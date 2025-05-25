@@ -11,7 +11,6 @@ import {
 } from '../interfaces/home/home.interfaces';
 import { ILiyYdmsNotification } from '../interfaces/models/liy.ydms.notification';
 import { IFriend } from '../interfaces/friend/friend';
-import { IFamilyConflictSurveyHistory, IFamilyConflictSurveyQuestion } from '../interfaces/family-conflict-survey/family-conflict-survey.interfaces';
 import { IFamilyCommunicationQualitySurveyHistory, IFamilyCommunicationQualitySurveyQuestion } from '../interfaces/family-communication-quality-survey/family-communication-quality-survey.interfaces';
 import { ISelfDiscoverySurveyHistory, ISelfDiscoverySurveyQuestion } from '../interfaces/self-discovery-survey/self-discovery-survey.interfaces';
 import { IFamilyDialogueSessionHistory, IFamilyDialogueSessionDetail, IFamilyDialogueSessionQuestion } from '../interfaces/family-dialogue-session/family-dialogue-session.interfaces';
@@ -192,157 +191,6 @@ export class ForceTestData {
   static getConflictLevelEmoji(conflictLevel: string): string {
     return ForceTestData.ConflictLevelEmojis[conflictLevel] || '🟢';
   }
-
-  /**
-   * Mock data for family conflict survey history
-   */
-  static mockFamilyConflictSurveyHistory: IFamilyConflictSurveyHistory[] = [
-    {
-      id: 1,
-      date: new Date(2024, 10, 29),
-      result: 'Mức độ xung đột thấp',
-      conflictLevel: ForceTestData.ConflictLevels.LOW,
-      score: 15
-    },
-    {
-      id: 2,
-      date: new Date(2024, 10, 22),
-      result: 'Mức độ xung đột trung bình',
-      conflictLevel: ForceTestData.ConflictLevels.MEDIUM,
-      score: 35
-    },
-    {
-      id: 3,
-      date: new Date(2024, 10, 15),
-      result: 'Mức độ xung đột cao',
-      conflictLevel: ForceTestData.ConflictLevels.HIGH,
-      score: 65
-    },
-    {
-      id: 4,
-      date: new Date(2024, 10, 8),
-      result: 'Mức độ xung đột thấp',
-      conflictLevel: ForceTestData.ConflictLevels.LOW,
-      score: 20
-    },
-    {
-      id: 5,
-      date: new Date(2024, 10, 1),
-      result: 'Mức độ xung đột trung bình',
-      conflictLevel: ForceTestData.ConflictLevels.MEDIUM,
-      score: 40
-    },
-    {
-      id: 6,
-      date: new Date(2024, 9, 24),
-      result: 'Mức độ xung đột nghiêm trọng',
-      conflictLevel: ForceTestData.ConflictLevels.SEVERE,
-      score: 85
-    },
-    {
-      id: 7,
-      date: new Date(2024, 9, 17),
-      result: 'Mức độ xung đột cao',
-      conflictLevel: ForceTestData.ConflictLevels.HIGH,
-      score: 70
-    },
-    {
-      id: 8,
-      date: new Date(2024, 9, 10),
-      result: 'Mức độ xung đột thấp',
-      conflictLevel: ForceTestData.ConflictLevels.LOW,
-      score: 25
-    },
-    {
-      id: 9,
-      date: new Date(2024, 9, 3),
-      result: 'Mức độ xung đột trung bình',
-      conflictLevel: ForceTestData.ConflictLevels.MEDIUM,
-      score: 45
-    },
-    {
-      id: 10,
-      date: new Date(2024, 8, 26),
-      result: 'Mức độ xung đột cao',
-      conflictLevel: ForceTestData.ConflictLevels.HIGH,
-      score: 60
-    },
-    {
-      id: 11,
-      date: new Date(2024, 8, 19),
-      result: 'Mức độ xung đột nghiêm trọng',
-      conflictLevel: ForceTestData.ConflictLevels.SEVERE,
-      score: 90
-    },
-    {
-      id: 12,
-      date: new Date(2024, 8, 12),
-      result: 'Mức độ xung đột thấp',
-      conflictLevel: ForceTestData.ConflictLevels.LOW,
-      score: 10
-    }
-  ];
-
-  /**
-   * Mock data for family conflict survey questions
-   */
-  static mockFamilyConflictSurveyQuestions: IFamilyConflictSurveyQuestion[] = [
-    {
-      id: 1,
-      text: 'Trong tuần qua, bạn có thường xuyên cãi vã với các thành viên trong gia đình không?',
-      options: [
-        {id: 1, text: 'Không bao giờ', selected: false, value: 0},
-        {id: 2, text: 'Hiếm khi', selected: false, value: 1},
-        {id: 3, text: 'Thỉnh thoảng', selected: false, value: 2},
-        {id: 4, text: 'Thường xuyên', selected: true, value: 3},
-        {id: 5, text: 'Rất thường xuyên', selected: false, value: 4}
-      ]
-    },
-    {
-      id: 2,
-      text: 'Bạn có cảm thấy gia đình hiểu và tôn trọng ý kiến của bạn không?',
-      options: [
-        {id: 6, text: 'Không bao giờ', selected: false, value: 4},
-        {id: 7, text: 'Hiếm khi', selected: false, value: 3},
-        {id: 8, text: 'Thỉnh thoảng', selected: true, value: 2},
-        {id: 9, text: 'Thường xuyên', selected: false, value: 1},
-        {id: 10, text: 'Luôn luôn', selected: false, value: 0}
-      ]
-    },
-    {
-      id: 3,
-      text: 'Khi có mâu thuẫn, gia đình bạn có giải quyết một cách bình tĩnh và hiệu quả không?',
-      options: [
-        {id: 11, text: 'Không bao giờ', selected: false, value: 4},
-        {id: 12, text: 'Hiếm khi', selected: true, value: 3},
-        {id: 13, text: 'Thỉnh thoảng', selected: false, value: 2},
-        {id: 14, text: 'Thường xuyên', selected: false, value: 1},
-        {id: 15, text: 'Luôn luôn', selected: false, value: 0}
-      ]
-    },
-    {
-      id: 4,
-      text: 'Bạn có cảm thấy căng thẳng khi ở nhà với gia đình không?',
-      options: [
-        {id: 16, text: 'Không bao giờ', selected: false, value: 0},
-        {id: 17, text: 'Hiếm khi', selected: false, value: 1},
-        {id: 18, text: 'Thỉnh thoảng', selected: false, value: 2},
-        {id: 19, text: 'Thường xuyên', selected: true, value: 3},
-        {id: 20, text: 'Luôn luôn', selected: false, value: 4}
-      ]
-    },
-    {
-      id: 5,
-      text: 'Các thành viên trong gia đình có thường xuyên nói to, quát tháo hoặc la hét với nhau không?',
-      options: [
-        {id: 21, text: 'Không bao giờ', selected: false, value: 0},
-        {id: 22, text: 'Hiếm khi', selected: false, value: 1},
-        {id: 23, text: 'Thỉnh thoảng', selected: false, value: 2},
-        {id: 24, text: 'Thường xuyên', selected: false, value: 3},
-        {id: 25, text: 'Luôn luôn', selected: true, value: 4}
-      ]
-    }
-  ];
 
   /**
    * Get feedback based on conflict score
@@ -1805,6 +1653,7 @@ export class ForceTestData {
       createdDate: '2023-03-30',
     },
   ];
+
   /**
    * Mock data for emotional survey questions
    */

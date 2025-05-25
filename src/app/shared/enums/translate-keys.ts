@@ -155,6 +155,7 @@ export enum TranslateKeys {
   TITLE_SYSTEM_FEEDBACK = 'TITLE.system_feedback',
   TITLE_SURVEY_QUESTIONS = 'TITLE.survey_questions',
   TITLE_NO_SURVEY_HISTORY = 'TITLE.no_survey_history',
+  TITLE_TAKE_SURVEY_NOW = 'TITLE.take_survey_now',
 
   // FAMILY COMMUNICATION QUALITY SURVEY
   TITLE_FAMILY_COMMUNICATION_QUALITY_SURVEY = 'TITLE.family_communication_quality_survey',
@@ -191,6 +192,7 @@ export enum TranslateKeys {
   TITLE_ANSWER_QUESTIONS = 'TITLE.answer_questions',
 
   // TITLE
+  TITLE_UNSUPPORTED_QUESTION_TYPE = 'TITLE.unsupported_question_type',
   TITLE_PHONE = 'TITLE.phone',
   TITLE_ACCOUNT = 'TITLE.account',
   TITLE_EMAIL = 'TITLE.email',
@@ -376,6 +378,7 @@ export enum TranslateKeys {
   TOAST_TASK_COMPLETE_ERROR = 'TOAST.task_complete_error',
   TOAST_UPDATE_FAILED = 'TOAST.update_failed',
   TOAST_UPDATE_SUCCESS = 'TOAST.update_success',
+  TOAST_ANSWER_ALL_QUESTIONS = 'TOAST.answer_all_questions',
 
   // ERROR
   ERROR_NETWORK = 'ERROR.network',
@@ -420,4 +423,16 @@ export enum TranslateKeys {
 
   // CAPTION
   CAPTION_CHATBOT = 'CAPTION.chatbot',
+
+  // CONFLICT LEVEL
+  CONFLICT_LEVEL_LOW = 'CONFLICT_LEVEL.low',
+  CONFLICT_LEVEL_MEDIUM = 'CONFLICT_LEVEL.medium',
+  CONFLICT_LEVEL_HIGH = 'CONFLICT_LEVEL.high',
+  CONFLICT_LEVEL_UNKNOWN = 'CONFLICT_LEVEL.unknown',
+
+  // CONFLICT FEEDBACK
+  CONFLICT_FEEDBACK_LOW = 'CONFLICT_FEEDBACK.low',
+  CONFLICT_FEEDBACK_MEDIUM = 'CONFLICT_FEEDBACK.medium',
+  CONFLICT_FEEDBACK_HIGH = 'CONFLICT_FEEDBACK.high',
+  CONFLICT_FEEDBACK_UNKNOWN = 'CONFLICT_FEEDBACK.unknown',
 }

@@ -2,11 +2,10 @@
   [pageTitle]="TranslateKeys.TITLE_FAMILY_COMMUNICATION_QUALITY_SURVEY_HISTORY"
   defaultBackHref="/{{PageRoutes.HOME}}"
   backgroundColor="linear-gradient(to bottom, #9333ea, #4c1d95)"
-  [animeImage]="animeImage"
->
+  [animeImage]="animeImage">
 </app-header>
 
-<ion-content [fullscreen]="true" class="native-padding-content font-comic-sans custom-page-bg-light ion-padding pb-32">
+<ion-content [fullscreen]="true" class="native-padding-content  custom-page-bg-light ion-padding pb-32">
   <!-- Refresh -->
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
@@ -32,7 +31,7 @@
   <!-- Survey history list -->
   <div *ngIf="!isLoading && surveyHistory.length > 0" class="mb-[35px] mt-3">
     <div class="space-y-3">
-      <ion-card *ngFor="let survey of getDisplayedItems()" class="font-comic-sans shadow-md border border-gray-200 dark:border-gray-700 cursor-pointer" (click)="viewSurveyDetail(survey.id)">
+      <ion-card *ngFor="let survey of getDisplayedItems()" class=" shadow-md border border-gray-200 dark:border-gray-700 cursor-pointer" (click)="viewSurveyDetail(survey.id)">
         <ion-card-content class="p-0">
           <div class="flex items-center p-4 border-b border-gray-200 dark:border-gray-700">
             <div class="flex-1">

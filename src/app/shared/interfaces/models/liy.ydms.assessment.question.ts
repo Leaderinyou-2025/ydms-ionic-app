@@ -7,7 +7,7 @@ import { DisplayType } from '../../enums/display-type';
  * Model: Bảng hỏi - Câu hỏi
  */
 export interface ILiyYdmsAssessmentQuestion extends IBase {
-  answer_ids?: Array<number>;
+  answer_ids: Array<number>;
   answer_type: AnswerType;
   assessment_id: IRelatedField;
   description?: string;

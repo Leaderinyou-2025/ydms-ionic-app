@@ -1,30 +1,30 @@
 <div class="mb-6">
   <!-- Caption input -->
   <div class="mb-6">
-    <h3 class="text-lg font-medium mb-2 font-comic-sans">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_ADD_CAPTION | translate }}</h3>
+    <h3 class="text-lg font-medium mb-2 ">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_ADD_CAPTION | translate }}</h3>
     <ion-item class="rounded-lg overflow-hidden shadow-sm">
       <ion-textarea
         [(ngModel)]="caption"
         rows="3"
         placeholder="{{ TranslateKeys.DAILY_EMOTION_JOURNAL_CAPTION_PLACEHOLDER | translate }}"
-        class="font-comic-sans">
+        class="">
       </ion-textarea>
     </ion-item>
   </div>
 
   <!-- Share targets -->
   <div *ngIf="availableShareTargets.length > 0">
-    <h3 class="text-lg font-medium mb-2 font-comic-sans">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_WITH | translate }}</h3>
+    <h3 class="text-lg font-medium mb-2 ">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_WITH | translate }}</h3>
 
     <!-- Class groups -->
     <div class="mb-4" *ngIf="getShareTargetsByType(EmotionShareTargetType.CLASS_GROUP).length > 0">
-      <h4 class="text-md font-semibold mb-2 font-comic-sans">{{ TranslateKeys.EMOTION_SHARE_TARGET_CLASS | translate }}</h4>
+      <h4 class="text-md font-semibold mb-2 ">{{ TranslateKeys.EMOTION_SHARE_TARGET_CLASS | translate }}</h4>
       <div class="flex flex-wrap gap-2">
         <ion-chip
           *ngFor="let target of getShareTargetsByType(EmotionShareTargetType.CLASS_GROUP)"
           [color]="isShareTargetSelected(target) ? 'primary' : 'medium'"
           (click)="toggleShareTarget(target)"
-          class="font-comic-sans"
+          class=""
         >
           <ion-label>{{ target.name }}</ion-label>
           <ion-icon name="checkmark-circle" *ngIf="isShareTargetSelected(target)"></ion-icon>
@@ -34,13 +34,13 @@
 
     <!-- Friends -->
     <div class="mb-4" *ngIf="getShareTargetsByType(EmotionShareTargetType.FRIEND).length > 0">
-      <h4 class="text-md font-semibold mb-2 font-comic-sans">{{ TranslateKeys.EMOTION_SHARE_TARGET_FRIENDS | translate }}</h4>
+      <h4 class="text-md font-semibold mb-2 ">{{ TranslateKeys.EMOTION_SHARE_TARGET_FRIENDS | translate }}</h4>
       <div class="flex flex-wrap gap-2">
         <ion-chip
           *ngFor="let target of getShareTargetsByType(EmotionShareTargetType.FRIEND)"
           [color]="isShareTargetSelected(target) ? 'primary' : 'medium'"
           (click)="toggleShareTarget(target)"
-          class="font-comic-sans"
+          class=""
         >
           <ion-label>{{ target.name }}</ion-label>
           <ion-icon name="checkmark-circle" *ngIf="isShareTargetSelected(target)"></ion-icon>
@@ -50,13 +50,13 @@
 
     <!-- Teachers -->
     <div class="mb-4" *ngIf="getShareTargetsByType(EmotionShareTargetType.TEACHER).length > 0">
-      <h4 class="text-md font-semibold mb-2 font-comic-sans">{{ TranslateKeys.EMOTION_SHARE_TARGET_TEACHERS | translate }}</h4>
+      <h4 class="text-md font-semibold mb-2 ">{{ TranslateKeys.EMOTION_SHARE_TARGET_TEACHERS | translate }}</h4>
       <div class="flex flex-wrap gap-2">
         <ion-chip
           *ngFor="let target of getShareTargetsByType(EmotionShareTargetType.TEACHER)"
           [color]="isShareTargetSelected(target) ? 'primary' : 'medium'"
           (click)="toggleShareTarget(target)"
-          class="font-comic-sans"
+          class=""
         >
           <ion-label>{{ target.name }}</ion-label>
           <ion-icon name="checkmark-circle" *ngIf="isShareTargetSelected(target)"></ion-icon>
@@ -66,13 +66,13 @@
 
     <!-- Family -->
     <div class="mb-4" *ngIf="getShareTargetsByType(EmotionShareTargetType.FAMILY).length > 0">
-      <h4 class="text-md font-semibold mb-2 font-comic-sans">{{ TranslateKeys.EMOTION_SHARE_TARGET_FAMILY | translate }}</h4>
+      <h4 class="text-md font-semibold mb-2 ">{{ TranslateKeys.EMOTION_SHARE_TARGET_FAMILY | translate }}</h4>
       <div class="flex flex-wrap gap-2">
         <ion-chip
           *ngFor="let target of getShareTargetsByType(EmotionShareTargetType.FAMILY)"
           [color]="isShareTargetSelected(target) ? 'primary' : 'medium'"
           (click)="toggleShareTarget(target)"
-          class="font-comic-sans"
+          class=""
         >
           <ion-label>{{ target.name }}</ion-label>
           <ion-icon name="checkmark-circle" *ngIf="isShareTargetSelected(target)"></ion-icon>

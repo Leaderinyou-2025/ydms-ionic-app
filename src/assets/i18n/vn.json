@@ -299,6 +299,7 @@
     "parent_questions": "Câu hỏi từ phụ huynh",
     "no_family_dialogue_session_history": "Chưa có lịch sử buổi đối thoại gia đình",
     "answer_questions": "Gửi câu trả lời",
+    "unsupported_question_type": "Loại câu hỏi không được hỗ trợ",
     "name": "Tên",
     "gender": "Giới tính",
     "male": "Nam",
@@ -315,7 +316,8 @@
     "task_activity": "Nhiệm vụ & Hoạt động",
     "task": "Nhiệm vụ",
     "activity": "Hoạt động",
-    "checkin_emotion_daily": "Checkin cảm xúc hàng ngày"
+    "checkin_emotion_daily": "Checkin cảm xúc hàng ngày",
+    "take_survey_now": "Khảo sát ngay để nhận phần thưởng!"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",
@@ -425,5 +427,17 @@
   },
   "ACHIEVEMENT": {
     "badge_no_achievements_yet": "Chưa có huy hiệu nào trong danh mục này"
+  },
+  "CONFLICT_LEVEL": {
+    "low": "Mức độ mâu thuẫn thấp",
+    "medium": "Mức độ mâu thuẫn trung bình",
+    "high": "Mức độ mâu thuẫn cao",
+    "unknown": "Không xác định"
+  },
+  "CONFLICT_FEEDBACK": {
+    "low": "Gia đình bạn có mức độ mâu thuẫn thấp. Đây là dấu hiệu tích cực cho mối quan hệ gia đình. Hãy tiếp tục duy trì sự giao tiếp tốt và tôn trọng lẫn nhau.",
+    "medium": "Gia đình bạn có mức độ mâu thuẫn ở mức trung bình. Có thể cần cải thiện cách giao tiếp và giải quyết xung đột trong gia đình. Hãy thử tìm hiểu nguyên nhân và cùng nhau tìm giải pháp.",
+    "high": "Gia đình bạn có mức độ mâu thuẫn cao. Điều này có thể ảnh hưởng đến sức khỏe tinh thần và mối quan hệ gia đình. Nên tìm kiếm sự hỗ trợ từ chuyên gia tâm lý hoặc tham gia các khóa học về kỹ năng giao tiếp gia đình.",
+    "unknown": "Không có đủ thông tin để đánh giá."
   }
 }

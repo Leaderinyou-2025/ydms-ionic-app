@@ -10,5 +10,10 @@ export enum ModelName {
   BADGE = 'liy.ydms.badge',
   TASK = 'liy.ydms.task',
   LEADERBOARD = 'liy.ydms.leaderboard',
-  ACHIEVEMENT = 'liy.ydms.achievement'
+  ACHIEVEMENT = 'liy.ydms.achievement',
+  ASSESSMENT = 'liy.ydms.assessment',
+  ASSESSMENT_QUESTION = 'liy.ydms.assessment.question',
+  ASSESSMENT_ANSWER_OPTION = 'liy.ydms.assessment.answer.option',
+  ASSESSMENT_RESULT = 'liy.ydms.assessment.result',
+  ASSESSMENT_ANSWER_RESULT = 'liy.ydms.assessment.answer.result'
 }
