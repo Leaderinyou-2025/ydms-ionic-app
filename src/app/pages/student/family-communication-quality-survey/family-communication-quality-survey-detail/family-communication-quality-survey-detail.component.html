@@ -5,7 +5,7 @@
 >
 </app-header>
 
-<ion-content class="ion-padding font-comic-sans">
+<ion-content class="ion-padding ">
   <!-- Loading skeleton -->
   <div *ngIf="isLoading">
     <ion-skeleton-text animated style="width: 100%; height: 80px;" class="rounded-lg mb-3"></ion-skeleton-text>
@@ -52,7 +52,7 @@
                 class="option-item mb-2 border border-gray-300 dark:border-gray-600 rounded-3xl cursor-default relative z-10 text-gray-700 dark:text-gray-300 py-1 px-4"
                 [ngClass]="{'selected-item bg-[#59cb01] text-white border-transparent': option.selected}">
               <ion-radio slot="start" [value]="option.id" disabled="true" class="mr-2 pointer-events-none"></ion-radio>
-              <ion-label class="ml-2 pointer-events-none font-comic-sans" [ngClass]="{'font-medium': option.selected}">{{ option.text }}</ion-label>
+              <ion-label class="ml-2 pointer-events-none " [ngClass]="{'font-medium': option.selected}">{{ option.text }}</ion-label>
             </ion-item>
           </ion-radio-group>
         </div>

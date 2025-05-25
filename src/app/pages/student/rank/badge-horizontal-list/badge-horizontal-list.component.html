@@ -21,7 +21,7 @@
           <ion-badge class="absolute top-1 p-0.5 px-1 right-1.5 text-xs z-2 bg-red-500 border border-red-100 text-white rounded">
             {{ TranslateKeys.BADGE_NEW | translate }}
           </ion-badge>
-          <div class="w-full font-medium mt-1 text-xs text-gray-700 dark:text-gray-300 font-comic-sans">
+          <div class="w-full font-medium mt-1 text-xs text-gray-700 dark:text-gray-300 ">
             {{ achievement.badge_id?.name }}
           </div>
         </div>
@@ -35,7 +35,7 @@
                    [alt]="badge.name" class="w-auto h-20 max-h-20 mx-auto block"></ion-img>
           <ion-img *ngIf="!badge.unlocked" [src]="getResourceImageUrl(badge.review_image)"
                    [alt]="badge.name" class="w-auto h-20 max-h-20  mx-auto block"></ion-img>
-          <div class="font-medium mt-1 text-xs text-gray-700 dark:text-gray-300 font-comic-sans">{{ badge.name }}</div>
+          <div class="font-medium mt-1 text-xs text-gray-700 dark:text-gray-300 ">{{ badge.name }}</div>
         </div>
       </ng-container>
     </div>

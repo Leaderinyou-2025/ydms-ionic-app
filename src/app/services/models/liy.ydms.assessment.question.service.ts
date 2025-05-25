@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { OdooService } from '../odoo/odoo.service';
+import { OdooService, SearchDomain } from '../odoo/odoo.service';
 import { ModelName } from '../../shared/enums/model-name';
 import { ILiyYdmsAssessmentQuestion } from '../../shared/interfaces/models/liy.ydms.assessment.question';
-import { CommonConstants } from "../../shared/classes/common-constants";
-import {OdooDomainOperator} from "../../shared/enums/odoo-domain-operator";
+import { CommonConstants } from '../../shared/classes/common-constants';
+import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
+import { OrderBy } from '../../shared/enums/order-by';
 
 @Injectable({
   providedIn: 'root'
@@ -23,31 +24,35 @@ export class LiyYdmsAssessmentQuestionService {
 
   constructor(
     private odooService: OdooService
-  ) { }
+  ) {
+  }
+
+  /**
+   * getAssessmentQuestionList
+   * @param searchDomain
+   * @param offset
+   * @param limit
+   * @param order
+   */
+  public async getAssessmentQuestionList(
+    searchDomain: SearchDomain = [],
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.ORDER_WEIGHT_ASC
+  ): Promise<ILiyYdmsAssessmentQuestion[]> {
+    const results = await this.odooService.searchRead<ILiyYdmsAssessmentQuestion>(
+      ModelName.ASSESSMENT_QUESTION, searchDomain, this.fields, offset, limit, order
+    );
+    return CommonConstants.convertArr2ListItem(results);
+  }
 
   /**
    * Get assessment questions by assessment ID
    * @param assessmentId Assessment ID
    * @returns Array of assessment questions
    */
-  public async getAssessmentQuestions(assessmentId: number): Promise<ILiyYdmsAssessmentQuestion[]> {
-    try {
-      let questionDetail = await this.odooService.searchRead<ILiyYdmsAssessmentQuestion>(
-        ModelName.ASSESSMENT_QUESTION,
-        [['assessment_id',  OdooDomainOperator.EQUAL, assessmentId]],
-        this.fields
-      );
-      questionDetail = CommonConstants.convertArr2ListItem(questionDetail);
-
-      // Sort questions by order_weight
-      if (questionDetail && questionDetail.length > 0) {
-        questionDetail.sort((a, b) => a.order_weight - b.order_weight);
-      }
-
-      return questionDetail || [];
-    } catch (error) {
-      console.error('ERROR getting assessment questions:', error);
-      return [];
-    }
+  public async getAssessmentQuestionsByAssessmentId(assessmentId: number): Promise<ILiyYdmsAssessmentQuestion[]> {
+    const searchDomain: SearchDomain = [['assessment_id', OdooDomainOperator.EQUAL, assessmentId]];
+    return this.getAssessmentQuestionList(searchDomain, 0, 0);
   }
 }

@@ -316,7 +316,8 @@
     "task_activity": "Nhiệm vụ & Hoạt động",
     "task": "Nhiệm vụ",
     "activity": "Hoạt động",
-    "checkin_emotion_daily": "Checkin cảm xúc hàng ngày"
+    "checkin_emotion_daily": "Checkin cảm xúc hàng ngày",
+    "take_survey_now": "Khảo sát ngay để nhận phần thưởng!"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",

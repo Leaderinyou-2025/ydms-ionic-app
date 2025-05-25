@@ -155,6 +155,7 @@ export enum TranslateKeys {
   TITLE_SYSTEM_FEEDBACK = 'TITLE.system_feedback',
   TITLE_SURVEY_QUESTIONS = 'TITLE.survey_questions',
   TITLE_NO_SURVEY_HISTORY = 'TITLE.no_survey_history',
+  TITLE_TAKE_SURVEY_NOW = 'TITLE.take_survey_now',
 
   // FAMILY COMMUNICATION QUALITY SURVEY
   TITLE_FAMILY_COMMUNICATION_QUALITY_SURVEY = 'TITLE.family_communication_quality_survey',
@@ -377,6 +378,7 @@ export enum TranslateKeys {
   TOAST_TASK_COMPLETE_ERROR = 'TOAST.task_complete_error',
   TOAST_UPDATE_FAILED = 'TOAST.update_failed',
   TOAST_UPDATE_SUCCESS = 'TOAST.update_success',
+  TOAST_ANSWER_ALL_QUESTIONS = 'TOAST.answer_all_questions',
 
   // ERROR
   ERROR_NETWORK = 'ERROR.network',

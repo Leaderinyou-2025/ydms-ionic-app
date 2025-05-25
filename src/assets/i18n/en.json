@@ -315,7 +315,8 @@
     "task_activity": "Tasks & Activities",
     "task": "Tasks",
     "activity": "Activities",
-    "checkin_emotion_daily": "Daily Mood Check-in"
+    "checkin_emotion_daily": "Daily Mood Check-in",
+    "take_survey_now": "Take survey now to get reward"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",
@@ -355,7 +356,8 @@
     "create_new_survey": "Create New Survey",
     "create_first_survey": "Create Your First Survey",
     "select": "Select",
-    "share": "Share"
+    "share": "Share",
+    "answer_all_questions": "Please answer all question!"
   },
   "TOAST": {
     "error_header": "Error",

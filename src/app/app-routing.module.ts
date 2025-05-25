@@ -99,6 +99,10 @@ const routes: Routes = [
     path: 'daily-emotion-journal',
     loadChildren: () => import('./pages/student/daily-emotion-journal/daily-emotion-journal.module').then(m => m.DailyEmotionJournalPageModule)
   },
+  {
+    path: 'family-conflict-survey',
+    loadChildren: () => import('./pages/student/family-conflict-survey/family-conflict-survey.module').then(m => m.FamilyConflictSurveyPageModule)
+  },
 ];
 
 @NgModule({

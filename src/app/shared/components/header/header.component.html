@@ -15,14 +15,15 @@
     <h1 class="text-2xl font-semibold text-white m-0 p-0" [class.pb-3]="!caption">
       {{ pageTitle | translate }}
     </h1>
-    <p *ngIf="caption" class="text-base italic pb-3">
+    <p *ngIf="caption" class="text-base italic pb-5 pt-2">
       {{ caption | translate }}
     </p>
   </div>
 
   <!-- Anime image -->
   <ng-container *ngIf="animeImage">
-    <ion-img [src]="animeImage.imageUrl"
+    <ion-img class="float-animation"
+             [src]="animeImage.imageUrl"
              [alt]="animeImage.name"
              [class]="animeImage.position?.position || 'absolute'"
              [style.top]="animeImage.position?.top || 'auto'"

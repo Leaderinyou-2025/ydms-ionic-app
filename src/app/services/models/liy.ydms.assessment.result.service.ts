@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { OdooService } from '../odoo/odoo.service';
+import { OdooService, SearchDomain } from '../odoo/odoo.service';
 import { ModelName } from '../../shared/enums/model-name';
 import { ILiyYdmsAssessmentResult } from '../../shared/interfaces/models/liy.ydms.assessment.result';
-import { CommonConstants } from "../../shared/classes/common-constants";
-import {OdooDomainOperator} from "../../shared/enums/odoo-domain-operator";
+import { CommonConstants } from '../../shared/classes/common-constants';
+import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
+import { OrderBy } from '../../shared/enums/order-by';
 
 @Injectable({
   providedIn: 'root'
@@ -11,42 +12,74 @@ import {OdooDomainOperator} from "../../shared/enums/odoo-domain-operator";
 export class LiyYdmsAssessmentResultService {
   // Fields for assessment result model
   private fields = [
+    'assessment_id',
     'nickname',
     'assessment_id',
     'name',
+    'area_of_expertise',
+    'scores',
     'rank_point',
-    'area_of_expertise'
+    'create_date',
+    'write_date'
   ];
 
   constructor(
     private odooService: OdooService
-  ) { }
+  ) {
+  }
+
+  /**
+   * getAssessmentResultList
+   * @param searchDomain
+   * @param offset
+   * @param limit
+   * @param order
+   */
+  public async getAssessmentResultList(
+    searchDomain: SearchDomain = [],
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.CREATE_AT_DESC
+  ): Promise<ILiyYdmsAssessmentResult[]> {
+    let results = await this.odooService.searchRead<ILiyYdmsAssessmentResult>(
+      ModelName.ASSESSMENT_RESULT, searchDomain, this.fields, offset, limit, order
+    );
+    return CommonConstants.convertArr2ListItem(results);
+  }
 
   /**
    * Load survey history by area of expertise
    * @param areaOfExpertise Area of expertise (e.g., 'conflict', 'stress', etc.)
+   * @param assessmentId
    * @param limit Number of records to return (default: 10)
    * @param offset Offset for pagination (default: 0)
    * @returns Array of survey history results
    */
-  public async loadAssessmentResult(
+  public async getAssessmentResultByAreaOfExpertise(
     areaOfExpertise: string,
+    assessmentId: number,
     offset: number = 0,
     limit: number = 10
   ): Promise<ILiyYdmsAssessmentResult[]> {
-    try {
-      let surveyHistoryResult = await this.odooService.searchRead<ILiyYdmsAssessmentResult>(
-        ModelName.ASSESSMENT_RESULT,
-        [['area_of_expertise', OdooDomainOperator.EQUAL, areaOfExpertise]],
-        this.fields,
-        offset,
-        limit
-      );
-      surveyHistoryResult = CommonConstants.convertArr2ListItem(surveyHistoryResult);
-      return surveyHistoryResult || [];
-    } catch (error) {
-      console.error('ERROR loading survey history:', error);
-      return [];
-    }
+    const searchDomain: SearchDomain = [
+      ['area_of_expertise', OdooDomainOperator.EQUAL, areaOfExpertise],
+      ['assignee_id', OdooDomainOperator.EQUAL, assessmentId]
+    ];
+    return this.getAssessmentResultList(searchDomain, offset, limit);
+  }
+
+  /**
+   * getAssessmentResultById
+   * @param id
+   */
+  public async getAssessmentResultById(id: number): Promise<ILiyYdmsAssessmentResult | undefined> {
+    let results = await this.odooService.read<ILiyYdmsAssessmentResult>(
+      ModelName.ASSESSMENT_RESULT,
+      [id],
+      this.fields,
+    )
+    if (!results || !results?.length) return;
+    results = CommonConstants.convertArr2ListItem(results);
+    return results[0];
   }
 }

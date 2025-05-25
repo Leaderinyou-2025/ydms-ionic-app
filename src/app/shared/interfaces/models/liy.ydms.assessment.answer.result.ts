@@ -7,8 +7,8 @@ import { IRelatedField } from '../base/related-field';
 export interface ILiyYdmsAssessmentAnswerResult extends IBase {
   assessment_result_id: IRelatedField;
   question_id: IRelatedField;
-  question_name: string | null;
-  answer_id: IRelatedField;
-  answer_text: string | null;
+  question_name?: string;
+  answer_id?: IRelatedField;
+  answer_text?: string;
   scores: number;
 }

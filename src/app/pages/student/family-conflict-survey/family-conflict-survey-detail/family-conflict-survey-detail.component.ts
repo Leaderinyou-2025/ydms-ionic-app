@@ -1,10 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IFamilyConflictSurveyDetail, IFamilyConflictSurveyQuestion, IFamilyConflictSurveyOption } from '../../../../shared/interfaces/family-conflict-survey/family-conflict-survey.interfaces';
+import { LoadingController, ToastButton, ToastController, ToastOptions } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
+
 import { TranslateKeys } from '../../../../shared/enums/translate-keys';
-import { PageRoutes } from "../../../../shared/enums/page-routes";
-import { FamilyConflictSurveyService } from '../../../../services/family-conflict-survey/family-conflict-survey.service';
-import { ConflictLevel } from '../../../../shared/enums/family-conflict-survey/conflict-level';
+import { PageRoutes } from '../../../../shared/enums/page-routes';
+import { ISurvey, ISurveyQuestion } from '../../../../shared/interfaces/function-data/survey';
+import { SurveyService } from '../../../../services/survey/survey.service';
+import { IHeaderAnimeImage } from '../../../../shared/interfaces/header/header';
+import { NativePlatform } from '../../../../shared/enums/native-platform';
+import { IonicColors } from '../../../../shared/enums/ionic-colors';
+import { IonicIcons } from '../../../../shared/enums/ionic-icons';
+import { Position } from '../../../../shared/enums/position';
+import { BtnRoles } from '../../../../shared/enums/btn-roles';
+import { StyleClass } from '../../../../shared/enums/style-class';
 
 @Component({
   selector: 'app-family-conflict-survey-detail',
@@ -13,92 +22,124 @@ import { ConflictLevel } from '../../../../shared/enums/family-conflict-survey/c
   standalone: false,
 })
 export class FamilyConflictSurveyDetailComponent implements OnInit {
-  surveyDetail!: IFamilyConflictSurveyDetail;
+
   isLoading: boolean = true;
+  animeImage!: IHeaderAnimeImage;
+  readonly!: boolean;
+  conflictSurveyDetail?: ISurvey;
 
   protected readonly TranslateKeys = TranslateKeys;
   protected readonly PageRoutes = PageRoutes;
+  protected readonly structuredClone = structuredClone;
 
   constructor(
-    private route: ActivatedRoute,
+    private activeRoute: ActivatedRoute,
     private router: Router,
-    private familyConflictSurveyService: FamilyConflictSurveyService
-  ) { }
+    private surveyService: SurveyService,
+    private loadingController: LoadingController,
+    private toastController: ToastController,
+    private translate: TranslateService,
+  ) {
+  }
 
-  ngOnInit() {
-    this.loadSurveyDetail();
+  async ngOnInit() {
+    this.initHeader();
+    await this.loadSurveyDetail();
   }
 
   /**
-   * Navigate back to the survey list
+   * Submit form
+   * @param questions
    */
-  public navigateBack(): void {
-    this.router.navigate([`/${PageRoutes.FAMILY_CONFLICT_SURVEY}`]);
+  public async onSubmitForm(questions: ISurveyQuestion[]): Promise<void> {
+    if (!questions.length) return;
+    const loading = await this.loadingController.create({mode: NativePlatform.IOS});
+    await loading.present();
+
+    try {
+      const result = await this.surveyService.updateAnswer(questions);
+      if (result) {
+        this.showToast(
+          this.translate.instant(TranslateKeys.TOAST_UPDATE_SUCCESS),
+          IonicColors.SUCCESS
+        );
+        await this.router.navigateByUrl(PageRoutes.FAMILY_CONFLICT_SURVEY);
+      } else {
+        this.showToast(
+          this.translate.instant(TranslateKeys.TOAST_UPDATE_FAILED),
+          IonicColors.SUCCESS
+        );
+      }
+    } catch (e: any) {
+      console.error(e.message);
+    } finally {
+      await loading.dismiss();
+    }
   }
 
   /**
    * Load survey detail from the service
    */
   private async loadSurveyDetail(): Promise<void> {
-    this.isLoading = true;
-
-    try {
-      const id = this.route.snapshot.paramMap.get('id');
-      if (!id) {
-        throw new Error('Survey ID not provided');
-      }
-
-      const surveyDetail = await this.familyConflictSurveyService.getSurveyDetail(Number(id));
-
-      if (!surveyDetail) {
-        throw new Error('Failed to load survey detail');
-      }
-
-      this.surveyDetail = surveyDetail;
-    } catch (error) {
-      console.error('ERROR:', error);
-      this.navigateBack();
-    } finally {
-      this.isLoading = false;
+    const id = this.activeRoute.snapshot.paramMap.get('id');
+    if (!id) {
+      return this.navigateBack();
     }
+    this.conflictSurveyDetail = await this.surveyService.getSurveyDetail(+id);
+    this.readonly = this.conflictSurveyDetail?.assessment_result.create_date !== this.conflictSurveyDetail?.assessment_result.write_date ||
+      this.conflictSurveyDetail?.assessment_result['create_time'] !== this.conflictSurveyDetail?.assessment_result['write_time'];
+    this.isLoading = false;
   }
 
   /**
-   * Format date
-   * @param date Date
+   * Navigate back to the survey list
    */
-  public formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+  private async navigateBack(): Promise<void> {
+    await this.router.navigateByUrl(PageRoutes.FAMILY_CONFLICT_SURVEY);
   }
 
   /**
-   * Get conflict level emoji
-   * @param conflictLevel Conflict level
+   * init header
+   * @private
    */
-  public getConflictLevelEmoji(conflictLevel: string): string {
-    switch (conflictLevel) {
-      case ConflictLevel.Low:
-        return '😊'; // Happy face
-      case ConflictLevel.Medium:
-        return '😐'; // Neutral face
-      case ConflictLevel.High:
-        return '😟'; // Worried face
-      default:
-        return '🤔'; // Thinking face
+  private initHeader(): void {
+    this.animeImage = {
+      name: 'rank',
+      imageUrl: '/assets/images/family-conflict-survey.webp',
+      width: '130px',
+      height: 'auto',
+      position: {
+        position: 'absolute',
+        right: '-20px',
+        bottom: '-10px'
+      }
+    };
+  }
+
+  /**
+   * Show toast message
+   * @param message
+   * @param color
+   * @private
+   */
+  private showToast(message: string, color: IonicColors.SUCCESS | IonicColors.DANGER): void {
+    const closeBtn: ToastButton = {
+      icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
+      side: Position.END,
+      role: BtnRoles.CANCEL,
     }
-  }
 
-  /**
-   * Get selected option value
-   * @param question Question
-   */
-  public getSelectedOptionValue(question: IFamilyConflictSurveyQuestion): number {
-    const selectedOption = question.options.find(o => o.selected);
-    return selectedOption ? selectedOption.id : 0;
+    const toastOption: ToastOptions = {
+      message,
+      duration: 3000,
+      buttons: [closeBtn],
+      mode: NativePlatform.IOS,
+      cssClass: `${StyleClass.TOAST_ITEM} ${color === IonicColors.DANGER ? StyleClass.TOAST_ERROR : StyleClass.TOAST_SUCCESS}`,
+      position: Position.TOP,
+      icon: color === IonicColors.DANGER ? IonicIcons.WARNING_OUTLINE : IonicIcons.CHECKMARK_CIRCLE_OUTLINE,
+      color,
+      keyboardClose: false
+    }
+    this.toastController.create(toastOption).then(toast => toast.present());
   }
-
 }

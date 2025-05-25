@@ -19,6 +19,7 @@ import { EmotionDiaryModalComponent } from '../pages/student/personal-diary/emot
 import { ResourceListComponent } from './components/resource-list/resource-list.component';
 import { EmotionIconSelectorComponent } from './components/emotion-icon-selector/emotion-icon-selector.component';
 import { EmotionShareComponent } from './components/emotion-share/emotion-share.component';
+import { FormAssessmentComponent } from './components/form-assessment/form-assessment.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { EmotionShareComponent } from './components/emotion-share/emotion-share.
     ResourceViewerComponent,
     EmotionDiaryModalComponent,
     ResourceListComponent,
+    FormAssessmentComponent,
   ],
   imports: [
     CommonModule,
@@ -56,6 +58,7 @@ import { EmotionShareComponent } from './components/emotion-share/emotion-share.
     ResourceViewerComponent,
     EmotionDiaryModalComponent,
     ResourceListComponent,
+    FormAssessmentComponent,
   ]
 })
 export class SharedModule {

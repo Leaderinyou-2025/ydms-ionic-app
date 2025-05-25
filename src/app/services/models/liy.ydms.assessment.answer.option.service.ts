@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { OdooService } from '../odoo/odoo.service';
+import { OdooService, SearchDomain } from '../odoo/odoo.service';
 import { ModelName } from '../../shared/enums/model-name';
 import { ILiyYdmsAssessmentAnswerOption } from '../../shared/interfaces/models/liy.ydms.assessment.answer.option';
-import { CommonConstants } from "../../shared/classes/common-constants";
-import {OdooDomainOperator} from "../../shared/enums/odoo-domain-operator";
+import { CommonConstants } from '../../shared/classes/common-constants';
+import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
+import { OrderBy } from '../../shared/enums/order-by';
 
 @Injectable({
   providedIn: 'root'
@@ -22,31 +23,34 @@ export class LiyYdmsAssessmentAnswerOptionService {
 
   constructor(
     private odooService: OdooService
-  ) { }
+  ) {
+  }
 
   /**
-   * Get answer options for a question
-   * @param questionId Question ID
-   * @returns Array of answer options
+   * getAnswerOptionList
+   * @param searchDomain
+   * @param offset
+   * @param limit
+   * @param order
    */
-  public async getAnswerOptions(questionId: number): Promise<ILiyYdmsAssessmentAnswerOption[]> {
-    try {
-      let answerOptions = await this.odooService.searchRead<ILiyYdmsAssessmentAnswerOption>(
-        ModelName.ASSESSMENT_ANSWER_OPTION,
-        [['question_id',  OdooDomainOperator.EQUAL, questionId]],
-        this.fields
-      );
-      answerOptions = CommonConstants.convertArr2ListItem(answerOptions);
+  public async getAnswerOptionList(
+    searchDomain: SearchDomain = [],
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.ORDER_WEIGHT_ASC,
+  ): Promise<ILiyYdmsAssessmentAnswerOption[]> {
+    const results = await this.odooService.searchRead<ILiyYdmsAssessmentAnswerOption>(
+      ModelName.ASSESSMENT_ANSWER_OPTION, searchDomain, this.fields, offset, limit, order
+    );
+    return CommonConstants.convertArr2ListItem(results);
+  }
 
-      // Sort options by order_weight if available
-      if (answerOptions && answerOptions.length > 0) {
-        answerOptions.sort((a, b) => a.order_weight - b.order_weight);
-      }
-
-      return answerOptions || [];
-    } catch (error) {
-      console.error('ERROR getting answer options:', error);
-      return [];
-    }
+  /**
+   * Get answer options by question ids
+   * @returns Array of answer options
+   * @param ids
+   */
+  public async getAnswerOptionsByQuestionIds(ids: Array<number>): Promise<ILiyYdmsAssessmentAnswerOption[]> {
+    return this.getAnswerOptionList([['question_id', OdooDomainOperator.IN, ids]], 0, 0);
   }
 }

@@ -1,0 +1,48 @@
+<div class="form-assessment" *ngIf="questions?.length">
+  <!-- Questions -->
+  <div class="questions-container">
+    <!-- Question item -->
+    <div *ngFor="let question of questions; let qIndex = index" class="question-item ion-padding">
+
+      <!--   Question   -->
+      <div class="mb-3">
+        <h4 class="font-medium text-base italic">{{ qIndex + 1 }}. {{ question.name }}</h4>
+      </div>
+
+      <!-- Different UI based on answer type -->
+      <div [ngSwitch]="question.answer_type">
+
+        <!-- SELECT_OPTION type -->
+        <div *ngSwitchCase="AnswerType.SELECT_OPTION" class="flex flex-col gap-2.5">
+          <ion-radio-group [(ngModel)]="question.answer_id" class="w-full">
+            <ion-item *ngFor="let option of question.options" lines="none" [appSoundClick]="true"
+                      class="option-item mb-2 border rounded-3xl cursor-default relative py-1 px-4"
+                      [ngClass]="{'selected-item bg-green-500 text-white border-transparent': option.selected || question.answer_id === option.id}">
+              <ion-radio slot="start" [value]="option.id" [disabled]="readonly" class="mr-2 pointer-events-none"></ion-radio>
+              <ion-label class="ml-2 pointer-events-none " [ngClass]="{'font-medium': option.selected}">{{ option.name }}</ion-label>
+            </ion-item>
+          </ion-radio-group>
+        </div>
+
+        <!-- INPUT_TEXT type -->
+        <div *ngSwitchCase="AnswerType.INPUT_TEXT" class="flex flex-col gap-2.5 border rounded-xl overflow-hidden p-3 min-h-24">
+          <div *ngIf="readonly" class="text-blue-500 text-justify"> {{ question.answer_text }}</div>
+          <ion-textarea [(ngModel)]="question.answer_text" *ngIf="!readonly" rows="3" class="ion-no-padding"></ion-textarea>
+        </div>
+
+        <!-- Default case (unknown type) -->
+        <div *ngSwitchDefault class="flex flex-col gap-2.5">
+          <p class="text-gray-500 dark:text-gray-400 italic">{{ TranslateKeys.TITLE_UNSUPPORTED_QUESTION_TYPE | translate }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Complete button -->
+  <div class="complete-button-container ion-padding" *ngIf="!readonly">
+    <ion-button expand="block" color="primary" (click)="onClickSubmitForm()" [appSoundClick]="true">
+      {{ TranslateKeys.BUTTON_COMPLETE | translate }}
+    </ion-button>
+  </div>
+</div>
