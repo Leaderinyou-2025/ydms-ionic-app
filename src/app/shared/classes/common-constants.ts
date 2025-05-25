@@ -37,17 +37,17 @@ export class CommonConstants {
    * Background sound gallery
    */
   static sound_gallery: Array<IAssetsResource> = [
-    {id: 1, resource_url: '/assets/sounds/touch.mp3', name: 'touch', category: AssetResourceCategory.EFFECT, key: SoundKeys.TOUCH},
-    {id: 2, resource_url: '/assets/sounds/reload.mp3', name: 'reload', category: AssetResourceCategory.EFFECT, key: SoundKeys.RELOAD},
-    {id: 3, resource_url: '/assets/sounds/loading.mp3', name: 'loading', category: AssetResourceCategory.EFFECT, key: SoundKeys.LOADING},
-    {id: 4, resource_url: '/assets/sounds/message.mp3', name: 'message', category: AssetResourceCategory.EFFECT, key: SoundKeys.MESSAGE},
-    {id: 5, resource_url: '/assets/sounds/notification.mp3', name: 'notification', category: AssetResourceCategory.EFFECT, key: SoundKeys.NOTIFICATION},
-    {id: 6, resource_url: '/assets/sounds/success.mp3', name: 'success', category: AssetResourceCategory.EFFECT, key: SoundKeys.SUCCESS},
-    {id: 7, resource_url: '/assets/sounds/fail.mp3', name: 'success', category: AssetResourceCategory.EFFECT, key: SoundKeys.FAILED},
-    {id: 8, resource_url: '/assets/sounds/error.mp3', name: 'error', category: AssetResourceCategory.EFFECT, key: SoundKeys.ERROR},
-    {id: 9, resource_url: '/assets/sounds/background-default.mp3', name: 'Cuộc sống tươi đẹp', category: AssetResourceCategory.BACKGROUND},
-    {id: 10, resource_url: '/assets/sounds/background-music-soft-calm.mp3', name: 'Lạc quan mới', category: AssetResourceCategory.BACKGROUND},
-    {id: 11, resource_url: '/assets/sounds/background-music-soft-corporate.mp3', name: 'Nhịp điệu ngày mới', category: AssetResourceCategory.BACKGROUND},
+    {id: 1, resource_url: 'assets/sounds/touch.mp3', name: 'touch', category: AssetResourceCategory.EFFECT, key: SoundKeys.TOUCH},
+    {id: 2, resource_url: 'assets/sounds/reload.mp3', name: 'reload', category: AssetResourceCategory.EFFECT, key: SoundKeys.RELOAD},
+    {id: 3, resource_url: 'assets/sounds/loading.mp3', name: 'loading', category: AssetResourceCategory.EFFECT, key: SoundKeys.LOADING},
+    {id: 4, resource_url: 'assets/sounds/message.mp3', name: 'message', category: AssetResourceCategory.EFFECT, key: SoundKeys.MESSAGE},
+    {id: 5, resource_url: 'assets/sounds/notification.mp3', name: 'notification', category: AssetResourceCategory.EFFECT, key: SoundKeys.NOTIFICATION},
+    {id: 6, resource_url: 'assets/sounds/success.mp3', name: 'success', category: AssetResourceCategory.EFFECT, key: SoundKeys.SUCCESS},
+    {id: 7, resource_url: 'assets/sounds/fail.mp3', name: 'success', category: AssetResourceCategory.EFFECT, key: SoundKeys.FAILED},
+    {id: 8, resource_url: 'assets/sounds/error.mp3', name: 'error', category: AssetResourceCategory.EFFECT, key: SoundKeys.ERROR},
+    {id: 9, resource_url: 'assets/sounds/background-default.mp3', name: 'Cuộc sống tươi đẹp', category: AssetResourceCategory.BACKGROUND},
+    {id: 10, resource_url: 'assets/sounds/background-music-soft-calm.mp3', name: 'Lạc quan mới', category: AssetResourceCategory.BACKGROUND},
+    {id: 11, resource_url: 'assets/sounds/background-music-soft-corporate.mp3', name: 'Nhịp điệu ngày mới', category: AssetResourceCategory.BACKGROUND},
   ];
 
   /**
@@ -396,5 +396,15 @@ export class CommonConstants {
    */
   private static hex2buf(hex: string): Uint8Array {
     return new Uint8Array(hex.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)));
+  }
+
+  /**
+   * Format seconds to time string
+   * @param seconds
+   */
+  public static formatTimeSeconds(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
   }
 }

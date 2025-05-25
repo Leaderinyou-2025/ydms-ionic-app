@@ -38,7 +38,7 @@ export class AuthService {
   private authData!: IAuthData | undefined;
   private userRoles!: UserRoles | undefined;
   private userFields = [
-    'name', 'email', 'phone', 'street', 'precint_id', 'district_id', 'state_id', 'country_id', 'image_128', 'lang',
+    'name', 'email', 'login', 'phone', 'street', 'precint_id', 'district_id', 'state_id', 'country_id', 'image_128', 'lang',
     'nickname', 'avatar', 'avatar_512', 'code', 'edu_id', 'social_id', 'gender', 'dob',
     'is_teenager', 'is_parent', 'is_teacher',
     'school_id', 'classroom_id', 'parent_id', 'partner_id', 'classroom_ids', 'child_ids',

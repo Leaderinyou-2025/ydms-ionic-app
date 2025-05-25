@@ -5,6 +5,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { AnimationOptions } from 'ngx-lottie';
 
 import { AuthService } from '../../../services/auth/auth.service';
+import { TaskService } from '../../../services/task/task.service';
+import { SoundService } from '../../../services/sound/sound.service';
+import { LiyYdmsAvatarService } from '../../../services/models/liy.ydms.avatar.service';
 import { TranslateKeys } from '../../../shared/enums/translate-keys';
 import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
 import { BtnRoles } from '../../../shared/enums/btn-roles';
@@ -14,8 +17,6 @@ import { NativePlatform } from '../../../shared/enums/native-platform';
 import { StyleClass } from '../../../shared/enums/style-class';
 import { IonicColors } from '../../../shared/enums/ionic-colors';
 import { PageRoutes } from '../../../shared/enums/page-routes';
-import { LiyYdmsAvatarService } from '../../../services/models/liy.ydms.avatar.service';
-import { TaskService } from '../../../services/task/task.service';
 import { TaskStatus } from '../../../shared/enums/task-status';
 import { ILiyYdmsTask } from '../../../shared/interfaces/models/liy.ydms.task';
 import { CommonConstants } from '../../../shared/classes/common-constants';
@@ -68,12 +69,14 @@ export class HomePage implements OnInit {
     private router: Router,
     private liyYdmsAvatarService: LiyYdmsAvatarService,
     private taskService: TaskService,
+    private soundService: SoundService,
   ) {
   }
 
   async ngOnInit() {
     // Reload user profile on server for first time
     await this.authService.loadUserProfile();
+    this.soundService.playBackground();
   }
 
   async ionViewDidEnter() {

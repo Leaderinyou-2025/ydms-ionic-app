@@ -60,13 +60,16 @@ export class PersonalInfoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadStateList();
+  }
+
+  ionViewDidEnter() {
     this.authService.getAuthData().then(authData => {
       this.authData = authData;
       this.initProfileForm();
       this.loadAvatarImage();
       this.userImage = this.getUserImage();
     });
-    this.loadStateList();
   }
 
   /**
@@ -102,6 +105,12 @@ export class PersonalInfoComponent implements OnInit {
 
     this.addressService.getDistrictList(event.detail.value)
       .then(districtList => this.districtList = districtList);
+
+    if (!this.authData) return;
+    const selectState = this.stateList.find(u => u.id === event.detail.value);
+    if (!selectState) return;
+    this.authData.state_id = {id: selectState.id, name: selectState.name || ''};
+    this.authData.district_id = undefined;
   }
 
   /**
@@ -115,6 +124,23 @@ export class PersonalInfoComponent implements OnInit {
 
     this.addressService.getPrecintList(this.profileForm.value.state_id, event.detail.value)
       .then(precintList => this.precintList = precintList);
+
+    if (!this.authData) return;
+    const selectDistrict = this.districtList.find(u => u.id === event.detail.value);
+    if (!selectDistrict) return;
+    this.authData.district_id = {id: selectDistrict.id, name: selectDistrict.name || ''};
+    this.authData.precint_id = undefined;
+  }
+
+  /**
+   * On select precint
+   * @param event
+   */
+  public onSelectPrecint(event: SelectCustomEvent) {
+    if (!this.authData) return;
+    const selectPrecint = this.precintList.find(u => u.id === event.detail.value);
+    if (!selectPrecint) return;
+    this.authData.precint_id = {id: selectPrecint.id, name: selectPrecint.name || ''};
   }
 
   /**
@@ -175,9 +201,6 @@ export class PersonalInfoComponent implements OnInit {
     this.authData.email = this.profileForm.value.email;
     this.authData.phone = this.profileForm.value.phone;
     this.authData.gender = this.profileForm.value.gender;
-    this.authData.state_id = this.profileForm.value.state_id;
-    this.authData.district_id = this.profileForm.value.district_id;
-    this.authData.precint_id = this.profileForm.value.precint_id;
     this.authData.street = this.profileForm.value.street;
 
     const loading = await this.loadingController.create({mode: NativePlatform.IOS})
@@ -206,6 +229,7 @@ export class PersonalInfoComponent implements OnInit {
         name: this.translate.instant(TranslateKeys.TITLE_NOT_SET_NICKNAME),
         image_url: '/assets/images/avatar/conan_no_set.png',
         image_512: '',
+        resource_url: ''
       };
       return;
     }

@@ -81,7 +81,7 @@
 }
 
 .shake {
-  animation: shake 2s infinite;
+  animation: shake 0.5s infinite ease-in-out;
 }
 
 @keyframes intense-shake-zoom {

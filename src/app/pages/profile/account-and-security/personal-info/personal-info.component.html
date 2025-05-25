@@ -105,7 +105,7 @@
           <!--     Precint     -->
           <ion-col size="12" class="pb-3">
             <ion-label>{{ TranslateKeys.TITLE_PRECINT | translate }}</ion-label>
-            <ion-select formControlName="precint_id" class="border overflow-hidden" interface="action-sheet">
+            <ion-select formControlName="precint_id" class="border overflow-hidden" interface="action-sheet" (ionChange)="onSelectPrecint($event)">
               <ng-container *ngIf="districtList">
                 <ion-select-option *ngFor="let precint of precintList" [value]="precint.id">
                   {{ precint.name }}

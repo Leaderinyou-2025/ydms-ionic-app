@@ -43,7 +43,6 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "localforage",
-              "howler",
               "crypto-js",
               "lottie-web"
             ]

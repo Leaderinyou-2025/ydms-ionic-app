@@ -12,6 +12,7 @@ import { Theme } from '../../../shared/enums/theme';
 import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
 import { NativePlatform } from '../../../shared/enums/native-platform';
 import { CommonConstants } from '../../../shared/classes/common-constants';
+import { DateFormat } from '../../../shared/enums/date-format';
 
 @Component({
   selector: 'app-account-and-security',
@@ -29,6 +30,7 @@ export class AccountAndSecurityComponent implements OnInit {
   protected readonly TranslateKeys = TranslateKeys;
   protected readonly PageRoutes = PageRoutes;
   protected readonly Theme = Theme;
+  protected readonly DateFormat = DateFormat;
 
   constructor(
     public router: Router,
@@ -94,6 +96,4 @@ export class AccountAndSecurityComponent implements OnInit {
     this.biometricAvailable = this.biometricService.getAvailableResult();
     this.enableBiometric = this.biometricService.getBiometricSettingStatus();
   }
-
-
 }

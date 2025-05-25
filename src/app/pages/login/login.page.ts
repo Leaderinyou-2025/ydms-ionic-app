@@ -95,6 +95,7 @@ export class LoginPage implements OnInit, OnDestroy {
     this.liveUpdateService.getAppVersionString().then(appVersionString => this.appVersion = appVersionString);
     // Initial app
     setTimeout(() => this.initApp(), 500);
+    this.soundService.stopBackground();
   }
 
   ngOnDestroy() {
@@ -464,11 +465,11 @@ export class LoginPage implements OnInit, OnDestroy {
 
     if (!this.biometricAvailable?.isAvailable) return;
 
-    const username: string = this.loginForm.get('phone')?.value;
+    const username: string = this.loginForm.get('username')?.value;
     this.biometricService.getCredentials(username).then(certificate => {
       this.hasCredentials = (certificate?.username != null && certificate?.username === username && certificate?.password != null);
       if (!this.hasCredentials && certificate) this.biometricService.deleteCredentials(username);
-    });
+    }).catch(e => console.error(e.message));
   }
 
   /**

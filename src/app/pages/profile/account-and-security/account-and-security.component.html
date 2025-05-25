@@ -57,7 +57,8 @@
       <ion-icon name="calendar" slot="start" color="primary" class="text-xl"></ion-icon>
       <ion-label class="py-2">
         {{ TranslateKeys.TITLE_BIRTHDAY | translate }}<br>
-        <span class="text-sm text-gray-500 italic dark:text-gray-400">{{ TranslateKeys.TITLE_NOT_SET | translate }}</span>
+        <span class="text-sm text-gray-500 italic dark:text-gray-400" *ngIf="authData.dob"> {{ authData.dob | date: DateFormat.DATE_ONLY }} &nbsp;</span>
+        <span class="text-sm text-gray-500 italic dark:text-gray-400" *ngIf="!authData.dob">{{ TranslateKeys.TITLE_NOT_SET | translate }}</span>
       </ion-label>
     </ion-item>
   </ion-list>

@@ -93,10 +93,6 @@ export class AppComponent implements OnInit, OnDestroy {
    * @private
    */
   private initializeSound(): void {
-    setTimeout(() => {
-      if (this.authService.isAuthenticated()) {
-        this.soundService.loadUserSounds();
-      }
-    }, 500);
+    setTimeout(() => this.soundService.loadUserSounds(), 500);
   }
 }

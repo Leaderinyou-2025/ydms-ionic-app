@@ -51,7 +51,7 @@
       <ion-img *ngIf="!avatar" src="/assets/images/avatar/conan_no_set.png" alt="avatar" class="shake"></ion-img>
     </div>
     <div class="flex items-center">
-      <div class="relative">
+      <div class="relative" [class.intense-shake-zoom]="!authData.nickname">
         <!--   Nickname and animation     -->
         <ng-container *ngIf="authData.nickname">
           <span class="text-2xl text-teal-500 italic z-10">{{ authData.nickname }}</span>
@@ -63,7 +63,6 @@
           <span class="text-2xl text-teal-500 italic z-10" (click)="onClickOpenSetNicknameDialog()">
             {{ TranslateKeys.TITLE_NOT_SET_NICKNAME | translate }}
           </span>
-          <ion-icon (click)="onClickOpenSetNicknameDialog()" class="absolute right-[-25px] bottom-2 text-base" color="primary" name="settings"></ion-icon>
         </ng-container>
       </div>
     </div>
@@ -75,7 +74,7 @@
       <h3 class="text-base italic font-bold text-blue-400">{{ TranslateKeys.HOME_WELCOME_TITLE | translate }}</h3>
       <ion-icon name="checkmark-circle" class="mr-8 font-bold text-[#53ad0d] text-xl"></ion-icon>
     </div>
-    <p class="text-sm shadow-sm">{{ TranslateKeys.HOME_WELCOME_SUBTITLE | translate }}</p>
+    <p class="text-sm font-medium">{{ TranslateKeys.HOME_WELCOME_SUBTITLE | translate }}</p>
 
     <div class="flex gap-1 items-center">
       <ion-progress-bar class="task-progress h-4" type="determinate" [value]="progress.completed / progress.total"></ion-progress-bar>

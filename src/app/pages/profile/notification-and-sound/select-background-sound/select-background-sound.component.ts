@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '../../../../services/auth/auth.service';
 import { SoundService } from '../../../../services/sound/sound.service';
 import { ISoundResource } from '../../../../shared/interfaces/settings/assets-resource';
+import { CommonConstants } from '../../../../shared/classes/common-constants';
 
 @Component({
   selector: 'app-select-background-sound',
@@ -15,7 +16,6 @@ export class SelectBackgroundSoundComponent implements OnInit {
   @Input() volume!: number;
 
   backgroundSounds!: Array<ISoundResource>;
-  sound: Howl | null = null;
   selectedSound?: ISoundResource;
   playing: boolean = false;
 
@@ -27,11 +27,11 @@ export class SelectBackgroundSoundComponent implements OnInit {
 
   ngOnInit() {
     this.backgroundSounds = new Array<ISoundResource>();
-    this.loadSound();
+    this.soundService.getBackgroundSoundGallery().then(backgroundSounds => this.backgroundSounds = backgroundSounds);
   }
 
-  ionViewDidEnter() {
-    this.soundService.stopBackground();
+  async ionViewDidEnter() {
+    await this.soundService.stopBackground();
   }
 
   ionViewWillLeave() {
@@ -44,46 +44,29 @@ export class SelectBackgroundSoundComponent implements OnInit {
    * @param item
    */
   playSound(item: ISoundResource) {
-    if (this.sound) {
-      if (this.selectedSound?.id === item.id && !this.playing) {
-        this.playing = true;
-        this.sound.play();
-        return;
-      }
-
-      // Dừng âm thanh hiện tại nếu có
-      this.sound.stop();
-      this.playing = false;
-      if (this.selectedSound) {
-        this.selectedSound.progress = 0;
-        this.selectedSound.currentTime = '0:00';
-      }
+    // Tiếp tu nhạc hiện tại
+    if (this.selectedSound?.id === item.id && !this.playing) {
+      this.playing = true;
+      this.soundService.playSound(
+        item.id.toString(),
+        this.volume || 1,
+        false,
+        this.selectedSound.progress
+      ).finally(() => this.updateProgress());
+      return;
     }
 
-    if (!item.resource_url) return
-
-    // Chọn âm thanh mới
-    this.selectedSound = item;
-    this.sound = new Howl({
-      src: [item.resource_url],
-      html5: true,
-      volume: this.volume || 1,
-      onplay: () => {
-        this.playing = true;
-        item.duration = this.sound!.duration();
-        item.durationTime = this.formatTime(item.duration);
-        this.updateProgress();
-      },
-      onend: () => {
-        this.playing = false;
-        item.progress = 0;
-        item.currentTime = '0:00';
-      },
-    });
+    // Dừng các bản đang chạy
+    this.playing = false;
+    if (this.selectedSound) this.stopSound();
 
     // Phát âm thanh
-    this.sound.play();
-    this.soundService.setBackgroundSound(this.sound);
+    this.selectedSound = item;
+    this.soundService.playSound(item.id.toString()).finally(() => {
+      this.playing = true;
+      this.updateProgress();
+    });
+    this.soundService.setBackgroundSound(item.id);
     this.setSelectedSound();
   }
 
@@ -91,12 +74,18 @@ export class SelectBackgroundSoundComponent implements OnInit {
    * Pause sound
    */
   stopSound(isPause: boolean = false) {
-    if (!this.sound) return;
+    const soundId = this.selectedSound?.id.toString();
+    if (!soundId) return;
+
     if (!isPause) {
-      this.sound.stop();
+      if (this.selectedSound) {
+        this.selectedSound.progress = 0;
+        this.selectedSound.currentTime = '0:00';
+      }
+      this.soundService.stopSound(soundId);
       this.selectedSound = undefined;
     } else {
-      this.sound.pause();
+      this.soundService.pauseSound(soundId);
     }
     this.playing = false;
   }
@@ -107,12 +96,15 @@ export class SelectBackgroundSoundComponent implements OnInit {
    * @param item
    */
   public onProgressChange(event: any, item: ISoundResource) {
-    if (this.sound && this.selectedSound?.id === item.id) {
-      const newValue = event.detail.value;
-      this.sound.seek(newValue);
-      item.progress = newValue;
-      item.currentTime = this.formatTime(newValue);
-    }
+    const newValue = event.detail.value;
+    this.soundService.playSound(
+      item.id.toString(),
+      this.volume || 1,
+      false,
+      newValue
+    );
+    item.progress = newValue;
+    item.currentTime = CommonConstants.formatTimeSeconds(newValue);
   }
 
   /**
@@ -120,55 +112,17 @@ export class SelectBackgroundSoundComponent implements OnInit {
    * @private
    */
   private updateProgress(): void {
-    if (this.sound && this.playing && this.selectedSound) {
-      this.selectedSound.progress = this.sound.seek() as number;
-      this.selectedSound.currentTime = this.formatTime(this.selectedSound.progress);
-      // Cập nhật mỗi 100ms
+    if (this.playing && this.selectedSound) {
+      this.soundService.getSoundCurrentTime(this.selectedSound.id.toString())
+        .then(currentTime => {
+          if (this.selectedSound) {
+            this.selectedSound.progress = (currentTime === this.selectedSound.duration) ? 0 : currentTime;
+            this.selectedSound.currentTime = CommonConstants.formatTimeSeconds(this.selectedSound.progress);
+            if (currentTime === this.selectedSound.duration) this.playing = false;
+          }
+        });
       setTimeout(() => this.updateProgress(), 100);
     }
-  }
-
-  /**
-   * Hàm định dạng thời gian (giây -> mm:ss)
-   * @param seconds
-   * @private
-   */
-  private formatTime(seconds: number): string {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-  }
-
-  /**
-   * loadSound
-   * @private
-   */
-  private loadSound(): void {
-    const bgSounds = this.soundService.getBackgroundSoundGallery();
-    this.authService.getSoundSettings().then(soundSettings => {
-      bgSounds.forEach(item => {
-        if (item.resource_url) {
-          const tempSound = new Howl({
-            src: [item.resource_url],
-            html5: true,
-          });
-          tempSound.once('load', () => {
-            const bgSoundItem = {
-              id: item.id,
-              name: item.name,
-              resource_url: item.resource_url,
-              progress: 0,
-              duration: tempSound.duration(),
-              durationTime: this.formatTime(tempSound.duration()),
-              currentTime: this.formatTime(0)
-            };
-            this.backgroundSounds.push(bgSoundItem);
-            this.backgroundSounds = this.backgroundSounds.sort((a, b) => a.id - b.id);
-            if (soundSettings?.background?.sound?.id === item.id) this.selectedSound = bgSoundItem;
-          });
-        }
-      });
-    });
   }
 
   /**
