@@ -242,11 +242,11 @@ export class HomePage implements OnInit {
    * @private
    */
   private async getTaskList(): Promise<void> {
-    if (this.isLoading) return;
+    if (this.isLoading || !this.authData) return;
     this.isLoading = true;
 
     const offset = (this.paged - 1) * this.limit;
-    const results = await this.taskService.getActivatingTaskList(offset, this.limit);
+    const results = await this.taskService.getActivatingTaskList(this.authData.id, offset, this.limit);
     this.tasks = CommonConstants.mergeArrayObjectById(this.tasks, results) || [];
     this.isLoading = true;
   }
