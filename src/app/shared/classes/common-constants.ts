@@ -409,4 +409,14 @@ export class CommonConstants {
     const secs = Math.floor(seconds % 60);
     return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
   }
+
+  /**
+   * Get day number of the month
+   * @param month
+   * @param year
+   */
+  public static getDaysInMonth(month?: number, year?: number): number {
+    const current = new Date();
+    return new Date(year || current.getFullYear(), month || (current.getMonth() + 1), 0).getDate();
+  }
 }

@@ -135,6 +135,24 @@ export class SurveyService {
   }
 
   /**
+   *
+   * @param assigneeId
+   * @param month
+   * @param year
+   * @param areaOfExpertise
+   */
+  public async getSurveyListInMonth(
+    assigneeId: number,
+    month?: number,
+    year?: number,
+    areaOfExpertise?: string,
+  ): Promise<ILiyYdmsAssessmentResult[]> {
+    return this.liyYdmsAssessmentResultService.getAssessmentResultInMonth(
+      assigneeId, month, year, areaOfExpertise
+    );
+  }
+
+  /**
    * Updates the answers for a list of survey questions.
    * @param assessmentResultId
    * @param questions - Array of survey questions to update.

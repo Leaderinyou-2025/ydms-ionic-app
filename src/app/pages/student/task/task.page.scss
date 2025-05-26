@@ -1,13 +1,8 @@
-ion-range {
-  --bar-background: #e5e5e5;
-  --bar-background-active: linear-gradient(to bottom, #4ebc00, #55d300, #5cdd00, #55d300, #4ebc00);
-  --bar-height: 16px;
-  --bar-border-radius: 999px;
-  --knob-background: transparent;
-  --knob-size: 0;
-  --pin-size: 0;
-  --height: 16px;
+ion-progress-bar.emotion-streak {
+  --progress-background: linear-gradient(to bottom, #4ebc00, #55d300, #5cdd00, #55d300, #4ebc00);;
+  --background: #e5e5e5;
 }
+
 
 .checkin-emotion-btn {
   --background: linear-gradient(to bottom, #009ae6, #00a0e6, #0093d1, #00a0e6, #009ae6);
