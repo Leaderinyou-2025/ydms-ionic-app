@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { LoadingController, ToastButton, ToastController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingController, ToastButton, ToastController, ToastOptions } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
-import { IEmotionalSurveyDetail, IEmotionalSurveyQuestion } from '../../../../shared/interfaces/emotional-survey/emotional-survey.interfaces';
 import { TranslateKeys } from '../../../../shared/enums/translate-keys';
 import { PageRoutes } from '../../../../shared/enums/page-routes';
-import { getEmotionEmoji } from '../../../../shared/data/emotion-options.data';
-import { EmotionType } from "../../../../shared/enums/personal-diary/personal-diary.enum";
-import { EmotionalSurveyService } from '../../../../services/emotional-survey/emotional-survey.service';
+import { ISurvey, ISurveyQuestion } from '../../../../shared/interfaces/function-data/survey';
+import { SurveyService } from '../../../../services/survey/survey.service';
+import { IHeaderAnimeImage } from '../../../../shared/interfaces/header/header';
+import { NativePlatform } from '../../../../shared/enums/native-platform';
 import { IonicColors } from '../../../../shared/enums/ionic-colors';
 import { IonicIcons } from '../../../../shared/enums/ionic-icons';
+import { Position } from '../../../../shared/enums/position';
 import { BtnRoles } from '../../../../shared/enums/btn-roles';
-import { NativePlatform } from '../../../../shared/enums/native-platform';
 import { StyleClass } from '../../../../shared/enums/style-class';
 
 @Component({
@@ -22,111 +22,124 @@ import { StyleClass } from '../../../../shared/enums/style-class';
   standalone: false,
 })
 export class EmotionalSurveyDetailComponent implements OnInit {
-  surveyDetail!: IEmotionalSurveyDetail;
+
   isLoading: boolean = true;
+  animeImage!: IHeaderAnimeImage;
+  readonly!: boolean;
+  emotionalSurveyDetail?: ISurvey;
 
   protected readonly TranslateKeys = TranslateKeys;
   protected readonly PageRoutes = PageRoutes;
+  protected readonly structuredClone = structuredClone;
 
   constructor(
-    private route: ActivatedRoute,
-    private emotionalSurveyService: EmotionalSurveyService,
+    private activeRoute: ActivatedRoute,
+    private router: Router,
+    private surveyService: SurveyService,
     private loadingController: LoadingController,
+    private toastController: ToastController,
     private translate: TranslateService,
-    private toastController: ToastController
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
+    this.initHeader();
     await this.loadSurveyDetail();
   }
 
   /**
-   * Load survey detail from route parameter
+   * Submit form
+   * @param questions
    */
-  private async loadSurveyDetail(): Promise<void> {
-    const loading = await this.loadingController.create({
-      message: this.translate.instant(TranslateKeys.TITLE_LOADING_MORE),
-      spinner: 'crescent'
-    });
+  public async onSubmitForm(questions: ISurveyQuestion[]): Promise<void> {
+    if (!questions.length) return;
+    const loading = await this.loadingController.create({mode: NativePlatform.IOS});
     await loading.present();
 
     try {
-      const id = this.route.snapshot.paramMap.get('id');
-      if (!id) {
-        throw new Error('Survey ID not found');
+      const result = await this.surveyService.updateAnswer(questions);
+      if (result) {
+        this.showToast(
+          this.translate.instant(TranslateKeys.TOAST_UPDATE_SUCCESS),
+          IonicColors.SUCCESS
+        );
+        await this.router.navigateByUrl(PageRoutes.EMOTIONAL_SURVEY);
+      } else {
+        this.showToast(
+          this.translate.instant(TranslateKeys.TOAST_UPDATE_FAILED),
+          IonicColors.SUCCESS
+        );
       }
-
-      const surveyDetail = await this.emotionalSurveyService.getSurveyDetail(parseInt(id, 10));
-      if (!surveyDetail) {
-        throw new Error('Failed to load survey detail');
-      }
-
-      this.surveyDetail = surveyDetail;
-    } catch (error) {
-      console.error('ERROR:', error);
-      this.showToast(this.translate.instant('ERROR.server'), IonicColors.DANGER);
+    } catch (e: any) {
+      console.error(e.message);
     } finally {
-      this.isLoading = false;
       await loading.dismiss();
     }
   }
 
   /**
-   * Format date
-   * @param date Date
+   * Load survey detail from the service
    */
-  public formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+  private async loadSurveyDetail(): Promise<void> {
+    const id = this.activeRoute.snapshot.paramMap.get('id');
+    if (!id) {
+      return this.navigateBack();
+    }
+    this.emotionalSurveyDetail = await this.surveyService.getSurveyDetail(+id);
+    this.readonly = this.emotionalSurveyDetail?.assessment_result.create_date !== this.emotionalSurveyDetail?.assessment_result.write_date ||
+      this.emotionalSurveyDetail?.assessment_result['create_time'] !== this.emotionalSurveyDetail?.assessment_result['write_time'];
+    this.isLoading = false;
   }
 
   /**
-   * Get emotion emoji
-   * @param emotionType Emotion type
+   * Navigate back to the survey list
    */
-  public getEmotionEmoji(emotionType: string): string {
-    return getEmotionEmoji(emotionType as EmotionType);
+  private async navigateBack(): Promise<void> {
+    await this.router.navigateByUrl(PageRoutes.EMOTIONAL_SURVEY);
   }
 
   /**
-   * Get the selected option value for a question
-   * @param question The question to get the selected option for
-   * @returns The ID of the selected option or null if no option is selected
+   * init header
+   * @private
    */
-  public getSelectedOptionValue(question: IEmotionalSurveyQuestion): number | null {
-    const selectedOption = question.options.find(option => option.selected);
-    return selectedOption ? selectedOption.id : null;
+  private initHeader(): void {
+    this.animeImage = {
+      name: 'emotional-survey',
+      imageUrl: '/assets/images/emotional-survey.png',
+      width: '100px',
+      height: 'auto',
+      position: {
+        position: 'absolute',
+        right: '0',
+        bottom: '0'
+      }
+    };
   }
 
   /**
    * Show toast message
-   * @param message Message
-   * @param color Color
+   * @param message
+   * @param color
+   * @private
    */
-  private async showToast(message: string, color: IonicColors.SUCCESS | IonicColors.DANGER | IonicColors.WARNING | IonicColors.PRIMARY): Promise<void> {
+  private showToast(message: string, color: IonicColors.SUCCESS | IonicColors.DANGER): void {
     const closeBtn: ToastButton = {
       icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
-      side: 'end',
+      side: Position.END,
       role: BtnRoles.CANCEL,
-    };
+    }
 
-    const toast = await this.toastController.create({
+    const toastOption: ToastOptions = {
       message,
       duration: 3000,
       buttons: [closeBtn],
       mode: NativePlatform.IOS,
-      cssClass: `${StyleClass.TOAST_ITEM} ${(color === IonicColors.DANGER || color === IonicColors.WARNING) ? StyleClass.TOAST_ERROR : (color === IonicColors.PRIMARY ? StyleClass.TOAST_INFO : StyleClass.TOAST_SUCCESS)}`,
-      position: 'top',
-      icon: (color === IonicColors.DANGER || color === IonicColors.WARNING) ? IonicIcons.WARNING_OUTLINE : (color === IonicColors.PRIMARY ? IonicIcons.INFORMATION_CIRCLE_OUTLINE : IonicIcons.CHECKMARK_CIRCLE_OUTLINE),
+      cssClass: `${StyleClass.TOAST_ITEM} ${color === IonicColors.DANGER ? StyleClass.TOAST_ERROR : StyleClass.TOAST_SUCCESS}`,
+      position: Position.TOP,
+      icon: color === IonicColors.DANGER ? IonicIcons.WARNING_OUTLINE : IonicIcons.CHECKMARK_CIRCLE_OUTLINE,
       color,
       keyboardClose: false
-    });
-
-    await toast.present();
+    }
+    this.toastController.create(toastOption).then(toast => toast.present());
   }
 }

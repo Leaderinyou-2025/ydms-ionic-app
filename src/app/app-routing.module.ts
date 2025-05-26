@@ -107,6 +107,10 @@ const routes: Routes = [
     path: 'family-communication-quality-survey',
     loadChildren: () => import('./pages/student/family-communication-quality-survey/family-communication-quality-survey.module').then(m => m.FamilyCommunicationQualitySurveyPageModule)
   },
+  {
+    path: 'emotional-survey',
+    loadChildren: () => import('./pages/student/emotional-survey/emotional-survey.module').then(m => m.EmotionalSurveyPageModule)
+  },
 ];
 
 @NgModule({
