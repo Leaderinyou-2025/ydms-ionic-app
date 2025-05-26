@@ -65,3 +65,12 @@ ion-textarea {
 .ion-touched.ion-invalid {
   border-color: var(--ion-color-danger) !important;
 }
+
+ion-select::part(text) {
+  padding-inline-end: 4px;
+}
+
+ion-select::part(icon) {
+  margin-inline-start: 0;
+}
+
