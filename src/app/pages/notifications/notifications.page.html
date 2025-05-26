@@ -40,7 +40,8 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-list *ngIf="notifications?.length" class="bg-transparent pt-4 ion-padding-start ion-padding-end">
+  <div class="h-full overflow-auto">
+      <ion-list *ngIf="notifications?.length" class="bg-transparent pt-4 ion-padding-start ion-padding-end">
     <ion-item *ngFor="let notification of notifications"
               routerLink="/{{PageRoutes.NOTIFICATIONS}}/{{notification.id}}"
               class="mb-3 rounded-xl shadow notification-item"
@@ -70,14 +71,14 @@
           <div [class.font-medium]="!notification.state"
                [class.text-gray-600]="notification.state"
                [class.dark:text-gray-300]="notification.state"
+               [innerHTML]="notification.body"
                class="mb-1">
-            {{ notification.body }}
           </div>
 
           <!-- Footer: Timestamp and Type -->
           <div class="flex justify-between items-center">
             <div class="text-xs text-gray-500 dark:text-gray-400">
-              {{ notification.create_date | date: DateFormat.DATE_TIME }}
+              {{ notification.create_time }} - {{ notification.create_date | date: DateFormat.DATE_ONLY }}
             </div>
 
             <div class="notification-type text-xs px-2 py-1 rounded-full"
@@ -110,6 +111,7 @@
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreNotifications($event)">
     <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
   </ion-infinite-scroll>
+  </div>
 </ion-content>
 
 <app-footer></app-footer>
