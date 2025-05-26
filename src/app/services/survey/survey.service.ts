@@ -10,7 +10,6 @@ import { AreaOfExpertise } from '../../shared/enums/area-of-expertise';
 import { ISurvey, ISurveyOption, ISurveyQuestion } from '../../shared/interfaces/function-data/survey';
 import { ILiyYdmsAssessmentAnswerOption } from '../../shared/interfaces/models/liy.ydms.assessment.answer.option';
 import { AnswerType } from '../../shared/enums/answer-type';
-import { ILiyYdmsAssessmentAnswerResult } from '../../shared/interfaces/models/liy.ydms.assessment.answer.result';
 
 @Injectable({
   providedIn: 'root'
@@ -110,16 +109,47 @@ export class SurveyService {
   }
 
   /**
+   * Get count survey pending
+   * @param assigneeId
+   * @param areaOfExpertise
+   */
+  public async getCountSurveyPending(
+    assigneeId: number,
+    areaOfExpertise?: AreaOfExpertise
+  ): Promise<number> {
+    return this.liyYdmsAssessmentResultService.getCountAssessmentResultPending(assigneeId, areaOfExpertise);
+  }
+
+  /**
+   * Get Survey Pending List
+   * @param assigneeId
+   * @param areaOfExpertise
+   */
+  public async getSurveyPendingList(
+    assigneeId: number,
+    areaOfExpertise?: AreaOfExpertise
+  ): Promise<ILiyYdmsAssessmentResult[]> {
+    return this.liyYdmsAssessmentResultService.getAssessmentResultPending(
+      assigneeId, areaOfExpertise
+    );
+  }
+
+  /**
    * Updates the answers for a list of survey questions.
+   * @param assessmentResultId
    * @param questions - Array of survey questions to update.
    * @returns A promise resolving to `true` if all updates succeed, `false` otherwise.
    */
-  public async updateAnswer(questions: ISurveyQuestion[]): Promise<boolean> {
+  public async updateAnswer(
+    assessmentResultId: number,
+    questions: ISurveyQuestion[]
+  ): Promise<boolean> {
     if (!questions || questions.length === 0) {
       throw new Error('No questions provided for update.');
     }
 
     try {
+      // Update answer
       const updatePromises = questions.map((question) => {
         const body: any = {answer_id: question.answer_id, answer_text: question.answer_text};
         return this.liyYdmsAssessmentAnswerResultService.updateAnswersResult(
@@ -127,6 +157,9 @@ export class SurveyService {
           body
         );
       });
+
+      // Update assessment result is_posted status
+      updatePromises.push(this.liyYdmsAssessmentResultService.updateAssessmentResult(assessmentResultId, {is_posted: true}));
 
       await Promise.all(updatePromises);
       return true;

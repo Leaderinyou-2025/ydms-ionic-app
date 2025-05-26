@@ -58,6 +58,7 @@ export class CommonConstants {
   public static IMAGE_GIF_BASE64_PREFIX = 'data:image/gif;base64,';
   public static IMAGE_WEBP_BASE64_PREFIX = 'data:image/webp;base64,';
   public static IMAGE_BMP_BASE64_PREFIX = 'data:image/bmp;base64,';
+  public static IMAGE_SVG_BASE64_PREFIX = 'data:image/svg+xml;base64,';
   public static IMAGE_ICO_BASE64_PREFIX = 'data:image/x-icon;base64,';
 
   public static signaturesMineTypes: { [key: string]: string } = {
@@ -67,7 +68,8 @@ export class CommonConstants {
     R0lGODdh: CommonConstants.IMAGE_GIF_BASE64_PREFIX, // GIF (GIF87a)
     UklGR: CommonConstants.IMAGE_WEBP_BASE64_PREFIX, // WebP
     Qk1: CommonConstants.IMAGE_BMP_BASE64_PREFIX, // BMP
-    AAAB: CommonConstants.IMAGE_ICO_BASE64_PREFIX // ICO
+    AAAB: CommonConstants.IMAGE_ICO_BASE64_PREFIX, // ICO
+    PD94: CommonConstants.IMAGE_SVG_BASE64_PREFIX // SVG (<?xml)
   };
 
   public static detectMimeType(b64: string): string | undefined {
