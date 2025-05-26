@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingController, ToastController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
-import { ISelfDiscoverySurveyDetail, ISelfDiscoverySurveyQuestion } from '../../../../shared/interfaces/self-discovery-survey/self-discovery-survey.interfaces';
 import { TranslateKeys } from '../../../../shared/enums/translate-keys';
-import { ForceTestData } from '../../../../shared/classes/force-test-data';
 import { PageRoutes } from '../../../../shared/enums/page-routes';
-import { SelfDiscoverySurveyService } from '../../../../services/self-discovery-survey/self-discovery-survey.service';
+import { ISurvey, ISurveyQuestion } from '../../../../shared/interfaces/function-data/survey';
+import { SurveyService } from '../../../../services/survey/survey.service';
+import { IHeaderAnimeImage } from '../../../../shared/interfaces/header/header';
+import { NativePlatform } from '../../../../shared/enums/native-platform';
+import { IonicColors } from '../../../../shared/enums/ionic-colors';
 
 @Component({
   selector: 'app-self-discovery-survey-detail',
@@ -14,77 +18,114 @@ import { SelfDiscoverySurveyService } from '../../../../services/self-discovery-
   standalone: false,
 })
 export class SelfDiscoverySurveyDetailComponent implements OnInit {
-  surveyDetail!: ISelfDiscoverySurveyDetail;
+
   isLoading: boolean = true;
+  animeImage!: IHeaderAnimeImage;
+  readonly!: boolean;
+  selfDiscoverySurveyDetail?: ISurvey;
 
   protected readonly TranslateKeys = TranslateKeys;
   protected readonly PageRoutes = PageRoutes;
+  protected readonly structuredClone = structuredClone;
+  protected readonly Array = Array;
 
   constructor(
-    private route: ActivatedRoute,
+    private activeRoute: ActivatedRoute,
     private router: Router,
-    private selfDiscoverySurveyService: SelfDiscoverySurveyService
-  ) { }
+    private surveyService: SurveyService,
+    private loadingController: LoadingController,
+    private toastController: ToastController,
+    private translate: TranslateService,
+  ) {
+  }
 
-  ngOnInit() {
-    this.loadSurveyDetail();
+  async ngOnInit() {
+    this.initHeader();
+    await this.loadSurveyDetail();
   }
 
   /**
-   * Load survey detail
+   * Submit form
+   * @param questions
+   */
+  public async onSubmitForm(questions: ISurveyQuestion[]): Promise<void> {
+    if (!questions.length) return;
+    const loading = await this.loadingController.create({mode: NativePlatform.IOS});
+    await loading.present();
+
+    try {
+      const result = await this.surveyService.updateAnswer(questions);
+      if (result) {
+        this.showToast(
+          this.translate.instant(TranslateKeys.TOAST_UPDATE_SUCCESS),
+          IonicColors.SUCCESS
+        );
+        await this.router.navigateByUrl(PageRoutes.SELF_DISCOVERY_SURVEY);
+      } else {
+        this.showToast(
+          this.translate.instant(TranslateKeys.TOAST_UPDATE_FAILED),
+          IonicColors.SUCCESS
+        );
+      }
+    } catch (e: any) {
+      console.error(e.message);
+    } finally {
+      await loading.dismiss();
+    }
+  }
+
+  /**
+   * Load survey detail from the service
    */
   private async loadSurveyDetail(): Promise<void> {
-    this.isLoading = true;
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      const surveyId = parseInt(id, 10);
-      const surveyDetail = await this.selfDiscoverySurveyService.getSurveyDetail(surveyId);
-      if (surveyDetail) {
-        this.surveyDetail = surveyDetail;
-      } else {
-        this.navigateBack();
-      }
-    } else {
-      this.navigateBack();
+    const id = this.activeRoute.snapshot.paramMap.get('id');
+    if (!id) {
+      return this.navigateBack();
     }
+    this.selfDiscoverySurveyDetail = await this.surveyService.getSurveyDetail(+id);
+    this.readonly = this.selfDiscoverySurveyDetail?.assessment_result.create_date !== this.selfDiscoverySurveyDetail?.assessment_result.write_date ||
+      this.selfDiscoverySurveyDetail?.assessment_result['create_time'] !== this.selfDiscoverySurveyDetail?.assessment_result['write_time'];
     this.isLoading = false;
   }
 
   /**
    * Navigate back to the survey list
    */
-  public navigateBack(): void {
-    this.router.navigate([`/${PageRoutes.SELF_DISCOVERY_SURVEY}`]);
+  private async navigateBack(): Promise<void> {
+    await this.router.navigateByUrl(PageRoutes.SELF_DISCOVERY_SURVEY);
   }
 
   /**
-   * Format date
-   * @param date Date
+   * Show toast
+   * @param message
+   * @param color
+   * @private
    */
-  public formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+  private async showToast(message: string, color: IonicColors): Promise<void> {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      position: 'top',
+      color
     });
+    await toast.present();
   }
 
   /**
-   * Get discovery level emoji
-   * @param discoveryLevel Discovery level
+   * init header
+   * @private
    */
-  public getDiscoveryLevelEmoji(discoveryLevel: string): string {
-    return ForceTestData.getDiscoveryLevelEmoji(discoveryLevel);
-  }
-
-  /**
-   * Get selected option value
-   * @param question Question
-   */
-  public getSelectedOptionValue(question: ISelfDiscoverySurveyQuestion): number {
-    const selectedOption = question.options.find(option => option.selected);
-    return selectedOption ? selectedOption.id : -1;
+  private initHeader(): void {
+    this.animeImage = {
+      name: 'rank',
+      imageUrl: '/assets/images/self-discovery-survey.png',
+      width: '200px',
+      height: 'auto',
+      position: {
+        position: 'absolute',
+        right: '-50px',
+        bottom: '-5px'
+      }
+    };
   }
 }
