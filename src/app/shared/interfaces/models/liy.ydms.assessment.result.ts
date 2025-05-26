@@ -10,6 +10,7 @@ export interface ILiyYdmsAssessmentResult extends IBase {
   area_of_expertise: AreaOfExpertise;
   assessment_id: IRelatedField;
   assignee_id: IRelatedField;
+  is_posted: boolean;
   nickname?: string;
   rank_point?: number;
   scores?: number;

@@ -56,8 +56,7 @@ export class FamilyCommunicationQualitySurveyDetailComponent implements OnInit {
       return this.navigateBack();
     }
     this.communicationSurveyDetail = await this.surveyService.getSurveyDetail(+id);
-    this.readonly = this.communicationSurveyDetail?.assessment_result.create_date !== this.communicationSurveyDetail?.assessment_result.write_date ||
-      this.communicationSurveyDetail?.assessment_result['create_time'] !== this.communicationSurveyDetail?.assessment_result['write_time'];
+    this.readonly = this.communicationSurveyDetail?.assessment_result.is_posted || false;
     this.isLoading = false;
   }
 
@@ -78,7 +77,9 @@ export class FamilyCommunicationQualitySurveyDetailComponent implements OnInit {
     await loading.present();
 
     try {
-      const result = await this.surveyService.updateAnswer(questions);
+      const result = await this.surveyService.updateAnswer(
+        this.communicationSurveyDetail?.assessment_result.id || 0, questions
+      );
       if (result) {
         this.showToast(
           this.translate.instant(TranslateKeys.TOAST_UPDATE_SUCCESS),
