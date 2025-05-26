@@ -1,7 +1,7 @@
 <ion-toolbar class="home-toolbar">
   <div class="flex justify-between py-3 w-full h-auto ion-padding-start ion-padding-end">
     <!--  Huy hiệu  -->
-    <div class="flex items-center" [routerLink]="['/' + PageRoutes.RANK]" [queryParams]="{ activeTab: 'rank' }">
+    <div class="flex items-center" [routerLink]="['/' + PageRoutes.RANK]" [queryParams]="{ activeTab: 'achievements' }">
       <ion-img src="assets/icons/svg/ico_top_achievement.svg" alt="icon" class="w-7 h-7 mr-1 object-contain"></ion-img>
       <div class="flex flex-col justify-center">
         <span class="text-xs text-green-500 font-bold">{{ totalBadges || 0 }}</span>
@@ -10,7 +10,7 @@
     </div>
 
     <!--  Xếp hạng  -->
-    <div class="flex items-center" [routerLink]="['/' + PageRoutes.RANK]" [queryParams]="{ activeTab: 'achievements' }">
+    <div class="flex items-center" [routerLink]="['/' + PageRoutes.RANK]" [queryParams]="{ activeTab: 'rank' }">
       <ion-img src="assets/icons/svg/ico_top_rank.svg" alt="icon" class="w-7 h-7 mr-1 object-contain"></ion-img>
       <div class="flex flex-col justify-center">
         <span class="text-xs text-green-500 font-bold">{{ ranking || 0 }}</span>

@@ -43,6 +43,14 @@ export class LiyYdmsAchievementService {
   }
 
   /**
+   * getCountAchievement
+   * @param searchDomain
+   */
+  public async getCountAchievement(searchDomain: SearchDomain = []): Promise<number> {
+    return this.odooService.searchCount<ILiyYdmsAchievement>(ModelName.ACHIEVEMENT, searchDomain);
+  }
+
+  /**
    * Lấy danh sách huy hiệu đã đạt được của học sinh dựa trên huy hiệu
    * @param teenagerId
    * @param badgeIds

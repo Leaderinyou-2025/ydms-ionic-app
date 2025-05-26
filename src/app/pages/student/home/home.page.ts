@@ -8,6 +8,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { TaskService } from '../../../services/task/task.service';
 import { SoundService } from '../../../services/sound/sound.service';
 import { LiyYdmsAvatarService } from '../../../services/models/liy.ydms.avatar.service';
+import { RankService } from '../../../services/rank/rank.service';
 import { TranslateKeys } from '../../../shared/enums/translate-keys';
 import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
 import { BtnRoles } from '../../../shared/enums/btn-roles';
@@ -17,7 +18,6 @@ import { NativePlatform } from '../../../shared/enums/native-platform';
 import { StyleClass } from '../../../shared/enums/style-class';
 import { IonicColors } from '../../../shared/enums/ionic-colors';
 import { PageRoutes } from '../../../shared/enums/page-routes';
-import { TaskStatus } from '../../../shared/enums/task-status';
 import { ILiyYdmsTask } from '../../../shared/interfaces/models/liy.ydms.task';
 import { CommonConstants } from '../../../shared/classes/common-constants';
 
@@ -70,6 +70,7 @@ export class HomePage implements OnInit {
     private liyYdmsAvatarService: LiyYdmsAvatarService,
     private taskService: TaskService,
     private soundService: SoundService,
+    private rankService: RankService,
   ) {
   }
 
@@ -160,6 +161,7 @@ export class HomePage implements OnInit {
    * @private
    */
   private initTaskDataPaging(): void {
+    this.isLoading = false;
     this.paged = 1;
     this.tasks = new Array<ILiyYdmsTask>();
     this.progress = {completed: 0, total: 0}
@@ -211,10 +213,13 @@ export class HomePage implements OnInit {
    * @private
    */
   private getToolbarData(): void {
-    // TODO: Get count user badges
-    // TODO: Get user rank
+    if (!this.authData) return;
+    // Get count user badges
+    this.rankService.getCountUserAchievement(this.authData.id).then(totalAchievement => this.totalBadges = totalAchievement);
+    // Get user ranking
+    this.rankService.getLeaderboardByTeenagerId(this.authData.id).then(leaderboard => this.ranking = leaderboard?.ranking || 0);
     // Total task
-    this.taskService.getCountTask().then(results => this.totalTask = results);
+    this.taskService.getCountAllTasksByAssigneeId(this.authData.id).then(results => this.totalTask = results);
     // TODO: Get user total friendly
   }
 
@@ -223,9 +228,10 @@ export class HomePage implements OnInit {
    * @private
    */
   private getProgressTasks(): void {
+    if (!this.authData) return;
     Promise.all([
-      this.taskService.getCountActivatingTasks(),
-      this.taskService.getCountCompletedTasks()
+      this.taskService.getCountActivatingTaskByAssigneeId(this.authData.id),
+      this.taskService.getCountCompletedTaskByAssigneeId(this.authData.id)
     ]).then(([totalTask, completedTask]) => {
       this.progress = {total: totalTask, completed: completedTask};
     });
@@ -240,7 +246,7 @@ export class HomePage implements OnInit {
     this.isLoading = true;
 
     const offset = (this.paged - 1) * this.limit;
-    const results = await this.taskService.getTaskListByStatus([TaskStatus.PENDING, TaskStatus.IN_PROGRESS], offset, this.limit);
+    const results = await this.taskService.getActivatingTaskList(offset, this.limit);
     this.tasks = CommonConstants.mergeArrayObjectById(this.tasks, results) || [];
     this.isLoading = true;
   }

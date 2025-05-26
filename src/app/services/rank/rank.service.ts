@@ -144,4 +144,12 @@ export class RankService {
     return this.liyYdmsAchievementService.getAchievementByTeenagerIdAndBadgeIds(teenagerId, badgeIds);
   }
 
+  /**
+   * getCountUserAchievement
+   * @param teenagerId
+   */
+  public async getCountUserAchievement(teenagerId: number): Promise<number> {
+    return this.liyYdmsAchievementService.getCountAchievement([['teenager_id', OdooDomainOperator.EQUAL, teenagerId]]);
+  }
+
 }

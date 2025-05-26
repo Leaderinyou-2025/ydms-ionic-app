@@ -15,5 +15,6 @@ export enum ModelName {
   ASSESSMENT_QUESTION = 'liy.ydms.assessment.question',
   ASSESSMENT_ANSWER_OPTION = 'liy.ydms.assessment.answer.option',
   ASSESSMENT_RESULT = 'liy.ydms.assessment.result',
-  ASSESSMENT_ANSWER_RESULT = 'liy.ydms.assessment.answer.result'
+  ASSESSMENT_ANSWER_RESULT = 'liy.ydms.assessment.answer.result',
+  EMOTIONAL_DIARY = 'liy.ydms.emotional.diary'
 }
