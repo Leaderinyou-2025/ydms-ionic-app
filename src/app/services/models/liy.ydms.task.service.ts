@@ -71,7 +71,7 @@ export class LiyYdmsTaskService {
    * @param assigneeId
    */
   public async getCountUserTask(assigneeId: number): Promise<number> {
-    return this.getCountTask([[assigneeId, OdooDomainOperator.IN, 'assignee_ids']]);
+    return this.getCountTask([[ 'assignee_ids', OdooDomainOperator.IN, [assigneeId]]]);
   }
 
   /**
@@ -81,7 +81,7 @@ export class LiyYdmsTaskService {
   public async getCountActivatingTasks(assigneeId: number): Promise<number> {
     return this.getCountTask([
       ['status', OdooDomainOperator.IN, [TaskStatus.PENDING, TaskStatus.IN_PROGRESS]],
-      [assigneeId, OdooDomainOperator.IN, 'assignee_ids']
+      [ 'assignee_ids', OdooDomainOperator.IN, [assigneeId]]
     ]);
   }
 
@@ -91,7 +91,7 @@ export class LiyYdmsTaskService {
   public async getCountCompletedTasks(assigneeId: number): Promise<number> {
     return this.getCountTask([
       ['status', OdooDomainOperator.EQUAL, TaskStatus.COMPLETED],
-      [assigneeId, OdooDomainOperator.IN, 'assignee_ids']
+      [ 'assignee_ids', OdooDomainOperator.IN, [assigneeId]]
     ]);
   }
 
@@ -113,7 +113,7 @@ export class LiyYdmsTaskService {
     return this.getTaskList(
       [
         ['area_of_expertise', OdooDomainOperator.EQUAL, areaId],
-        [assigneeId, OdooDomainOperator.IN, 'assignee_ids']
+        [ 'assignee_ids', OdooDomainOperator.IN, [assigneeId]]
       ],
       offset,
       limit,
@@ -142,7 +142,7 @@ export class LiyYdmsTaskService {
         statuses.length === 1 ? OdooDomainOperator.EQUAL : OdooDomainOperator.IN,
         statuses.length === 1 ? statuses[0] : statuses
       ],
-      [assigneeId, OdooDomainOperator.IN, 'assignee_ids']
+      [ 'assignee_ids', OdooDomainOperator.IN, [assigneeId]]
     ];
     return this.getTaskList(searchDomain, offset, limit, order);
   }
@@ -160,6 +160,6 @@ export class LiyYdmsTaskService {
     limit: number = 20,
     order: OrderBy = OrderBy.CREATE_AT_DESC,
   ): Promise<ILiyYdmsTask[]> {
-    return this.getTaskList([[assigneeId, OdooDomainOperator.IN, 'assignee_ids']], offset, limit, order);
+    return this.getTaskList([[ 'assignee_ids', OdooDomainOperator.IN, [assigneeId]]], offset, limit, order);
   }
 }
