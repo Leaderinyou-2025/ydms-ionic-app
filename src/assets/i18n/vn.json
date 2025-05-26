@@ -169,6 +169,7 @@
     "profile": "Cá nhân",
     "chatbot": "Chatbot",
     "menu": "Menu",
+    "days": "ngày",
     "view_profile_page": "Xem trang cá nhân",
     "badge_collection": "Bộ sưu tập huy hiệu",
     "family_page": "Trang gia đình",
@@ -317,7 +318,14 @@
     "task": "Nhiệm vụ",
     "activity": "Hoạt động",
     "checkin_emotion_daily": "Checkin cảm xúc hàng ngày",
-    "take_survey_now": "Khảo sát ngay để nhận phần thưởng!"
+    "take_survey_now": "Khảo sát ngay để nhận phần thưởng!",
+    "emotion_streak_month": "Checkin trong tháng",
+    "has_survey_pending": "Có {{surveys}} bài khảo sát cần làm",
+    "group_challenge": "Thử thách nhóm",
+    "family_activity": "Hoạt động gia đình",
+    "instruction": "Gợi ý, hướng dẫn",
+    "exercise": "Bài tập",
+    "periodic_survey": "Khảo sát định kỳ"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",
@@ -357,7 +365,8 @@
     "create_new_survey": "Tạo khảo sát mới",
     "create_first_survey": "Tạo khảo sát đầu tiên",
     "select": "Chọn",
-    "share": "Chia sẻ"
+    "share": "Chia sẻ",
+    "checkin_emotion": "Check-In"
   },
   "TOAST": {
     "error_header": "Lỗi",

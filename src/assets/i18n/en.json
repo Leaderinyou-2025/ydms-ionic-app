@@ -169,6 +169,7 @@
     "profile": "Profile",
     "chatbot": "Chatbot",
     "menu": "Menu",
+    "days": "ngày",
     "view_profile_page": "View profile page",
     "badge_collection": "Badge collection",
     "family_page": "Family page",
@@ -316,7 +317,14 @@
     "task": "Tasks",
     "activity": "Activities",
     "checkin_emotion_daily": "Daily Mood Check-in",
-    "take_survey_now": "Take survey now to get reward"
+    "take_survey_now": "Take survey now to get reward",
+    "emotion_streak_month": "Check in this month",
+    "has_survey_pending": "There are {{surveys}} surveys to do",
+    "group_challenge": "Group challenge",
+    "family_activity": "Family activity",
+    "instruction": "Instruction",
+    "exercise": "Exercise",
+    "periodic_survey": "Periodic survey"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",
@@ -357,7 +365,8 @@
     "create_first_survey": "Create Your First Survey",
     "select": "Select",
     "share": "Share",
-    "answer_all_questions": "Please answer all question!"
+    "answer_all_questions": "Please answer all question!",
+    "checkin_emotion": "Check-In"
   },
   "TOAST": {
     "error_header": "Error",

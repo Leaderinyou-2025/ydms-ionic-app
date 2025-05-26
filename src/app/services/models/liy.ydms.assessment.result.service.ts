@@ -15,7 +15,7 @@ export class LiyYdmsAssessmentResultService {
   private fields = [
     'assessment_id',
     'nickname',
-    'assessment_id',
+    'assignee_id',
     'name',
     'area_of_expertise',
     'scores',
@@ -138,5 +138,34 @@ export class LiyYdmsAssessmentResultService {
     if (!results || !results?.length) return;
     results = CommonConstants.convertArr2ListItem(results);
     return results[0];
+  }
+
+  /**
+   * getAssessmentResultInMonth
+   * @param assigneeId
+   * @param month
+   * @param year
+   * @param areaOfExpertise
+   */
+  public async getAssessmentResultInMonth(
+    assigneeId: number,
+    month?: number,
+    year?: number,
+    areaOfExpertise?: string,
+  ): Promise<ILiyYdmsAssessmentResult[]> {
+    const currentDate = new Date();
+    const firstDay = new Date(year || currentDate.getFullYear(), month ? (month - 1) : currentDate.getMonth(), 1, 0, 0, 0);
+    const lastDay = new Date(year || currentDate.getFullYear(), month || (currentDate.getMonth() + 1), 0, 23, 59, 59);
+
+    const firstDayFormatted = `${firstDay.toISOString().split('T')[0]} 00:00:00`;
+    const lastDayFormatted = `${lastDay.toISOString().split('T')[0]} 23:59:59`;
+
+    const searchDomain: SearchDomain = [
+      ['assignee_id', OdooDomainOperator.EQUAL, assigneeId],
+      ['create_date', OdooDomainOperator.GREATER_EQUAL, firstDayFormatted],
+      ['create_date', OdooDomainOperator.LESS_EQUAL, lastDayFormatted],
+    ];
+    if (areaOfExpertise) searchDomain.push(['area_of_expertise', OdooDomainOperator.EQUAL, areaOfExpertise]);
+    return this.getAssessmentResultList(searchDomain, 0, 0);
   }
 }

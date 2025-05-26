@@ -213,6 +213,7 @@ export enum TranslateKeys {
   TITLE_CHATBOT = 'TITLE.chatbot',
   TITLE_RANK = 'TITLE.rank',
   TITLE_MENU = 'TITLE.menu',
+  TITLE_DAYS = 'TITLE.days',
   TITLE_VIEW_PROFILE_PAGE = 'TITLE.view_profile_page',
   TITLE_BADGE_COLLECTION = 'TITLE.badge_collection',
   TITLE_FAMILY_PAGE = 'TITLE.family_page',
@@ -227,6 +228,7 @@ export enum TranslateKeys {
   TITLE_CALENDAR = 'TITLE.calendar',
   TITLE_HISTORY = 'TITLE.history',
   TITLE_EMOTION_STREAK = 'TITLE.emotion_streak',
+  TITLE_EMOTION_STREAK_MONTH = 'TITLE.emotion_streak_month',
   TITLE_EMOTION_CAPTION = 'TITLE.emotion_caption',
   TITLE_EMOTION_SHARE = 'TITLE.emotion_share',
   TITLE_EMOTION_SHARE_TARGET = 'TITLE.emotion_share_target',
@@ -324,6 +326,13 @@ export enum TranslateKeys {
   TITLE_TASK = 'TITLE.task',
   TITLE_ACTIVITY = 'TITLE.activity',
   TITLE_CHECKIN_EMOTION_DAILY = 'TITLE.checkin_emotion_daily',
+  TITLE_HAS_SURVEY_PENDING = 'TITLE.has_survey_pending',
+  TITLE_GROUP_CHALLENGE = 'TITLE.group_challenge',
+  TITLE_FAMILY_ACTIVITY = 'TITLE.family_activity',
+  TITLE_INSTRUCTION = 'TITLE.instruction',
+  TITLE_EXERCISE = 'TITLE.exercise',
+  TITLE_PERIODIC_SURVEY = 'TITLE.periodic_survey',
+
 
   // VALIDATE
   VALIDATE_PHONE_REQUIRED = 'VALIDATE.phone_required',
@@ -363,6 +372,7 @@ export enum TranslateKeys {
   BUTTON_CREATE_FIRST_SURVEY = 'BUTTON_TITLES.create_first_survey',
   BUTTON_SELECT = 'BUTTON_TITLES.select',
   BUTTON_SHARE = 'BUTTON_TITLES.share',
+  BUTTON_CHECKIN_EMOTION = 'BUTTON_TITLES.checkin_emotion',
 
   // TOAST
   TOAST_ERROR_HEADER = 'TOAST.error_header',
