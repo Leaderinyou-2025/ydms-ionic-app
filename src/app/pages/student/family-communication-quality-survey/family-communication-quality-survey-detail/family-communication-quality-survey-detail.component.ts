@@ -1,11 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import {LoadingController, ToastButton, ToastController, ToastOptions} from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
-import { IFamilyCommunicationQualitySurveyDetail, IFamilyCommunicationQualitySurveyQuestion } from '../../../../shared/interfaces/family-communication-quality-survey/family-communication-quality-survey.interfaces';
 import { TranslateKeys } from '../../../../shared/enums/translate-keys';
-import { ForceTestData } from '../../../../shared/classes/force-test-data';
 import { PageRoutes } from '../../../../shared/enums/page-routes';
-import { FamilyCommunicationQualitySurveyService } from '../../../../services/family-communication-quality-survey/family-communication-quality-survey.service';
+import { ISurvey, ISurveyQuestion } from '../../../../shared/interfaces/function-data/survey';
+import { SurveyService } from '../../../../services/survey/survey.service';
+import { IHeaderAnimeImage } from '../../../../shared/interfaces/header/header';
+import { NativePlatform } from '../../../../shared/enums/native-platform';
+import { IonicColors } from '../../../../shared/enums/ionic-colors';
+import { IonicIcons } from '../../../../shared/enums/ionic-icons';
+import { Position } from '../../../../shared/enums/position';
+import { BtnRoles } from '../../../../shared/enums/btn-roles';
+import {StyleClass} from "../../../../shared/enums/style-class";
 
 @Component({
   selector: 'app-family-communication-quality-survey-detail',
@@ -14,77 +22,123 @@ import { FamilyCommunicationQualitySurveyService } from '../../../../services/fa
   standalone: false,
 })
 export class FamilyCommunicationQualitySurveyDetailComponent implements OnInit {
-  surveyDetail!: IFamilyCommunicationQualitySurveyDetail;
+
   isLoading: boolean = true;
+  animeImage!: IHeaderAnimeImage;
+  readonly!: boolean;
+  communicationSurveyDetail?: ISurvey;
 
   protected readonly TranslateKeys = TranslateKeys;
   protected readonly PageRoutes = PageRoutes;
+  protected readonly structuredClone = structuredClone;
 
   constructor(
-    private route: ActivatedRoute,
+    private activeRoute: ActivatedRoute,
     private router: Router,
-    private familyCommunicationQualitySurveyService: FamilyCommunicationQualitySurveyService
-  ) { }
+    private surveyService: SurveyService,
+    private loadingController: LoadingController,
+    private toastController: ToastController,
+    private translate: TranslateService,
+  ) {
+  }
 
-  ngOnInit() {
-    this.loadSurveyDetail();
+  async ngOnInit() {
+    this.initHeader();
+    await this.loadSurveyDetail();
   }
 
   /**
-   * Load survey detail
+   * Load survey detail from the service
    */
   private async loadSurveyDetail(): Promise<void> {
-    this.isLoading = true;
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      const surveyId = parseInt(id, 10);
-      const surveyDetail = await this.familyCommunicationQualitySurveyService.getSurveyDetail(surveyId);
-      if (surveyDetail) {
-        this.surveyDetail = surveyDetail;
-      } else {
-        this.navigateBack();
-      }
-    } else {
-      this.navigateBack();
+    const id = this.activeRoute.snapshot.paramMap.get('id');
+    if (!id) {
+      return this.navigateBack();
     }
+    this.communicationSurveyDetail = await this.surveyService.getSurveyDetail(+id);
+    this.readonly = this.communicationSurveyDetail?.assessment_result.create_date !== this.communicationSurveyDetail?.assessment_result.write_date ||
+      this.communicationSurveyDetail?.assessment_result['create_time'] !== this.communicationSurveyDetail?.assessment_result['write_time'];
     this.isLoading = false;
   }
 
   /**
    * Navigate back to the survey list
    */
-  public navigateBack(): void {
-    this.router.navigate([`/${PageRoutes.FAMILY_COMMUNICATION_QUALITY_SURVEY}`]);
+  private async navigateBack(): Promise<void> {
+    await this.router.navigateByUrl(PageRoutes.FAMILY_COMMUNICATION_QUALITY_SURVEY);
   }
 
   /**
-   * Format date
-   * @param date Date
+   * Submit form
+   * @param questions
    */
-  public formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+  public async onSubmitForm(questions: ISurveyQuestion[]): Promise<void> {
+    if (!questions.length) return;
+    const loading = await this.loadingController.create({mode: NativePlatform.IOS});
+    await loading.present();
+
+    try {
+      const result = await this.surveyService.updateAnswer(questions);
+      if (result) {
+        this.showToast(
+          this.translate.instant(TranslateKeys.TOAST_UPDATE_SUCCESS),
+          IonicColors.SUCCESS
+        );
+        await this.router.navigateByUrl(PageRoutes.FAMILY_COMMUNICATION_QUALITY_SURVEY);
+      } else {
+        this.showToast(
+          this.translate.instant(TranslateKeys.TOAST_UPDATE_FAILED),
+          IonicColors.SUCCESS
+        );
+      }
+    } catch (e: any) {
+      console.error(e.message);
+    } finally {
+      await loading.dismiss();
+    }
   }
 
   /**
-   * Get communication level emoji
-   * @param communicationLevel Communication level
+   * Initialize header
    */
-  public getCommunicationLevelEmoji(communicationLevel: string): string {
-    return ForceTestData.getCommunicationLevelEmoji(communicationLevel);
+  private initHeader(): void {
+    this.animeImage = {
+      name: 'family-communication-quality-survey-detail',
+      imageUrl: '/assets/images/family-communication-quality-survey.png',
+      width: '200px',
+      height: 'auto',
+      position: {
+        position: 'absolute',
+        right: '-20px',
+        bottom: '-10px'
+      }
+    };
   }
 
   /**
-   * Get selected option value
-   * @param question Question
+   * Show toast message
+   * @param message
+   * @param color
+   * @private
    */
-  public getSelectedOptionValue(question: IFamilyCommunicationQualitySurveyQuestion): number {
-    const selectedOption = question.options.find(o => o.selected);
-    return selectedOption ? selectedOption.id : 0;
+  private showToast(message: string, color: IonicColors.SUCCESS | IonicColors.DANGER): void {
+    const closeBtn: ToastButton = {
+      icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
+      side: Position.END,
+      role: BtnRoles.CANCEL,
+    }
+
+    const toastOption: ToastOptions = {
+      message,
+      duration: 3000,
+      buttons: [closeBtn],
+      mode: NativePlatform.IOS,
+      cssClass: `${StyleClass.TOAST_ITEM} ${color === IonicColors.DANGER ? StyleClass.TOAST_ERROR : StyleClass.TOAST_SUCCESS}`,
+      position: Position.TOP,
+      icon: color === IonicColors.DANGER ? IonicIcons.WARNING_OUTLINE : IonicIcons.CHECKMARK_CIRCLE_OUTLINE,
+      color,
+      keyboardClose: false
+    }
+    this.toastController.create(toastOption).then(toast => toast.present());
   }
 }
