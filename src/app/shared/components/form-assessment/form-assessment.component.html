@@ -27,7 +27,7 @@
         <!-- INPUT_TEXT type -->
         <div *ngSwitchCase="AnswerType.INPUT_TEXT" class="flex flex-col gap-2.5 border rounded-xl overflow-hidden p-3 min-h-24">
           <div *ngIf="readonly" class="text-blue-500 text-justify"> {{ question.answer_text }}</div>
-          <ion-textarea [(ngModel)]="question.answer_text" *ngIf="!readonly" rows="3" class="ion-no-padding"></ion-textarea>
+          <ion-textarea [(ngModel)]="question.answer_text" *ngIf="!readonly" rows="3" class="ion-no-padding bg-transparent"></ion-textarea>
         </div>
 
         <!-- Default case (unknown type) -->
