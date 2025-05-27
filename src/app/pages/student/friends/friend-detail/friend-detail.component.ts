@@ -71,6 +71,10 @@ export class FriendDetailComponent implements OnInit {
     this.friendService.getFriendById(this.friendId).subscribe(
       (friend) => {
         this.friend = friend;
+        // Process avatar for the friend
+        if (this.friend) {
+          this.processFriendAvatar(this.friend);
+        }
         loading.dismiss();
         this.isLoading = false;
       },
@@ -80,6 +84,11 @@ export class FriendDetailComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+  private processFriendAvatar(friend: IFriend): void {
+    if (!friend) return;
+    friend.avatar = this.friendService.getFriendAvatarImage(friend);
   }
 
   /**

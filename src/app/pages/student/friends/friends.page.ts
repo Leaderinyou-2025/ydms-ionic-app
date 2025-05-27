@@ -71,6 +71,8 @@ export class FriendsPage implements OnInit {
       }
 
       this.totalFriends = result.total;
+      // Process avatars for the loaded friends
+      this.processFriendAvatars(result.friends);
 
       // Check if we've loaded all available data
       this.hasMoreData = this.friends.length < result.total;
@@ -112,6 +114,14 @@ export class FriendsPage implements OnInit {
     this.searchTerm = searchTerm || '';
     // Reset pagination and reload with search term
     this.loadFriends(null, true);
+  }
+
+  private processFriendAvatars(friends: IFriend[]): void {
+    if (!friends?.length) return;
+
+    for (const friend of friends) {
+      friend.avatar = this.friendService.getFriendAvatarImage(friend);
+    }
   }
 
   /**
