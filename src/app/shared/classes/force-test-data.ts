@@ -11,6 +11,7 @@ import {
 } from '../interfaces/home/home.interfaces';
 import { ILiyYdmsNotification } from '../interfaces/models/liy.ydms.notification';
 import { IFriend } from '../interfaces/friend/friend';
+import { FriendStatus } from '../enums/friend-status';
 
 import { ISelfDiscoverySurveyHistory, ISelfDiscoverySurveyQuestion } from '../interfaces/self-discovery-survey/self-discovery-survey.interfaces';
 import { IFamilyDialogueSessionHistory, IFamilyDialogueSessionDetail, IFamilyDialogueSessionQuestion } from '../interfaces/family-dialogue-session/family-dialogue-session.interfaces';
@@ -359,8 +360,13 @@ export class ForceTestData {
   static friends: Array<IFriend> = [
     {
       id: 1,
+      user_id: {id: 1, name: 'Current User'}, // Assuming current user has ID 1
       name: 'Zoro Đầu rêu',
+      friend_id: {id: 101, name: 'Zoro Đầu rêu'},
       avatar: 'assets/images/avatar/Shiba-Inu-Dog-1.png',
+      nickname: 'Đầu rêu',
+      friendly_point: 120,
+      status: FriendStatus.ACCEPTED,
       likeCount: 100,
       rank: 5,
       achievements: 25,
@@ -368,8 +374,13 @@ export class ForceTestData {
     },
     {
       id: 2,
+      user_id: {id: 1, name: 'Current User'}, // Assuming current user has ID 1
       name: 'Bé thân thiện',
-      avatar: 'assets/images/avatar/Shiba-Inu-Dog-2.png',
+      friend_id: {id: 102, name: 'Bé thân thiện'},
+      avatar: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+      nickname: 'Thân thiện',
+      friendly_point: 90,
+      status: FriendStatus.ACCEPTED,
       likeCount: 80,
       rank: 8,
       achievements: 15,
@@ -377,8 +388,13 @@ export class ForceTestData {
     },
     {
       id: 3,
+      user_id: {id: 1, name: 'Current User'}, // Assuming current user has ID 1
       name: 'Hoa tiêu Nami',
-      avatar: 'assets/images/avatar/Shiba-Inu-Dog-3.png',
+      friend_id: {id: 103, name: 'Hoa tiêu Nami'},
+      avatar: '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/wA==',
+      nickname: 'Nami',
+      friendly_point: 150,
+      status: FriendStatus.ACCEPTED,
       likeCount: 102,
       rank: 4,
       achievements: 30,
@@ -386,8 +402,13 @@ export class ForceTestData {
     },
     {
       id: 4,
+      user_id: {id: 1, name: 'Current User'}, // Assuming current user has ID 1
       name: 'Tứ hoàng Luffy',
+      friend_id: {id: 104, name: 'Tứ hoàng Luffy'},
       avatar: 'assets/images/avatar/Shiba-Inu-Dog.png',
+      nickname: 'Luffy',
+      friendly_point: 186,
+      status: FriendStatus.ACCEPTED,
       likeCount: 186,
       rank: 1,
       achievements: 38,
@@ -395,8 +416,13 @@ export class ForceTestData {
     },
     {
       id: 5,
+      user_id: {id: 1, name: 'Current User'}, // Assuming current user has ID 1
       name: 'Mèo Tom',
+      friend_id: {id: 105, name: 'Mèo Tom'},
       avatar: 'assets/images/avatar/Shiba-Inu-Dog-Showing-Muscles.png',
+      nickname: 'Tom',
+      friendly_point: 95,
+      status: FriendStatus.NEW,
       likeCount: 90,
       rank: 6,
       achievements: 20,
@@ -404,8 +430,13 @@ export class ForceTestData {
     },
     {
       id: 6,
+      user_id: {id: 1, name: 'Current User'}, // Assuming current user has ID 1
       name: 'Vịt Donald',
+      friend_id: {id: 106, name: 'Vịt Donald'},
       avatar: 'assets/images/avatar/Shiba-Inu-Dog-1.png',
+      nickname: 'Donald',
+      friendly_point: 60,
+      status: FriendStatus.CANCEL,
       likeCount: 50,
       rank: 10,
       achievements: 12,
@@ -413,8 +444,13 @@ export class ForceTestData {
     },
     {
       id: 7,
+      user_id: {id: 1, name: 'Current User'}, // Assuming current user has ID 1
       name: 'Chuột Micky',
+      friend_id: {id: 107, name: 'Chuột Micky'},
       avatar: 'assets/images/avatar/Shiba-Inu-Dog-2.png',
+      nickname: 'Micky',
+      friendly_point: 75,
+      status: FriendStatus.ACCEPTED,
       likeCount: 70,
       rank: 9,
       achievements: 18,
@@ -422,8 +458,13 @@ export class ForceTestData {
     },
     {
       id: 8,
+      user_id: {id: 1, name: 'Current User'}, // Assuming current user has ID 1
       name: 'Nhóc Conan',
+      friend_id: {id: 108, name: 'Nhóc Conan'},
       avatar: 'assets/images/avatar/Shiba-Inu-Dog-3.png',
+      nickname: 'Conan',
+      friendly_point: 186,
+      status: FriendStatus.ACCEPTED,
       likeCount: 186,
       rank: 3,
       achievements: 38,
