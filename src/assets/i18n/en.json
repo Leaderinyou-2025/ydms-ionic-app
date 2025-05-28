@@ -324,7 +324,12 @@
     "family_activity": "Family activity",
     "instruction": "Instruction",
     "exercise": "Exercise",
-    "periodic_survey": "Periodic survey"
+    "periodic_survey": "Periodic survey",
+    "friend_requests": "Friend requests",
+    "no_friends": "No friends",
+    "no_friend_requests": "No friend requests",
+    "send_request_to" : "Send a request to",
+    "request_to_be_friend": "requested to be a friend"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",
@@ -366,7 +371,8 @@
     "select": "Select",
     "share": "Share",
     "answer_all_questions": "Please answer all question!",
-    "checkin_emotion": "Check-In"
+    "checkin_emotion": "Check-In",
+    "accept": "Accept"
   },
   "TOAST": {
     "error_header": "Error",

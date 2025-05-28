@@ -5,6 +5,8 @@ import { OrderBy } from '../../shared/enums/order-by';
 import { ILiyYdmsFriend } from '../../shared/interfaces/models/liy.ydms.friend';
 import { ModelName } from '../../shared/enums/model-name';
 import { CommonConstants } from '../../shared/classes/common-constants';
+import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
+import { FriendStatus } from '../../shared/enums/friend-status';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,6 @@ export class LiyYdmsFriendService {
     'user_id',
     'friend_id',
     'name',
-    'avatar',
     'nickname',
     'friendly_point',
     'status',
@@ -46,6 +47,20 @@ export class LiyYdmsFriendService {
   }
 
   /**
+   * Get count friends
+   * @param teenagerId
+   * @param status
+   */
+  public async getCountFriends(
+    teenagerId: number,
+    status?: FriendStatus,
+  ): Promise<number> {
+    const searchDomain: SearchDomain = [['user_id', OdooDomainOperator.EQUAL, teenagerId]];
+    if (status) searchDomain.push(['status', OdooDomainOperator.EQUAL, status]);
+    return this.odooService.searchCount<ILiyYdmsFriend>(ModelName.FRIEND, searchDomain);
+  }
+
+  /**
    * getFriendById
    * @param id
    */
@@ -59,6 +74,15 @@ export class LiyYdmsFriendService {
 
     const convertedResults = CommonConstants.convertArr2ListItem(results);
     return convertedResults[0];
+  }
+
+  /**
+   * getFriendsByIds
+   * @param ids
+   */
+  public async getFriendsByIds(ids: Array<number>): Promise<ILiyYdmsFriend[]> {
+    if (!ids?.length) return [];
+    return this.getFriendList([['friend_id', OdooDomainOperator.IN, ids]], 0, 0);
   }
 
 }

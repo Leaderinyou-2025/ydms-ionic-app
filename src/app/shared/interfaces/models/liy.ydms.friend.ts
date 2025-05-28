@@ -7,7 +7,7 @@ import { FriendStatus } from '../../enums/friend-status';
  */
 export interface ILiyYdmsFriend extends IBase {
   /** Người dùng sở hữu - Many2one to res.user (owner of the friend relationship) */
-  user_id?: IRelatedField;
+  user_id: IRelatedField;
   /** Bạn - Many2one to res.user */
   friend_id: IRelatedField;
   /** Tên người bạn - Related to friend_id.name */

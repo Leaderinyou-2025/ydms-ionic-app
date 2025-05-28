@@ -6,7 +6,7 @@
 
 <ion-content [fullscreen]="true">
   <div class="flex items-center justify-center w-full h-full">
-    <div class="block w-full h-auto ion-padding-start ion-padding-end">
+    <div class="block w-full h-auto ion-padding-start ion-padding-end" *ngIf="friend">
       <ion-row>
         <ion-col size="6" class="ion-text-center m-auto">
           <ion-img [src]="friend?.avatar" [alt]="friend?.name" class="w-full h-auto"></ion-img>

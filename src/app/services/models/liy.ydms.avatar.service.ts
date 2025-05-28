@@ -13,6 +13,7 @@ import { OrderBy } from '../../shared/enums/order-by';
 export class LiyYdmsAvatarService {
 
   private liyYdmsAvatarFields = ['name', 'tags', 'image_512'];
+  private cachingAvatarImages: IAssetsResource[] = new Array<IAssetsResource>();
 
   constructor(
     private odooService: OdooService,
@@ -22,7 +23,9 @@ export class LiyYdmsAvatarService {
   /**
    * Get all avatar image from server
    */
-  public async getImages(): Promise<Array<IAssetsResource>> {
+  public async getImages(isCache = false): Promise<Array<IAssetsResource>> {
+    if (isCache && this.cachingAvatarImages.length) return this.cachingAvatarImages;
+
     const avatars = await this.odooService.searchRead<ILiyYdmsAvatar>(
       ModelName.AVATAR, [], this.liyYdmsAvatarFields, 0, 0, OrderBy.CREATE_AT_ASC
     );
@@ -38,6 +41,7 @@ export class LiyYdmsAvatarService {
       });
     }
 
+    if (isCache) this.cachingAvatarImages = avatarAssets;
     return avatarAssets;
   }
 

@@ -3,7 +3,9 @@
   backgroundColor="linear-gradient(to right, #0a1f5c, #4a2a8c)"
   [animeImage]="animeImage"
   [searchbar]="searchbar"
-  (inputSearch)="onSearchChange($event)">
+  [segment]="segment"
+  (inputSearch)="onSearchChange($event)"
+  (changeSegment)="onChangeActiveTab($event)">
 </app-header>
 
 <ion-content class="bg-gradient-to-r from-[#0a1f5c] to-[#4a2a8c]">
@@ -13,31 +15,58 @@
   </ion-refresher>
 
   <div class="flex flex-col h-full pb-5">
-    <div class="flex justify-between px-4 pt-4 pb-2.5 text-gray-800">
+    <div class="flex justify-between px-4 pt-4 pb-2.5" *ngIf="activeTab === 'friends'">
       <div class="text-sm font-bold">{{ TranslateKeys.TITLE_TOTAL_FRIENDS | translate }}: {{ totalFriends }}</div>
       <div class="text-sm font-bold">{{ TranslateKeys.TITLE_CLOSE_FRIENDS | translate }}</div>
     </div>
+
+    <!-- Loading skeleton -->
+    <div *ngIf="isLoading" class="mt-3">
+      <ion-skeleton-text animated class="w-full h-11 rounded-lg mb-3" *ngFor="let i of Array(10)"></ion-skeleton-text>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="isLoading === false &&  friends?.length === 0" class="flex flex-col items-center justify-center py-10">
+      <ion-icon name="person" class="text-6xl text-gray-400 mb-4" *ngIf="activeTab === 'friends'"></ion-icon>
+      <ion-icon name="person-add" class="text-6xl text-gray-400 mb-4" *ngIf="activeTab === 'requests'"></ion-icon>
+      <p class="text-center text-gray-500">{{ (activeTab === 'friends' ? TranslateKeys.TITLE_NO_FRIENDS : TranslateKeys.TITLE_NO_FRIEND_REQUESTS) | translate }}</p>
+    </div>
+
+    <!--  List friend/request  -->
     <div class="flex-1 overflow-auto px-2 mb-4">
-      <ion-list class="w-full bg-transparent">
-        <ion-item *ngFor="let friend of friends" routerLink="{{friend.id}}"
-                  lines="none" detail="false" class="w-full mb-1 border-b border-gray-200 friend-item">
-          <ion-avatar slot="start" class="w-[42px] h-[42px] mr-2.5">
-            <div class="w-full h-full overflow-hidden rounded-full border-2 border-blue-500">
-              <ion-img [src]="friend.avatar" alt="Friend avatar" class="object-cover w-full h-full"></ion-img>
-            </div>
+      <ion-list class="w-full bg-transparent" *ngIf="friends?.length">
+        <ion-item *ngFor="let friend of friends" (click)="onClickFriendDetail(friend)"
+                  lines="none" detail="false" class="w-full border-b border-gray-200 friend-item">
+          <ion-avatar slot="start" class="w-10 h-10 mr-3 overflow-hidden border border-blue-500">
+            <ion-img [src]="friend.avatar" alt="Friend avatar" class="object-cover w-full h-full"></ion-img>
           </ion-avatar>
-          <div class="flex flex-col">
-            <div class="text-sm font-medium text-gray-800">
-              {{ friend.name }}
-            </div>
-            <div class="text-xs text-gray-500 mt-1">
-              {{ friend.nickname }}
-            </div>
+          <div class="text-sm font-medium" *ngIf="friend.user_id.id === authData?.id">
+            {{ friend.nickname || friend.name }}
+            <ng-container *ngIf="friend.status !== FriendStatus.ACCEPTED">
+              <br><span class="text-md italic text-gray-400">{{ TranslateKeys.TITLE_REQUEST_TO_BE_FRIEND | translate }}</span>
+            </ng-container>
+          </div>
+          <div class="text-sm font-medium" *ngIf="friend.friend_id.id === authData?.id">
+            <ng-container *ngIf="friend.status !== FriendStatus.ACCEPTED">
+              <span class="text-md italic text-gray-400">{{ TranslateKeys.TITLE_SEND_REQUEST_TO | translate }}</span><br>
+            </ng-container>
+            {{ friend.user_id.name || friend.name }}
           </div>
           <div slot="end" class="flex flex-col items-end min-w-[60px]">
-            <div class="flex items-center text-red-500">
+            <div class="flex items-center text-red-500" *ngIf="activeTab === 'friends' && !isLoading">
               <ion-icon name="heart" class="text-lg text-red-500"></ion-icon>
-              <span class="ml-1 text-sm font-semibold">{{ friend.friendly_point }}</span>
+              <span class="ml-1 text-sm font-semibold">{{ friend.friendly_point || 0 }}</span>
+            </div>
+
+            <div class="flex flex-col w-28 py-2">
+              <ion-button shape="round" color="primary"
+                          *ngIf="friend.user_id.id === authData?.id && friend.status !== FriendStatus.ACCEPTED && !isLoading">
+                {{ TranslateKeys.BUTTON_ACCEPT | translate }}
+              </ion-button>
+              <ion-button shape="round" color="medium"
+                          *ngIf="(friend.user_id.id === authData?.id || friend.friend_id.id === authData?.id) && friend.status !== FriendStatus.ACCEPTED && !isLoading">
+                {{ TranslateKeys.BUTTON_CANCEL | translate }}
+              </ion-button>
             </div>
           </div>
         </ion-item>
@@ -48,6 +77,7 @@
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
       </ion-infinite-scroll>
     </div>
+
     <ion-button expand="block" color="primary" class="h-11 mx-4 text-sm font-semibold uppercase">
       {{ TranslateKeys.TITLE_ADD_FRIEND | translate }}
     </ion-button>

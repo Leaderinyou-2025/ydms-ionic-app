@@ -1,12 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { InfiniteScrollCustomEvent, RefresherCustomEvent } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
+import { AuthService } from '../../../services/auth/auth.service';
+import { FriendService } from '../../../services/friend/friend.service';
 import { TranslateKeys } from '../../../shared/enums/translate-keys';
 import { PageRoutes } from '../../../shared/enums/page-routes';
-import { FriendService } from '../../../services/friend/friend.service';
-import { IFriend } from '../../../shared/interfaces/friend/friend';
-import { IHeaderAnimeImage, IHeaderSearchbar } from '../../../shared/interfaces/header/header';
+import { IHeaderAnimeImage, IHeaderSearchbar, IHeaderSegment } from '../../../shared/interfaces/header/header';
 import { InputTypes } from '../../../shared/enums/input-types';
+import { ILiyYdmsFriend } from '../../../shared/interfaces/models/liy.ydms.friend';
+import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
+import { CommonConstants } from '../../../shared/classes/common-constants';
+import { FriendStatus } from '../../../shared/enums/friend-status';
 
 @Component({
   selector: 'app-friends',
@@ -16,112 +22,158 @@ import { InputTypes } from '../../../shared/enums/input-types';
 })
 export class FriendsPage implements OnInit {
 
-  friends: IFriend[] = [];
+  authData?: IAuthData;
   searchbar!: IHeaderSearchbar;
   animeImage!: IHeaderAnimeImage;
-  totalFriends: number = 0;
-  searchTerm: string = '';
+  segment!: IHeaderSegment;
+  activeTab!: 'friends' | 'requests';
 
-  // Pagination parameters
-  currentPage: number = 0;
-  pageSize: number = 10;
-  hasMoreData: boolean = true;
+  searchTerm: string = '';
+  totalFriends: number = 0;
+  isLoading!: boolean;
+  friends: ILiyYdmsFriend[] = [];
+  private paged: number = 1;
+  private limit: number = 20;
 
   protected readonly TranslateKeys = TranslateKeys;
   protected readonly PageRoutes = PageRoutes;
+  protected readonly Array = Array;
+  protected readonly FriendStatus = FriendStatus;
 
   constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router,
     private friendService: FriendService,
     private translate: TranslateService
   ) {
   }
 
-  ngOnInit() {
-    this.loadFriends();
-    this.initHeader();
+  async ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.activeTab = params['activeTab'] || 'friends';
+      this.initHeader();
+    });
+    this.authData = await this.authService.getAuthData();
+    if (this.authData) {
+      this.friendService.getCountUserFriends(this.authData.id, FriendStatus.ACCEPTED).then(countFriends => this.totalFriends = countFriends);
+      await this.getFriends();
+    }
   }
 
   /**
-   * Load friends list from service with pagination
-   * @param event Infinite scroll event (optional)
-   * @param refresh Whether to refresh the list (reset pagination)
+   * On change active tab
+   * @param activeTab
    */
-  loadFriends(event?: any, refresh: boolean = false) {
-    // Reset pagination if refreshing
-    if (refresh) {
-      this.currentPage = 0;
-      this.friends = [];
-      this.hasMoreData = true;
-    }
-
-    // Calculate offset based on current page and page size
-    const offset = this.currentPage * this.pageSize;
-
-    // Call service with pagination parameters
-    this.friendService.getFriends(
-      this.searchTerm,
-      offset,
-      this.pageSize
-    ).subscribe(result => {
-      // If refreshing, replace the list, otherwise append
-      if (refresh) {
-        this.friends = result.friends;
-      } else {
-        this.friends = [...this.friends, ...result.friends];
-      }
-
-      this.totalFriends = result.total;
-      // Process avatars for the loaded friends
-      this.processFriendAvatars(result.friends);
-
-      // Check if we've loaded all available data
-      this.hasMoreData = this.friends.length < result.total;
-
-      // Complete the infinite scroll event if provided
-      if (event) {
-        event.target.complete();
-
-        // Disable infinite scroll if no more data
-        if (!this.hasMoreData) {
-          event.target.disabled = true;
-        }
-      }
+  public onChangeActiveTab(activeTab: string | number): void {
+    if (typeof activeTab !== 'string' || (activeTab !== 'friends' && activeTab !== 'requests')) return;
+    setTimeout(() => {
+      this.activeTab = activeTab;
+      this.doRefresh();
     });
   }
 
   /**
-   * Load more data when scrolling
-   * @param event Infinite scroll event
+   * Handle search input changes
    */
-  loadMore(event: any) {
-    // Increment page before loading more
-    this.currentPage++;
-    this.loadFriends(event);
+  public async onSearchChange(searchTerm: string): Promise<void> {
+    this.searchTerm = searchTerm || '';
+    this.paged = 1;
+    this.friends = new Array<ILiyYdmsFriend>();
+    await this.getFriends();
   }
 
   /**
    * Handle pull-to-refresh
    * @param event Refresh event
    */
-  doRefresh(event: any) {
-    this.loadFriends(event, true);
+  public doRefresh(event?: RefresherCustomEvent): void {
+    if (this.isLoading) {
+      event?.target.complete();
+      return;
+    }
+    this.paged = 1;
+    this.friends = new Array<ILiyYdmsFriend>();
+    this.getFriends().finally(() => event?.target.complete());
   }
 
   /**
-   * Handle search input changes
+   * Load more data when scrolling
+   * @param event Infinite scroll event
    */
-  onSearchChange(searchTerm: string) {
-    this.searchTerm = searchTerm || '';
-    // Reset pagination and reload with search term
-    this.loadFriends(null, true);
+  public loadMore(event: InfiniteScrollCustomEvent): void {
+    if (this.isLoading || this.friends?.length < ((this.paged - 1) * this.limit)) {
+      event.target.complete();
+      return;
+    }
+    this.paged += 1;
+    this.getFriends().finally(() => event.target.complete());
   }
 
-  private processFriendAvatars(friends: IFriend[]): void {
-    if (!friends?.length) return;
+  /**
+   * On click friend detail
+   * @param friend
+   */
+  public onClickFriendDetail(friend: ILiyYdmsFriend): void {
+    if (friend.status !== FriendStatus.ACCEPTED) return;
+    this.router.navigateByUrl(`${PageRoutes.FRIENDS}/${friend.id}`);
+  }
 
-    for (const friend of friends) {
-      friend.avatar = this.friendService.getFriendAvatarImage(friend);
+  /**
+   * Get friend list
+   * @private
+   */
+  private async getFriends() {
+    if (this.isLoading || !this.authData) return;
+    this.isLoading = true;
+
+    const offset = (this.paged - 1) * this.limit;
+
+    let results: ILiyYdmsFriend[];
+    if (this.activeTab === 'friends') {
+      results = await this.friendService.getFriends(
+        this.searchTerm, this.authData.id, FriendStatus.ACCEPTED, offset, this.limit
+      );
+    } else {
+      results = await this.friendService.getFriendRequests(this.authData.id, 0, this.limit);
     }
+
+    this.friends = CommonConstants.mergeArrayObjectById(this.friends, results) || [];
+    this.lazyLoadAvatarResource(results);
+    this.isLoading = false;
+  }
+
+  /**
+   * Lazy load fried avatar
+   * @param friends
+   * @private
+   */
+  private lazyLoadAvatarResource(friends: ILiyYdmsFriend[]): void {
+    if (!this.authData) return;
+    this.friendService.loadFriendAvatarImage(this.authData.id, friends)
+      .then(([teenagerAvatars, avatarResources]) => {
+        for (let friend of friends) {
+          const existIndex = this.friends.findIndex((f) => f.id === friend.id);
+          if (existIndex < 0) continue;
+
+          const friendAvatar = teenagerAvatars.find((user) =>
+            (friend.user_id.id !== this.authData?.id && user.id === friend.user_id.id) ||
+            (friend.friend_id.id !== this.authData?.id) && user.id === friend.friend_id.id);
+
+          if (!friendAvatar?.avatar?.id) {
+            this.friends[existIndex].avatar = CommonConstants.defaultUserAvatarImage;
+            if (this.friends[existIndex].user_id.id === this.authData?.id) {
+              this.friends[existIndex].friend_id.name = friendAvatar?.nickname || '';
+            } else {
+              this.friends[existIndex].user_id.name = friendAvatar?.nickname || '';
+            }
+            continue;
+          }
+
+          const avatarImage = avatarResources.find(image => image.id === friendAvatar.avatar?.id);
+          this.friends[existIndex].avatar = avatarImage?.resource_url || CommonConstants.defaultUserAvatarImage;
+        }
+      });
   }
 
   /**
@@ -135,6 +187,13 @@ export class FriendsPage implements OnInit {
       placeholder: this.translate.instant(TranslateKeys.TITLE_SEARCH_FRIENDS),
       animated: true,
       showClearButton: true,
+    };
+    this.segment = {
+      value: this.activeTab,
+      buttons: [
+        {value: 'friends', label: TranslateKeys.TITLE_FRIENDS},
+        {value: 'requests', label: TranslateKeys.TITLE_FRIEND_REQUESTS}
+      ]
     };
     this.animeImage = {
       imageUrl: '/assets/images/owl_img.png',

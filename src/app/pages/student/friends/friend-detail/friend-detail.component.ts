@@ -7,7 +7,8 @@ import { PageRoutes } from '../../../../shared/enums/page-routes';
 import { IFriend } from '../../../../shared/interfaces/friend/friend';
 import { FriendService } from '../../../../services/friend/friend.service';
 import { NativePlatform } from '../../../../shared/enums/native-platform';
-import { IHeaderAnimeImage, IHeaderSearchbar } from '../../../../shared/interfaces/header/header';
+import { IHeaderAnimeImage } from '../../../../shared/interfaces/header/header';
+import { ILiyYdmsFriend } from '../../../../shared/interfaces/models/liy.ydms.friend';
 
 @Component({
   selector: 'app-friend-detail',
@@ -17,10 +18,9 @@ import { IHeaderAnimeImage, IHeaderSearchbar } from '../../../../shared/interfac
 })
 export class FriendDetailComponent implements OnInit {
 
-  friendId: number = 0;
-  friend: IFriend | undefined;
-  isLoading: boolean = false;
   animeImage!: IHeaderAnimeImage;
+  isLoading: boolean = false;
+  friend?: any;
 
   protected readonly TranslateKeys = TranslateKeys;
   protected readonly PageRoutes = PageRoutes;
@@ -36,7 +36,6 @@ export class FriendDetailComponent implements OnInit {
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id != null) {
-      this.friendId = +id;
       this.initHeader();
       await this.loadFriendDetails();
     } else {
@@ -67,30 +66,7 @@ export class FriendDetailComponent implements OnInit {
     const loading = await this.loadingCtrl.create({mode: NativePlatform.IOS});
     await loading.present();
 
-    // Get friend details from service
-    this.friendService.getFriendById(this.friendId).subscribe(
-      (friend) => {
-        this.friend = friend;
-        // Process avatar for the friend
-        if (this.friend) {
-          this.processFriendAvatar(this.friend);
-        }
-        loading.dismiss();
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Error loading friend details:', error);
-        loading.dismiss();
-        this.isLoading = false;
-      }
-    );
   }
-
-  private processFriendAvatar(friend: IFriend): void {
-    if (!friend) return;
-    friend.avatar = this.friendService.getFriendAvatarImage(friend);
-  }
-
   /**
    * initHeader
    * @private

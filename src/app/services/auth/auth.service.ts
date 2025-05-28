@@ -404,7 +404,7 @@ export class AuthService {
    */
   public async getAvatarByTeenagerIds(teenagerIds: Array<number>): Promise<Array<IAuthData>> {
     if (!teenagerIds?.length) return [];
-    const results = await this.odooService.read<IAuthData>(ModelName.RES_USERS, teenagerIds, ['avatar']);
+    const results = await this.odooService.read<IAuthData>(ModelName.RES_USERS, teenagerIds, ['avatar', 'nickname']);
     return CommonConstants.convertArr2ListItem(results);
   }
 

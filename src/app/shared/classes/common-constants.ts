@@ -81,6 +81,15 @@ export class CommonConstants {
     return undefined;
   }
 
+  public static formatBase64ImageUrl(
+    b64Resource: string,
+    defaultImage: string = CommonConstants.defaultUserAvatarImage
+  ): string {
+    const mimeType = CommonConstants.detectMimeType(b64Resource);
+    if (!mimeType) return defaultImage || CommonConstants.defaultUserAvatarImage;
+    return `${mimeType}${b64Resource}`;
+  }
+
   /**
    * Load device identifier
    */

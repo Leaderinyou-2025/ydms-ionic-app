@@ -325,7 +325,12 @@
     "family_activity": "Hoạt động gia đình",
     "instruction": "Gợi ý, hướng dẫn",
     "exercise": "Bài tập",
-    "periodic_survey": "Khảo sát định kỳ"
+    "periodic_survey": "Khảo sát định kỳ",
+    "friend_requests": "Yêu cầu kết bạn",
+    "no_friends": "Chưa có bạn bè nào",
+    "no_friend_requests": "Không có yêu cầu kết bạn nào",
+    "send_request_to" : "Bạn đã gửi một lời mời kết bạn tới",
+    "request_to_be_friend": "Đã gửi lời mới kết bạn tơi bạn"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",
@@ -366,7 +371,8 @@
     "create_first_survey": "Tạo khảo sát đầu tiên",
     "select": "Chọn",
     "share": "Chia sẻ",
-    "checkin_emotion": "Check-In"
+    "checkin_emotion": "Check-In",
+    "accept": "Đồng ý"
   },
   "TOAST": {
     "error_header": "Lỗi",

@@ -332,7 +332,11 @@ export enum TranslateKeys {
   TITLE_INSTRUCTION = 'TITLE.instruction',
   TITLE_EXERCISE = 'TITLE.exercise',
   TITLE_PERIODIC_SURVEY = 'TITLE.periodic_survey',
-
+  TITLE_FRIEND_REQUESTS = 'TITLE.friend_requests',
+  TITLE_NO_FRIENDS = 'TITLE.no_friends',
+  TITLE_NO_FRIEND_REQUESTS = 'TITLE.no_friend_requests',
+  TITLE_SEND_REQUEST_TO = 'TITLE.send_request_to',
+  TITLE_REQUEST_TO_BE_FRIEND = 'TITLE.request_to_be_friend',
 
   // VALIDATE
   VALIDATE_PHONE_REQUIRED = 'VALIDATE.phone_required',
@@ -373,6 +377,7 @@ export enum TranslateKeys {
   BUTTON_SELECT = 'BUTTON_TITLES.select',
   BUTTON_SHARE = 'BUTTON_TITLES.share',
   BUTTON_CHECKIN_EMOTION = 'BUTTON_TITLES.checkin_emotion',
+  BUTTON_ACCEPT = 'BUTTON_TITLES.accept',
 
   // TOAST
   TOAST_ERROR_HEADER = 'TOAST.error_header',
