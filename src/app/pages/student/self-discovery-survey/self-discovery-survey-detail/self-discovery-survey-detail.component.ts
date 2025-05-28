@@ -49,12 +49,12 @@ export class SelfDiscoverySurveyDetailComponent implements OnInit {
    * @param questions
    */
   public async onSubmitForm(questions: ISurveyQuestion[]): Promise<void> {
-    if (!questions.length) return;
+    if (!questions.length || !this.selfDiscoverySurveyDetail) return;
     const loading = await this.loadingController.create({mode: NativePlatform.IOS});
     await loading.present();
 
     try {
-      const result = await this.surveyService.updateAnswer(questions);
+      const result = await this.surveyService.updateAnswer(this.selfDiscoverySurveyDetail.assessment_result.id, questions);
       if (result) {
         this.showToast(
           this.translate.instant(TranslateKeys.TOAST_UPDATE_SUCCESS),
@@ -83,8 +83,7 @@ export class SelfDiscoverySurveyDetailComponent implements OnInit {
       return this.navigateBack();
     }
     this.selfDiscoverySurveyDetail = await this.surveyService.getSurveyDetail(+id);
-    this.readonly = this.selfDiscoverySurveyDetail?.assessment_result.create_date !== this.selfDiscoverySurveyDetail?.assessment_result.write_date ||
-      this.selfDiscoverySurveyDetail?.assessment_result['create_time'] !== this.selfDiscoverySurveyDetail?.assessment_result['write_time'];
+    this.readonly = this.selfDiscoverySurveyDetail?.assessment_result?.is_posted || false;
     this.isLoading = false;
   }
 

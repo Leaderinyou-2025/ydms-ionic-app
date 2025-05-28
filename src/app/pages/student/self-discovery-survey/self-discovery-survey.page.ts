@@ -40,20 +40,24 @@ export class SelfDiscoverySurveyPage implements OnInit {
     await this.loadSurveyHistory();
   }
 
+  ionViewDidEnter() {
+    if (this.surveyHistory) this.doRefresh();
+  }
+
   /**
    * Handle pull-to-refresh
    * @param event Refresh event
    */
-  public doRefresh(event: RefresherCustomEvent): void {
+  public doRefresh(event?: RefresherCustomEvent): void {
     if (this.isLoading) {
-      event.target.complete();
+      event?.target.complete();
       return;
     }
 
     setTimeout(() => {
       this.paged = 1;
       this.surveyHistory = new Array<ILiyYdmsAssessmentResult>();
-      this.loadSurveyHistory().finally(() => event.target.complete());
+      this.loadSurveyHistory().finally(() => event?.target.complete());
     }, 500)
   }
 
