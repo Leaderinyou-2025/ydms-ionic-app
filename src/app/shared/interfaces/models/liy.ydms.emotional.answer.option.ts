@@ -8,7 +8,7 @@ export interface ILiyYdmsEmotionalAnswerOption extends IBase {
   question_id: IRelatedField;
   encourage?: string;
   guide_category_ids?: Array<number>;
-  image_256?: string;
+  image_1920?: string;
   order_weight: number;
   scores: number;
 }

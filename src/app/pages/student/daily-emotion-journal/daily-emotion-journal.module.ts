@@ -8,10 +8,9 @@ import { DailyEmotionJournalPageRoutingModule } from './daily-emotion-journal-ro
 import { DailyEmotionJournalPage } from './daily-emotion-journal.page';
 import { EmotionJournalCalendarComponent } from './calendar/emotion-journal-calendar.component';
 import { EmotionJournalStreakComponent } from './streak-status/emotion-journal-streak.component';
-import { AddEmotionJournalComponent } from './add-emotion-journal/add-emotion-journal.component';
+import { EmotionJournalDetailComponent } from './detail/emotion-journal-detail.component';
 import { SharedModule } from '../../../shared/shared.module';
-import { EmotionIconSelectorComponent } from '../../../shared/components/emotion-icon-selector/emotion-icon-selector.component';
-import { EmotionShareComponent } from '../../../shared/components/emotion-share/emotion-share.component';
+
 
 @NgModule({
   imports: [
@@ -22,7 +21,9 @@ import { EmotionShareComponent } from '../../../shared/components/emotion-share/
     TranslateModule,
     SharedModule,
     DailyEmotionJournalPage,
-    AddEmotionJournalComponent
+    EmotionJournalDetailComponent,
+    EmotionJournalCalendarComponent,
+    EmotionJournalStreakComponent
   ],
   declarations: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

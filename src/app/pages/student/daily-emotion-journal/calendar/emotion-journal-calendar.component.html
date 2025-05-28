@@ -30,15 +30,21 @@
       [ngClass]="{
         'bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100': isCurrentMonth(day.date),
         'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500': !isCurrentMonth(day.date),
-        'bg-blue-100 dark:bg-blue-900/30 font-bold text-blue-700 dark:text-blue-300': isToday(day.date),
-        'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-400': day.entry,
+        'bg-blue-100 dark:bg-blue-900/30 font-bold text-blue-700 dark:text-blue-300': isTodayComplete(day.date, day.entry),
+        'bg-orange-100 dark:bg-orange-900/30 font-bold text-orange-700 dark:text-orange-300 animate-pulse': isTodayWithoutEntry(day.date),
+        'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-400': hasValidAnswerId(day.entry) && !isToday(day.date),
         'hover:bg-blue-50 dark:hover:bg-blue-900/10': true
       }"
       (click)="selectDate(day)"
     >
-      <div class="text-sm  mb-0.5">{{ day.date.getDate() }}</div>
-      <div class="absolute top-[9px] left-0 right-0 mx-auto w-6 h-6 flex items-center justify-center leading-none" *ngIf="day.entry">
-        <span class="text-xl">{{ day.entry.emotionIcon.emoji }}</span>
+      <div class="text-sm mb-0.5" [ngClass]="{'animate-bounce': isTodayWithoutEntry(day.date)}">{{ day.date.getDate() }}</div>
+      <div class="absolute top-[7px] left-0 right-0 mx-auto w-8 h-8 flex items-center justify-center leading-none" *ngIf="hasValidAnswerId(day.entry)">
+        <img
+          [src]="getEntryIcon(day.entry)"
+          alt="Emotion icon"
+          class="w-8 h-8 object-contain"
+          *ngIf="getEntryIcon(day.entry)"
+        />
       </div>
     </div>
   </div>

@@ -1,81 +1,71 @@
 <div class="mb-6">
-  <!-- Caption input -->
-  <div class="mb-6">
-    <h3 class="text-lg font-medium mb-2 ">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_ADD_CAPTION | translate }}</h3>
-    <ion-item class="rounded-lg overflow-hidden shadow-sm">
-      <ion-textarea
-        [(ngModel)]="caption"
-        rows="3"
-        placeholder="{{ TranslateKeys.DAILY_EMOTION_JOURNAL_CAPTION_PLACEHOLDER | translate }}"
-        class="">
-      </ion-textarea>
-    </ion-item>
-  </div>
-
-  <!-- Share targets -->
-  <div *ngIf="availableShareTargets.length > 0">
-    <h3 class="text-lg font-medium mb-2 ">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_WITH | translate }}</h3>
-
-    <!-- Class groups -->
-    <div class="mb-4" *ngIf="getShareTargetsByType(EmotionShareTargetType.CLASS_GROUP).length > 0">
-      <h4 class="text-md font-semibold mb-2 ">{{ TranslateKeys.EMOTION_SHARE_TARGET_CLASS | translate }}</h4>
-      <div class="flex flex-wrap gap-2">
-        <ion-chip
-          *ngFor="let target of getShareTargetsByType(EmotionShareTargetType.CLASS_GROUP)"
-          [color]="isShareTargetSelected(target) ? 'primary' : 'medium'"
-          (click)="toggleShareTarget(target)"
-          class=""
-        >
-          <ion-label>{{ target.name }}</ion-label>
-          <ion-icon name="checkmark-circle" *ngIf="isShareTargetSelected(target)"></ion-icon>
-        </ion-chip>
+  <!-- Public Sharing Section -->
+  <div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+    <!-- Public Share Toggle -->
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex-1">
+        <h3 class="text-lg font-medium mb-1">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_PUBLIC_SHARE | translate }}</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_PUBLIC_SHARE_DESCRIPTION | translate }}</p>
       </div>
+      <ion-checkbox
+        [(ngModel)]="public_emotional"
+        (ionChange)="onPublicSharingToggle()"
+        class="ml-4">
+      </ion-checkbox>
     </div>
 
-    <!-- Friends -->
-    <div class="mb-4" *ngIf="getShareTargetsByType(EmotionShareTargetType.FRIEND).length > 0">
-      <h4 class="text-md font-semibold mb-2 ">{{ TranslateKeys.EMOTION_SHARE_TARGET_FRIENDS | translate }}</h4>
-      <div class="flex flex-wrap gap-2">
-        <ion-chip
-          *ngFor="let target of getShareTargetsByType(EmotionShareTargetType.FRIEND)"
-          [color]="isShareTargetSelected(target) ? 'primary' : 'medium'"
-          (click)="toggleShareTarget(target)"
-          class=""
-        >
-          <ion-label>{{ target.name }}</ion-label>
-          <ion-icon name="checkmark-circle" *ngIf="isShareTargetSelected(target)"></ion-icon>
-        </ion-chip>
-      </div>
+    <!-- Share Type Selection -->
+    <div *ngIf="public_emotional" class="mb-4">
+        <ion-select
+          class="w-full p-0"
+          [label]="TranslateKeys.DAILY_EMOTION_JOURNAL_SELECT_SHARE_TYPE | translate" label-placement="fixed"
+          [(ngModel)]="public_emotional_to"
+          (ionChange)="onShareTypeChange()"
+          interface="popover">
+          <ion-select-option [value]="PublicShareTargetType.FRIENDS">
+            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_FRIENDS | translate }}
+          </ion-select-option>
+          <ion-select-option [value]="PublicShareTargetType.PARENT">
+            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_PARENT | translate }}
+          </ion-select-option>
+          <ion-select-option [value]="PublicShareTargetType.TEACHER">
+            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_TEACHER | translate }}
+          </ion-select-option>
+        </ion-select>
     </div>
 
-    <!-- Teachers -->
-    <div class="mb-4" *ngIf="getShareTargetsByType(EmotionShareTargetType.TEACHER).length > 0">
-      <h4 class="text-md font-semibold mb-2 ">{{ TranslateKeys.EMOTION_SHARE_TARGET_TEACHERS | translate }}</h4>
-      <div class="flex flex-wrap gap-2">
-        <ion-chip
-          *ngFor="let target of getShareTargetsByType(EmotionShareTargetType.TEACHER)"
-          [color]="isShareTargetSelected(target) ? 'primary' : 'medium'"
-          (click)="toggleShareTarget(target)"
-          class=""
-        >
-          <ion-label>{{ target.name }}</ion-label>
-          <ion-icon name="checkmark-circle" *ngIf="isShareTargetSelected(target)"></ion-icon>
-        </ion-chip>
-      </div>
-    </div>
+    <!-- Users Selection -->
+    <div *ngIf="public_emotional" class="mb-4">
+      <h4 class="text-md font-medium mb-2">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_SELECT_USERS | translate }}</h4>
 
-    <!-- Family -->
-    <div class="mb-4" *ngIf="getShareTargetsByType(EmotionShareTargetType.FAMILY).length > 0">
-      <h4 class="text-md font-semibold mb-2 ">{{ TranslateKeys.EMOTION_SHARE_TARGET_FAMILY | translate }}</h4>
-      <div class="flex flex-wrap gap-2">
+      <!-- Loading state -->
+      <div *ngIf="isLoadingUsers" class="text-center py-4">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p class="text-sm text-gray-500 mt-2">{{ TranslateKeys.LOADING | translate }}</p>
+      </div>
+
+      <!-- No users found -->
+      <div *ngIf="!isLoadingUsers && loadedUsers.length === 0" class="text-center py-4 text-gray-500">
+        {{ TranslateKeys.DAILY_EMOTION_JOURNAL_NO_USERS_FOUND | translate }}
+      </div>
+
+      <!-- Users list -->
+      <div *ngIf="!isLoadingUsers && loadedUsers.length > 0" class="flex flex-wrap gap-2 max-h-60 overflow-y-auto">
         <ion-chip
-          *ngFor="let target of getShareTargetsByType(EmotionShareTargetType.FAMILY)"
-          [color]="isShareTargetSelected(target) ? 'primary' : 'medium'"
-          (click)="toggleShareTarget(target)"
-          class=""
-        >
-          <ion-label>{{ target.name }}</ion-label>
-          <ion-icon name="checkmark-circle" *ngIf="isShareTargetSelected(target)"></ion-icon>
+          *ngFor="let user of loadedUsers"
+          [color]="isUserSelected(user) ? 'primary' : 'medium'"
+          (click)="toggleUserSelection(user)"
+          class="cursor-pointer">
+          <ion-avatar slot="start" class="w-6 h-6">
+            <div class="w-full h-full bg-gray-300 flex items-center justify-center text-xs font-medium text-gray-600 rounded-full">
+              {{ user.name.charAt(0).toUpperCase() }}
+            </div>
+          </ion-avatar>
+          <ion-label>{{ user.name }}</ion-label>
+          <ion-icon
+            [name]="isUserSelected(user) ? 'checkmark-circle' : 'add-circle-outline'"
+            slot="end">
+          </ion-icon>
         </ion-chip>
       </div>
     </div>

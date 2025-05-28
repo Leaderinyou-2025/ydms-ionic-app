@@ -18,7 +18,8 @@
   "LOADING": {
     "pull_to_refresh": "Kéo để làm mới",
     "refreshing": "Đang làm mới...",
-    "loading_more_items": "Đang tải thêm..."
+    "loading_more_items": "Đang tải thêm...",
+    "loading": "Đang tải..."
   },
   "MESSAGE": {
     "feature_under_development": "Tính năng đang được phát triển"
@@ -98,21 +99,28 @@
     "date_has_entry": "Ngày này đã có nhật ký cảm xúc",
     "entry_created": "Đã tạo nhật ký cảm xúc thành công",
     "entry_creation_failed": "Không thể tạo nhật ký cảm xúc",
+    "entry_updated": "Đã cập nhật nhật ký cảm xúc thành công",
+    "entry_update_failed": "Không thể cập nhật nhật ký cảm xúc",
     "add_entry": "Thêm Nhật Ký Cảm Xúc",
+    "edit_entry": "Chỉnh Sửa Nhật Ký Cảm Xúc",
     "select_emotion": "Hôm nay bạn cảm thấy thế nào?",
     "add_caption": "Thêm ghi chú (tùy chọn)",
     "caption_placeholder": "Viết gì đó về ngày hôm nay của bạn...",
     "share_with": "Chia sẻ với (tùy chọn)",
-    "only_today_allowed": "Bạn chỉ có thể thêm nhật ký cảm xúc cho ngày hôm nay"
+    "only_today_allowed": "Bạn chỉ có thể thêm nhật ký cảm xúc cho ngày hôm nay",
+    "public_share": "Chia sẻ công khai",
+    "public_share_description": "Cho phép mọi người xem cảm xúc của bạn",
+    "select_share_type": "Chia sẻ cho",
+    "select_users": "Chọn người dùng để chia sẻ",
+    "share_type_friends": "Bạn bè",
+    "share_type_parent": "Phụ huynh",
+    "share_type_teacher": "Giáo viên",
+    "no_users_found": "Không tìm thấy người dùng nào",
+    "no_entry_for_date": "Không tìm thấy nhật ký cảm xúc cho ngày này"
   },
   "EMOTION_STREAK": {
-    "current": "Chuỗi hiện tại",
-    "longest": "Chuỗi dài nhất",
-    "days_3": "Chuỗi 3 ngày",
-    "days_5": "Chuỗi 5 ngày",
-    "days_7": "Chuỗi 7 ngày",
-    "days_15": "Chuỗi 15 ngày",
-    "days_28": "Chuỗi 28 ngày"
+    "monthly": "Đã check-in trong tháng",
+    "days_in_month": "Số ngày trong tháng"
   },
   "EMOTION_SHARE": {
     "target_class": "Nhóm lớp",
@@ -393,7 +401,11 @@
     "server": "Lỗi máy chủ. Vui lòng thử lại sau.",
     "unknown": "Đã xảy ra lỗi không xác định. Vui lòng thử lại.",
     "server_connection": "Không thể kết nối tới máy chủ. Vui lòng thử lại sau.",
-    "invalid_current_password": "Mật khẩu hiện tại không chính xác."
+    "invalid_current_password": "Mật khẩu hiện tại không chính xác.",
+    "invalid_edit_mode": "Chế độ chỉnh sửa không hợp lệ. Vui lòng thử lại.",
+    "no_emotion_selected": "Vui lòng chọn một cảm xúc trước khi lưu.",
+    "no_auth_data": "Dữ liệu xác thực không có sẵn. Vui lòng đăng nhập lại.",
+    "can_only_create_today": "Bạn chỉ có thể tạo nhật ký cảm xúc cho ngày hôm nay."
   },
   "WARNING": {
     "app_lock": "Trong trường hợp bạn quên mã khóa ứng dụng, bạn phải gỡ cài đặt và cài đặt lại ứng dụng từ cửa hàng để xóa mã khóa cũ."

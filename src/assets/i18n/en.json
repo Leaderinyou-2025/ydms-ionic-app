@@ -18,7 +18,8 @@
   "LOADING": {
     "pull_to_refresh": "Pull to refresh",
     "refreshing": "Refreshing...",
-    "loading_more_items": "Loading more items..."
+    "loading_more_items": "Loading more items...",
+    "loading": "Loading..."
   },
   "MESSAGE": {
     "feature_under_development": "This feature is under development"
@@ -98,21 +99,28 @@
     "date_has_entry": "This date already has an emotion journal entry",
     "entry_created": "Emotion journal entry created successfully",
     "entry_creation_failed": "Failed to create emotion journal entry",
+    "entry_updated": "Emotion journal entry updated successfully",
+    "entry_update_failed": "Failed to update emotion journal entry",
     "add_entry": "Add Emotion Journal Entry",
+    "edit_entry": "Edit Emotion Journal Entry",
     "select_emotion": "How are you feeling today?",
     "add_caption": "Add a note (optional)",
     "caption_placeholder": "Write something about your day...",
     "share_with": "Share with (optional)",
-    "only_today_allowed": "You can only add an emotion journal entry for today"
+    "only_today_allowed": "You can only add an emotion journal entry for today",
+    "public_share": "Public Share",
+    "public_share_description": "Allow everyone to see your emotion",
+    "select_share_type": "Select share target type",
+    "select_users": "Select users to share with",
+    "share_type_friends": "Friends",
+    "share_type_parent": "Parent",
+    "share_type_teacher": "Teacher",
+    "no_users_found": "No users found",
+    "no_entry_for_date": "No emotion journal entry found for this date"
   },
   "EMOTION_STREAK": {
-    "current": "Current Streak",
-    "longest": "Longest Streak",
-    "days_3": "3 Days Streak",
-    "days_5": "5 Days Streak",
-    "days_7": "7 Days Streak",
-    "days_15": "15 Days Streak",
-    "days_28": "28 Days Streak"
+    "monthly": "Check-ins this month",
+    "days_in_month": "Days in month"
   },
   "EMOTION_SHARE": {
     "target_class": "Class Groups",
@@ -393,7 +401,11 @@
     "server": "Server error. Please try again later.",
     "unknown": "An unknown error occurred. Please try again.",
     "server_connection": "Unable to connect to server. Please try again later.",
-    "invalid_current_password": "Current password is incorrect."
+    "invalid_current_password": "Current password is incorrect.",
+    "invalid_edit_mode": "Invalid edit mode. Please try again.",
+    "no_emotion_selected": "Please select an emotion before saving.",
+    "no_auth_data": "Authentication data not available. Please login again.",
+    "can_only_create_today": "You can only create emotion journal entries for today."
   },
   "WARNING": {
     "app_lock": "If you forget the encryption app, you must uninstall and reinstall the app to remove the old passcode."

@@ -3,15 +3,14 @@
 }
 
 .streak-counter {
-  flex: 1;
   padding: 12px;
   border-radius: 8px;
   background-color: #f9fafb;
-  
+
   &:first-child {
     margin-right: 8px;
   }
-  
+
   &:last-child {
     margin-left: 8px;
   }
@@ -25,11 +24,11 @@
   padding: 8px;
   border-radius: 8px;
   transition: background-color 0.3s ease;
-  
+
   &.milestone-completed {
     background-color: rgba(34, 197, 94, 0.1);
   }
-  
+
   &:hover {
     background-color: #f9fafb;
   }
