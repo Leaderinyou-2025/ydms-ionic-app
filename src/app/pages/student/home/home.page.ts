@@ -9,6 +9,7 @@ import { TaskService } from '../../../services/task/task.service';
 import { SoundService } from '../../../services/sound/sound.service';
 import { LiyYdmsAvatarService } from '../../../services/models/liy.ydms.avatar.service';
 import { RankService } from '../../../services/rank/rank.service';
+import { SurveyService } from '../../../services/survey/survey.service';
 import { TranslateKeys } from '../../../shared/enums/translate-keys';
 import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
 import { BtnRoles } from '../../../shared/enums/btn-roles';
@@ -20,6 +21,8 @@ import { IonicColors } from '../../../shared/enums/ionic-colors';
 import { PageRoutes } from '../../../shared/enums/page-routes';
 import { ILiyYdmsTask } from '../../../shared/interfaces/models/liy.ydms.task';
 import { CommonConstants } from '../../../shared/classes/common-constants';
+import { ILiyYdmsAssessmentResult } from '../../../shared/interfaces/models/liy.ydms.assessment.result';
+import { ILiyYdmsEmotionalDiary } from '../../../shared/interfaces/models/liy.ydms.emotional.diary';
 
 @Component({
   selector: 'app-home',
@@ -48,6 +51,8 @@ export class HomePage implements OnInit {
 
   // Task list and progress
   tasks!: Array<ILiyYdmsTask>;
+  emotionDiaryList!: Array<ILiyYdmsEmotionalDiary>;
+  surveyList!: Array<ILiyYdmsAssessmentResult>;
   progress = {
     completed: 0,
     total: 0
@@ -71,6 +76,7 @@ export class HomePage implements OnInit {
     private taskService: TaskService,
     private soundService: SoundService,
     private rankService: RankService,
+    private surveyService: SurveyService,
   ) {
   }
 
@@ -140,6 +146,22 @@ export class HomePage implements OnInit {
   }
 
   /**
+   * Execute the selected emotion diary
+   * @param emotionDiary
+   */
+  public onClickExecuteEmotionDiary(emotionDiary: ILiyYdmsEmotionalDiary): void {
+
+  }
+
+  /**
+   * Execute the selected survey
+   * @param survey
+   */
+  public onClickExecuteSurvey(survey: ILiyYdmsAssessmentResult): void {
+
+  }
+
+  /**
    * Load more tasks
    * @param e
    */
@@ -180,7 +202,9 @@ export class HomePage implements OnInit {
     // Get task list and task progress
     this.getProgressTasks();
     this.initTaskDataPaging();
-    this.getTaskList();
+    this.getEmotionDiaryPendingList();
+    this.getSurveyPendingList();
+    await this.getTaskList();
 
     // Get toolbar total data
     this.getToolbarData();
@@ -213,14 +237,26 @@ export class HomePage implements OnInit {
    * @private
    */
   private getToolbarData(): void {
-    if (!this.authData) return;
-    // Get count user badges
-    this.rankService.getCountUserAchievement(this.authData.id).then(totalAchievement => this.totalBadges = totalAchievement);
-    // Get user ranking
-    this.rankService.getLeaderboardByTeenagerId(this.authData.id).then(leaderboard => this.ranking = leaderboard?.ranking || 0);
-    // Total task
-    this.taskService.getCountAllTasksByAssigneeId(this.authData.id).then(results => this.totalTask = results);
-    // TODO: Get user total friendly
+    if (this.authData) {
+      // Get count user badges
+      this.rankService.getCountUserAchievement(this.authData.id).then(totalAchievement => this.totalBadges = totalAchievement);
+      // Get user ranking
+      this.rankService.getLeaderboardByTeenagerId(this.authData.id).then(leaderboard => this.ranking = leaderboard?.ranking || 0);
+      // Total task
+      this.totalTask = 0;
+      this.taskService.getCountAllTasksByAssigneeId(this.authData.id).then(countTask => this.totalTask += countTask);
+      // Count emotion diary
+      this.taskService.getCountEmotionDiaryPending(this.authData?.id || 0).then(countEmotion => {
+        this.totalTask += countEmotion;
+        this.progress.total += countEmotion;
+      });
+      // Count survey
+      this.surveyService.getCountSurveyPending(this.authData?.id || 0).then(countSurvey => {
+        this.totalTask += countSurvey;
+        this.progress.total += countSurvey;
+      });
+      // TODO: Get friendly points
+    }
   }
 
   /**
@@ -233,7 +269,8 @@ export class HomePage implements OnInit {
       this.taskService.getCountActivatingTaskByAssigneeId(this.authData.id),
       this.taskService.getCountCompletedTaskByAssigneeId(this.authData.id)
     ]).then(([totalTask, completedTask]) => {
-      this.progress = {total: totalTask, completed: completedTask};
+      this.progress.completed = completedTask;
+      this.progress.total += totalTask;
     });
   }
 
@@ -242,13 +279,35 @@ export class HomePage implements OnInit {
    * @private
    */
   private async getTaskList(): Promise<void> {
-    if (this.isLoading) return;
+    if (this.isLoading || !this.authData) return;
     this.isLoading = true;
 
     const offset = (this.paged - 1) * this.limit;
-    const results = await this.taskService.getActivatingTaskList(offset, this.limit);
+    const results = await this.taskService.getActivatingTaskList(this.authData.id, offset, this.limit);
     this.tasks = CommonConstants.mergeArrayObjectById(this.tasks, results) || [];
     this.isLoading = true;
+  }
+
+  /**
+   * Get emotion diary pending list
+   * @private
+   */
+  private getEmotionDiaryPendingList(): void {
+    if (!this.authData) return;
+    this.taskService.getEmotionDiaryPending(this.authData.id).then(
+      emotionDiaryList => this.emotionDiaryList = emotionDiaryList
+    );
+  }
+
+  /**
+   * Get Survey Pending List
+   * @private
+   */
+  private getSurveyPendingList(): void {
+    if (!this.authData) return;
+    this.surveyService.getSurveyPendingList(this.authData.id).then(
+      surveyList => this.surveyList = surveyList
+    );
   }
 
   /**

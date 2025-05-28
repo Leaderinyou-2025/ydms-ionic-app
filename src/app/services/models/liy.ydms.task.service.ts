@@ -8,6 +8,7 @@ import { CommonConstants } from '../../shared/classes/common-constants';
 import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
 import { TaskStatus } from '../../shared/enums/task-status';
 import { AreaOfExpertise } from '../../shared/enums/area-of-expertise';
+import { GuideType } from '../../shared/enums/guide-type';
 
 @Injectable({
   providedIn: 'root'
@@ -71,7 +72,7 @@ export class LiyYdmsTaskService {
    * @param assigneeId
    */
   public async getCountUserTask(assigneeId: number): Promise<number> {
-    return this.getCountTask([[assigneeId, OdooDomainOperator.IN, 'assignee_ids']]);
+    return this.getCountTask([['assignee_ids', OdooDomainOperator.IN, [assigneeId]]]);
   }
 
   /**
@@ -81,7 +82,7 @@ export class LiyYdmsTaskService {
   public async getCountActivatingTasks(assigneeId: number): Promise<number> {
     return this.getCountTask([
       ['status', OdooDomainOperator.IN, [TaskStatus.PENDING, TaskStatus.IN_PROGRESS]],
-      [assigneeId, OdooDomainOperator.IN, 'assignee_ids']
+      ['assignee_ids', OdooDomainOperator.IN, [assigneeId]]
     ]);
   }
 
@@ -91,7 +92,7 @@ export class LiyYdmsTaskService {
   public async getCountCompletedTasks(assigneeId: number): Promise<number> {
     return this.getCountTask([
       ['status', OdooDomainOperator.EQUAL, TaskStatus.COMPLETED],
-      [assigneeId, OdooDomainOperator.IN, 'assignee_ids']
+      ['assignee_ids', OdooDomainOperator.IN, [assigneeId]]
     ]);
   }
 
@@ -113,7 +114,7 @@ export class LiyYdmsTaskService {
     return this.getTaskList(
       [
         ['area_of_expertise', OdooDomainOperator.EQUAL, areaId],
-        [assigneeId, OdooDomainOperator.IN, 'assignee_ids']
+        ['assignee_ids', OdooDomainOperator.IN, [assigneeId]]
       ],
       offset,
       limit,
@@ -142,7 +143,7 @@ export class LiyYdmsTaskService {
         statuses.length === 1 ? OdooDomainOperator.EQUAL : OdooDomainOperator.IN,
         statuses.length === 1 ? statuses[0] : statuses
       ],
-      [assigneeId, OdooDomainOperator.IN, 'assignee_ids']
+      ['assignee_ids', OdooDomainOperator.IN, [assigneeId]]
     ];
     return this.getTaskList(searchDomain, offset, limit, order);
   }
@@ -150,16 +151,21 @@ export class LiyYdmsTaskService {
   /**
    * Get all user task list
    * @param assigneeId
+   * @param guideType
    * @param offset
    * @param limit
    * @param order
    */
   public async getUserTaskList(
     assigneeId: number,
+    guideType: GuideType,
     offset: number = 0,
     limit: number = 20,
     order: OrderBy = OrderBy.CREATE_AT_DESC,
   ): Promise<ILiyYdmsTask[]> {
-    return this.getTaskList([[assigneeId, OdooDomainOperator.IN, 'assignee_ids']], offset, limit, order);
+    return this.getTaskList([
+      ['assignee_ids', OdooDomainOperator.IN, [assigneeId]],
+      ['guide_type', OdooDomainOperator.EQUAL, guideType]
+    ], offset, limit, order);
   }
 }

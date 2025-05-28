@@ -29,21 +29,19 @@
       <ion-card *ngFor="let survey of surveyHistory" routerLink="/{{PageRoutes.EMOTIONAL_SURVEY}}/{{survey.id}}"
                 class=" shadow-md border border-gray-200 dark:border-gray-700">
         <ion-card-content class="relative">
-          <ion-icon *ngIf="survey.create_date !== survey.write_date || survey['create_time'] !== survey['write_time']"
-                    name="checkmark-circle" color="success" class="absolute right-3 top-3 text-2xl"></ion-icon>
-          <ion-icon *ngIf="survey.create_date === survey.write_date && survey['create_time'] === survey['write_time']"
-                    name="warning" color="warning" class="absolute right-3 top-3 text-2xl intense-shake-zoom"></ion-icon>
+          <ion-icon *ngIf="survey.is_posted"
+                    name="checkmark-circle" color="success" class="absolute right-2 top-2 text-2xl"></ion-icon>
+          <ion-icon *ngIf="!survey.is_posted"
+                    name="warning" color="warning" class="absolute right-2 top-2 text-2xl intense-shake-zoom"></ion-icon>
           <div class="font-medium text-xl">{{ survey.name }}</div>
           <div class="flex items-center justify-start pt-2 text-base">
-            <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-5 h-5"
-                     [class.intense-shake-zoom]="survey.create_date === survey.write_date && survey['create_time'] === survey['write_time']"></ion-img>
+            <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-5 h-5" [class.intense-shake-zoom]="!survey.is_posted"></ion-img>
             <span class="font-bold">+{{ survey.rank_point }}</span>
-            <span *ngIf="survey.create_date === survey.write_date && survey['create_time'] === survey['write_time']"
-                  class="pl-3 italic text-red-500">
+            <span *ngIf="!survey.is_posted" class="pl-3 italic text-red-500">
               {{ TranslateKeys.TITLE_TAKE_SURVEY_NOW | translate }}
             </span>
           </div>
-          <div class="pt-2 text-xs italic" *ngIf="survey.create_date !== survey.write_date || survey['create_time'] !== survey['write_time']">
+          <div class="pt-2 text-xs italic" *ngIf="survey.is_posted">
             {{ survey.create_date | date: DateFormat.DATE_ONLY }}
           </div>
         </ion-card-content>

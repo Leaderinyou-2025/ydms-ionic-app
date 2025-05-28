@@ -131,6 +131,7 @@ export class LiyYdmsEmotionalDiaryService {
       ['teenager_id', OdooDomainOperator.EQUAL, teenagerId],
       ['create_date', OdooDomainOperator.GREATER_EQUAL, firstDayFormatted],
       ['create_date', OdooDomainOperator.LESS_EQUAL, lastDayFormatted],
+      ['answer_id', OdooDomainOperator.NOT_EQUAL, false],
     ];
 
     return this.getCountEmotionDiaryList(searchDomain);

@@ -7,101 +7,156 @@
 </app-header>
 
 <ion-content [fullscreen]="true" class="ion-padding-start ion-padding-end">
+  <!-- Refresh data -->
+  <ion-refresher slot="fixed" mode="md" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ion-grid>
     <!--  Checkin cảm xúc  -->
     <ion-col size="12">
       <h2 class="pb-2 text-2xl font-medium">{{ TranslateKeys.TITLE_CHECKIN_EMOTION_DAILY | translate }}</h2>
-      <div class="p-4 w-full rounded-2xl border-2 border-gray-300 mb-3">
-        <div class="flex items-center justify-between w-full">
-          <h3 class="text-lg text-sky-500 font-medium">Đạt chuỗi 10/30 ngày </h3>
-          <ion-icon name="checkmark-circle" color="success" class="text-2xl"></ion-icon>
+
+      <ng-container *ngIf="emotionDiaryList?.length">
+        <div class="relative mb-3 p-4 w-full rounded-2xl border-2 border-gray-300" *ngFor="let emotionDiary of emotionDiaryList">
+          <div class="block w-full">
+            <h3 class="text-lg font-medium">
+              {{ emotionDiary.question_id.name }}
+            </h3>
+            <div class="flex items-center justify-start py-4 text-2xl text-orange-500">
+              <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>
+              <span class="font-bold">+{{ emotionDiary.rank_point }}</span>
+            </div>
+            <ion-button shape="round" class="checkin-emotion-btn absolute right-2 bottom-3">
+              {{ TranslateKeys.BUTTON_CHECKIN_EMOTION | translate }}
+            </ion-button>
+          </div>
         </div>
-        <ion-range class="emotion-streak pt-3 pb-5" aria-label="Emotion streak" [value]="30" [max]="100" [pin]="true"></ion-range>
-        <ion-button expand="block" class="checkin-emotion-btn mb-3" routerLink="/{{PageRoutes.DAILY_EMOTION_JOURNAL}}">
-          Checkin cảm xúc
-        </ion-button>
-      </div>
-      <div class="p-4 w-full rounded-2xl border-2 border-gray-300">
+      </ng-container>
+
+      <div class="p-4 w-full rounded-2xl border-2 border-gray-300" routerLink="/{{PageRoutes.DAILY_EMOTION_JOURNAL}}">
         <div class="flex items-center justify-between w-full">
           <h3 class="text-lg text-sky-500 font-medium">
-            Cảm xúc hôm nay <br>
-            <span class="text-base italic text-green-500 font-light">Đang cảm thấy vui vẻ!</span>
+            {{ TranslateKeys.TITLE_EMOTION_STREAK_MONTH | translate }} {{ emotionStreak }}/{{ daysOfMonths }} {{ TranslateKeys.TITLE_DAYS | translate }}
           </h3>
-          <ion-text class="text-4xl">😊</ion-text>
+          <ion-icon name="information-circle" color="primary" class="text-2xl intense-shake-zoom"></ion-icon>
         </div>
+        <ion-progress-bar class="emotion-streak h-4 mt-3 mb-4" type="determinate" [value]="emotionStreak/daysOfMonths"></ion-progress-bar>
       </div>
     </ion-col>
 
     <!--  Khảo sát định kỳ  -->
-    <ion-col size="12">
-      <h2 class="pt-3 pb-2 text-2xl font-medium">{{ 'Khảo sát định kỳ' }}</h2>
+    <ion-col size="12" *ngIf="surveyList?.length">
+      <h2 class="pt-3 pb-2 text-2xl font-medium">{{ TranslateKeys.TITLE_PERIODIC_SURVEY | translate }}</h2>
       <div class="p-4 w-full rounded-2xl border-2 border-gray-300 mb-3">
-        <h3 class="pb-4 text-lg text-sky-500 font-medium">Còn 3 bài khảo sát cần thực hiện </h3>
+        <h3 class="pb-4 text-lg text-sky-500 font-medium"> {{ TranslateKeys.TITLE_HAS_SURVEY_PENDING | translate: {surveys: surveyPending} }} </h3>
         <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto">
-          <div class="flex flex-col p-4 h-full">
-            <ion-icon name="checkmark-circle" color="success" class="text-3xl w-full pb-3"></ion-icon>
-            <ion-img src="/assets/icons/svg/review_emotion.svg" class="h-16 min-h-16"></ion-img>
-            <div class="flex items-center justify-center gap-3 w-full pt-5">
-              <p class="text-teal-500 text-sm uppercase text-center w-40 h-10">Điều tiết cảm xúc</p>
+          <ng-container *ngFor="let survey of surveyList">
+            <div class="flex flex-col p-4 h-full" (click)="onClickDoSurvey(survey)">
+              <div class="flex items-center justify-center text-2xl text-orange-500 mb-2">
+                <ng-container *ngIf="!survey.is_posted">
+                  <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>
+                  <span class="font-bold">+{{ survey.rank_point }}</span>
+                </ng-container>
+                <ion-icon name="checkmark-circle" color="success" class="text-3xl w-full" *ngIf="survey.is_posted"></ion-icon>
+              </div>
+              <ion-img src="/assets/icons/svg/review_emotion.svg" class="h-16 min-h-16" *ngIf="survey.area_of_expertise === AreaOfExpertise.EMOTION"></ion-img>
+              <ion-img src="/assets/icons/svg/review_check.svg" class="h-16 min-h-16" *ngIf="survey.area_of_expertise === AreaOfExpertise.CONFLICT"></ion-img>
+              <ion-img src="/assets/icons/svg/group-chat_1911059.svg" class="h-16 min-h-16" *ngIf="survey.area_of_expertise === AreaOfExpertise.COMMUNICATION"></ion-img>
+              <ion-img src="/assets/icons/svg/bar_chart.svg" class="h-16 min-h-16" *ngIf="survey.area_of_expertise === AreaOfExpertise.DISCOVERY"></ion-img>
+              <div class="flex flex-col items-center justify-center gap-3 w-full pt-5">
+                <p class="text-sm uppercase text-center w-40 h-10" [class.text-teal-500]="survey.is_posted">
+                  {{ survey.assessment_id.name }}<br>
+                  <span class="text-center text-sm italic font-light">{{ survey.create_date | date: DateFormat.DATE_ONLY }}</span>
+                </p>
+              </div>
             </div>
-          </div>
-
-          <div class="flex flex-col p-4 h-full">
-            <ion-icon name="warning" color="warning" class="text-3xl w-full pb-3"></ion-icon>
-            <ion-img src="/assets/icons/svg/review_check.svg" class="h-16"></ion-img>
-            <div class="flex items-center justify-center gap-3 w-full pt-5">
-              <p class="text-gray-400 text-sm uppercase text-center w-[9rem] h-10">Giảm mâu thuẫn gia đình</p>
-            </div>
-          </div>
-
-          <div class="flex flex-col p-4 h-full">
-            <ion-icon name="warning" color="warning" class="text-3xl w-full pb-3"></ion-icon>
-            <ion-img src="/assets/icons/svg/group-chat_1911059.svg" class="h-16"></ion-img>
-            <div class="flex items-center justify-center gap-3 w-full pt-5">
-              <p class="text-gray-400 text-sm uppercase text-center w-[9rem] h-10">Cải thiện giao tiếp gia đình</p>
-            </div>
-          </div>
-
-          <div class="flex flex-col p-4 h-full">
-            <ion-icon name="warning" color="warning" class="text-3xl w-full pb-3"></ion-icon>
-            <ion-img src="/assets/icons/svg/bar_chart.svg" class="h-16"></ion-img>
-            <div class="flex items-center justify-center gap-3 w-full pt-5">
-              <p class="text-gray-400 text-sm uppercase text-center w-40">Khám phá và phát triển bản thân</p>
-            </div>
-          </div>
+          </ng-container>
         </div>
       </div>
     </ion-col>
 
     <!--  Thử thách nhóm  -->
-    <ion-col size="12">
-      <h2 class="pt-3 pb-2 text-2xl font-medium">Thử thách nhóm</h2>
-      <div class="p-4 w-full rounded-2xl border-2 border-gray-300 mb-3">
-        <h3 class="pb-4 text-lg text-sky-500 font-medium">Còn 3 bài khảo sát cần thực hiện </h3>
+    <ion-col size="12" *ngIf="groupTaskList?.length">
+      <h2 class="pt-3 pb-3 text-2xl font-medium">{{ TranslateKeys.TITLE_GROUP_CHALLENGE | translate }}</h2>
+      <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto"
+           appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreFamilyTask($event)">
+        <div class="flex flex-col p-4 h-full border-2 rounded-2xl" *ngFor="let task of groupTaskList">
+          <div class="flex items-center justify-center text-2xl text-orange-500 mb-2">
+            <ng-container *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS">
+              <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>
+              <span class="font-bold">+{{ task.rank_point }}</span>
+            </ng-container>
+            <ion-icon name="checkmark-circle" color="success" class="text-3xl w-full" *ngIf="task.status === TaskStatus.COMPLETED"></ion-icon>
+          </div>
+          <p class="text-base text-center w-48" [class.text-teal-500]="task.status === TaskStatus.COMPLETED">
+            {{ task.name }}
+          </p>
+          <p class="py-3 text-center text-sm italic font-light">{{ task.create_date | date: DateFormat.DATE_ONLY }}</p>
+        </div>
       </div>
     </ion-col>
 
     <!--  Hoạt động gia đình  -->
-    <ion-col size="12">
-      <h2 class="pt-3 pb-2 text-2xl font-medium">Hoạt động gia đình</h2>
-      <div class="p-4 w-full rounded-2xl border-2 border-gray-300 mb-3">
-        <h3 class="pb-4 text-lg text-sky-500 font-medium">Còn 3 bài khảo sát cần thực hiện </h3>
+    <ion-col size="12" *ngIf="familyTaskList?.length">
+      <h2 class="pt-3 pb-3 text-2xl font-medium">{{ TranslateKeys.TITLE_FAMILY_ACTIVITY | translate }}</h2>
+      <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto"
+           appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreFamilyTask($event)">
+        <div class="flex flex-col p-4 h-full border-2 rounded-2xl" *ngFor="let task of familyTaskList">
+          <div class="flex items-center justify-center text-2xl text-orange-500 mb-2">
+            <ng-container *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS">
+              <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>
+              <span class="font-bold">+{{ task.rank_point }}</span>
+            </ng-container>
+            <ion-icon name="checkmark-circle" color="success" class="text-3xl w-full" *ngIf="task.status === TaskStatus.COMPLETED"></ion-icon>
+          </div>
+          <p class="text-base text-center w-48" [class.text-teal-500]="task.status === TaskStatus.COMPLETED">
+            {{ task.name }}
+          </p>
+          <p class="py-2 text-center text-sm italic font-light">{{ task.create_date | date: DateFormat.DATE_ONLY }}</p>
+        </div>
       </div>
     </ion-col>
 
     <!--  Gợi ý, hướng dẫn  -->
-    <ion-col size="12">
-      <h2 class="pt-3 pb-2 text-2xl font-medium">Gợi ý, hướng dẫn</h2>
-      <div class="p-4 w-full rounded-2xl border-2 border-gray-300 mb-3">
-        <h3 class="pb-4 text-lg text-sky-500 font-medium">Còn 3 bài khảo sát cần thực hiện </h3>
+    <ion-col size="12" *ngIf="instructionTaskList?.length">
+      <h2 class="pt-3 pb-3 text-2xl font-medium">{{ TranslateKeys.TITLE_INSTRUCTION | translate }}</h2>
+      <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto"
+           appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreFamilyTask($event)">
+        <div class="flex flex-col p-4 border-2 rounded-2xl" *ngFor="let task of instructionTaskList">
+          <div class="flex justify-center text-2xl text-orange-500 mb-2">
+            <ng-container *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS">
+              <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>
+              <span class="font-bold">+{{ task.rank_point }}</span>
+            </ng-container>
+            <ion-icon name="checkmark-circle" color="success" class="text-3xl w-full" *ngIf="task.status === TaskStatus.COMPLETED"></ion-icon>
+          </div>
+          <p class="text-base text-center w-48" [class.text-teal-500]="task.status === TaskStatus.COMPLETED">
+            {{ task.name }}
+          </p>
+          <p class="py-2 text-center text-sm italic font-light">{{ task.create_date | date: DateFormat.DATE_ONLY }}</p>
+        </div>
       </div>
     </ion-col>
 
-    <!--  Gợi ý, hướng dẫn  -->
-    <ion-col size="12">
-      <h2 class="pt-3 pb-2 text-2xl font-medium">Hành trình phát triển bản thân</h2>
-      <div class="p-4 w-full rounded-2xl border-2 border-gray-300 mb-3">
-        <h3 class="pb-4 text-lg text-sky-500 font-medium">Còn 3 bài khảo sát cần thực hiện </h3>
+    <!--  Bài tập  -->
+    <ion-col size="12" *ngIf="exerciseTaskList?.length">
+      <h2 class="pt-3 pb-3 text-2xl font-medium">{{ TranslateKeys.TITLE_EXERCISE | translate }}</h2>
+      <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto"
+           appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreFamilyTask($event)">
+        <div class="flex flex-col p-4 border-2 rounded-2xl" *ngFor="let task of exerciseTaskList">
+          <div class="flex justify-center text-2xl text-orange-500 mb-2">
+            <ng-container *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS">
+              <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>
+              <span class="font-bold">+{{ task.rank_point }}</span>
+            </ng-container>
+            <ion-icon name="checkmark-circle" color="success" class="text-3xl w-full" *ngIf="task.status === TaskStatus.COMPLETED"></ion-icon>
+          </div>
+          <p class="text-base text-center w-48" [class.text-teal-500]="task.status === TaskStatus.COMPLETED">
+            {{ task.name }}
+          </p>
+          <p class="py-2 text-center text-sm italic font-light">{{ task.create_date | date: DateFormat.DATE_ONLY }}</p>
+        </div>
       </div>
     </ion-col>
   </ion-grid>
