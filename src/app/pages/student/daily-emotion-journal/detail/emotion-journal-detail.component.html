@@ -1,22 +1,24 @@
 <app-header
-  [pageTitle]="TranslateKeys.DAILY_EMOTION_JOURNAL_ADD_ENTRY"
+  [pageTitle]="existingEntry ? TranslateKeys.DAILY_EMOTION_JOURNAL_EDIT_ENTRY : TranslateKeys.DAILY_EMOTION_JOURNAL_ADD_ENTRY"
   backgroundColor="linear-gradient(to bottom, #9333ea, #4c1d95)"
   defaultBackHref="/daily-emotion-journal">
 </app-header>
 
 <ion-content [fullscreen]="true" class=" custom-page-bg-light" [style]="{'--padding-bottom': '70px'}">
-  <div class="p-4 pb-20"> <!-- Added pb-20 for extra padding at bottom -->
+  <div class="p-4 pb-20">
     <!-- Emotion Icon Selector Component -->
     <app-emotion-icon-selector
-      [emotionIcons]="emotionIcons"
-      [selectedEmotionIcon]="selectedEmotionIcon"
+      [emotionAnswerOptions]="emotionAnswerOptions"
+      [selectedEmotionOption]="selectedEmotionOption"
+      [questionText]="selectedQuestion?.name || ''"
       (emotionSelected)="onEmotionSelected($event)">
     </app-emotion-icon-selector>
 
     <!-- Emotion Share Component -->
     <app-emotion-share
-      [emotionIcon]="selectedEmotionIcon"
-      [availableShareTargets]="availableShareTargets"
+      [initialPublicEmotional]="existingEntry?.public_emotional || false"
+      [initialPublicEmotionalTo]="getInitialPublicEmotionalTo()"
+      [initialPublicUserIds]="getPublicUserIds()"
       (shareEmotion)="onShareEmotion($event)">
     </app-emotion-share>
   </div>
@@ -26,7 +28,7 @@
   <ion-toolbar>
     <div class="p-2">
       <ion-button expand="block" (click)="save()" class="w-full bg-blue-500 text-white  uppercase rounded-lg shadow-md">
-        {{ 'BUTTON_TITLES.save_changes' | translate }}
+        {{ (existingEntry ? 'BUTTON_TITLES.update' : 'BUTTON.save') | translate }}
       </ion-button>
     </div>
   </ion-toolbar>

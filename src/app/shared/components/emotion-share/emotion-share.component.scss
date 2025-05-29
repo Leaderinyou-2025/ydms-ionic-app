@@ -15,12 +15,30 @@ ion-textarea {
 ion-chip {
   --background: #f3f4f6;
   --color: #4b5563;
-  height: 32px;
+  height: 36px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
   &.ion-color-primary {
     --background: #22aff7;
     --color: #ffffff;
   }
+
+  ion-avatar {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
+
+  ion-icon {
+    margin-left: 4px;
+    font-size: 16px;
+  }
+}
+
+ion-select {
+  --padding-start: 0;
+  --padding-end: 0;
 }
 
 ion-button {

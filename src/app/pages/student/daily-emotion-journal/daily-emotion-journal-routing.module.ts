@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DailyEmotionJournalPage } from './daily-emotion-journal.page';
-import { AddEmotionJournalComponent } from './add-emotion-journal/add-emotion-journal.component';
+import { EmotionJournalDetailComponent } from './detail/emotion-journal-detail.component';
 
 const routes: Routes = [
   {
@@ -10,8 +10,8 @@ const routes: Routes = [
     component: DailyEmotionJournalPage
   },
   {
-    path: 'add',
-    component: AddEmotionJournalComponent
+    path: 'detail/:id',
+    component: EmotionJournalDetailComponent
   }
 ];
 

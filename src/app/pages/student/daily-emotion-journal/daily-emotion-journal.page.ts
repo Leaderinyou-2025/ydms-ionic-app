@@ -2,18 +2,22 @@ import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Observable, take } from 'rxjs';
+import { Observable, take, BehaviorSubject } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { EmotionJournalCalendarComponent } from './calendar/emotion-journal-calendar.component';
 import { EmotionJournalStreakComponent } from './streak-status/emotion-journal-streak.component';
 import { SharedModule } from '../../../shared/shared.module';
-import { AddEmotionJournalComponent } from './add-emotion-journal/add-emotion-journal.component';
+
+import { ILiyYdmsEmotionalDiary } from '../../../shared/interfaces/models/liy.ydms.emotional.diary';
 
 import { TranslateKeys } from '../../../shared/enums/translate-keys';
-import { IHeaderAnimeImage, IHeaderSegment } from '../../../shared/interfaces/header/header';
-import { IDailyEmotionJournal, IEmotionIcon, IEmotionShareTarget, IEmotionStreakStatus } from '../../../shared/interfaces/daily-emotion-journal/daily-emotion-journal.interfaces';
-import { DailyEmotionJournalService } from '../../../services/daily-emotion-journal/daily-emotion-journal.service';
+import { IHeaderAnimeImage } from '../../../shared/interfaces/header/header';
+import { LiyYdmsEmotionalDiaryService } from '../../../services/models/liy.ydms.emotional.diary.service';
+import { AuthService } from '../../../services/auth/auth.service';
+
+import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
+import { OrderBy } from '../../../shared/enums/order-by';
 
 @Component({
   selector: 'app-daily-emotion-journal',
@@ -32,17 +36,10 @@ import { DailyEmotionJournalService } from '../../../services/daily-emotion-jour
 })
 export class DailyEmotionJournalPage implements OnInit {
   // Header configuration
-  segment!: IHeaderSegment;
   animeImage!: IHeaderAnimeImage;
 
   // Journal entries
-  journalEntries$!: Observable<IDailyEmotionJournal[]>;
-
-  // Emotion icons
-  emotionIcons$!: Observable<IEmotionIcon[]>;
-
-  // Streak status
-  streakStatus$!: Observable<IEmotionStreakStatus | null>;
+  journalEntries$!: ILiyYdmsEmotionalDiary[];
 
   // Loading status
   isLoading$!: Observable<boolean>;
@@ -50,16 +47,28 @@ export class DailyEmotionJournalPage implements OnInit {
   // Selected date
   selectedDate: Date = new Date();
 
+  // Loading state
+  private isLoadingSubject = new BehaviorSubject<boolean>(false);
+
+  // Current user data
+  private currentUser: IAuthData | undefined;
+
+  // Flag to track if this is the first time entering the page
+  private isFirstTimeEntering: boolean = true;
+
   // Expose TranslateKeys to template
   protected readonly TranslateKeys = TranslateKeys;
 
   constructor(
-    private dailyEmotionJournalService: DailyEmotionJournalService,
+    private emotionalDiaryService: LiyYdmsEmotionalDiaryService,
+    private authService: AuthService,
     private toastController: ToastController,
     private translateService: TranslateService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.isLoading$ = this.isLoadingSubject.asObservable();
+  }
 
   ngOnInit() {
     this.initHeader();
@@ -67,16 +76,18 @@ export class DailyEmotionJournalPage implements OnInit {
   }
 
   /**
+   * Handle page lifecycle when entering
+   */
+  ionViewWillEnter() {
+    if (!this.isFirstTimeEntering) {
+      this.refreshData();
+    }
+  }
+
+  /**
    * Initialize header configuration
    */
   private initHeader(): void {
-    this.segment = {
-      value: 'calendar',
-      buttons: [
-        { value: 'calendar', label: TranslateKeys.TITLE_CALENDAR },
-        { value: 'history', label: TranslateKeys.TITLE_HISTORY }
-      ]
-    };
 
     this.animeImage = {
       name: 'daily_emotion_journal',
@@ -92,53 +103,223 @@ export class DailyEmotionJournalPage implements OnInit {
   }
 
   /**
-   * Load data from service
+   * Load data from service (includes auto-navigation logic for first time)
    */
-  private loadData(): void {
-    this.journalEntries$ = this.dailyEmotionJournalService.getJournalEntries();
-    this.emotionIcons$ = this.dailyEmotionJournalService.getEmotionIcons();
-    this.streakStatus$ = this.dailyEmotionJournalService.getStreakStatus();
-    this.isLoading$ = this.dailyEmotionJournalService.getLoadingStatus();
+  private async loadData(): Promise<void> {
+    try {
+      this.isLoadingSubject.next(true);
+      this.currentUser = await this.authService.getAuthData();
+      if (!this.currentUser?.id) {
+        throw new Error('User not authenticated');
+      }
 
-    // Refresh data
-    this.refreshData();
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1;
+      const currentYear = currentDate.getFullYear();
+
+      await this.loadEmotionDiaryEntries(this.currentUser.id, currentMonth, currentYear);
+
+      if (this.isFirstTimeEntering) {
+        await this.checkAndShowTodayEntryIfNeeded();
+        this.isFirstTimeEntering = false;
+      }
+
+    } catch (error) {
+      console.error('ERROR:', error);
+      const message = this.translateService.instant('ERROR.unknown');
+      this.showToast(message);
+    } finally {
+      this.isLoadingSubject.next(false);
+    }
   }
 
   /**
-   * Refresh data from service
+   * Check if today has incomplete entry and automatically show detail page for first-time users
    */
-  public refreshData(): void {
-    this.dailyEmotionJournalService.loadJournalEntries();
-    this.dailyEmotionJournalService.loadEmotionIcons();
-    this.dailyEmotionJournalService.loadStreakStatus();
+  private async checkAndShowTodayEntryIfNeeded(): Promise<void> {
+    try {
+      const today = new Date();
+      const todayEntry = this.findEntryForDate(today);
+
+      if (todayEntry && todayEntry.id && !this.hasValidAnswerId(todayEntry)) {
+
+        setTimeout(async () => {
+          const navigationResult = await this.router.navigate(['detail', todayEntry.id], {
+            relativeTo: this.route,
+            state: {
+              editEntry: todayEntry,
+              selectedDate: today,
+              isAutoShow: true
+            }
+          });
+
+        }, 100);
+      }
+    } catch (error) {
+      console.error('ERROR in checkAndShowTodayEntryIfNeeded:', error);
+    }
+  }
+
+  /**
+   * Load emotion diary entries for a specific month
+   * @param teenagerId User ID
+   * @param month Month (1-12)
+   * @param year Year
+   */
+  private async loadEmotionDiaryEntries(teenagerId: number, month: number, year: number): Promise<void> {
+    try {
+      const daysInMonth = new Date(year, month, 0).getDate();
+      const emotionDiaryEntries = await this.emotionalDiaryService.getUserEmotionDiaryListInMonth(
+        teenagerId,
+        0,
+        daysInMonth,
+        OrderBy.CREATE_AT_DESC,
+        month,
+        year
+      );
+
+      let filteredEntries = emotionDiaryEntries;
+
+      this.journalEntries$ = filteredEntries;
+
+    } catch (error) {
+      console.error('ERROR loading emotion diary entries:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Refresh data from service (without auto-navigation logic)
+   */
+  public async refreshData(): Promise<void> {
+    if (!this.currentUser?.id) {
+      try {
+        this.currentUser = await this.authService.getAuthData();
+        if (!this.currentUser?.id) {
+          throw new Error('User not authenticated');
+        }
+      } catch (error) {
+        console.error('ERROR getting user data in refreshData:', error);
+        return;
+      }
+    }
+
+    try {
+      this.isLoadingSubject.next(true);
+
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1;
+      const currentYear = currentDate.getFullYear();
+
+      await this.loadEmotionDiaryEntries(this.currentUser.id, currentMonth, currentYear);
+
+    } catch (error) {
+      console.error('ERROR:', error);
+      const message = this.translateService.instant('ERROR.unknown');
+      this.showToast(message);
+    } finally {
+      this.isLoadingSubject.next(false);
+    }
   }
 
   /**
    * Handle refresh event
    * @param event Refresh event
    */
-  public handleRefresh(event: any): void {
-    this.refreshData();
-    setTimeout(() => {
-      event.target.complete();
-    }, 1000);
-  }
-
-  /**
-   * Handle segment change
-   * @param value Segment value
-   */
-  public segmentChanged(value: string | number): void {
-    this.segment.value = value;
+  public async handleRefresh(event: any): Promise<void> {
+    try {
+      await this.refreshData();
+    } catch (error) {
+      console.error('ERROR in handleRefresh:', error);
+    } finally {
+      setTimeout(() => {
+        event.target.complete();
+      }, 1000);
+    }
   }
 
   /**
    * Handle date selection from calendar
    * @param date Selected date
    */
-  public onDateSelected(date: Date): void {
+  public async onDateSelected(date: Date): Promise<void> {
     this.selectedDate = date;
-    // Store the selected date for later use
+
+    const existingEntry = this.findEntryForDate(date);
+
+    try {
+      if (existingEntry && existingEntry.id) {
+        this.router.navigate(['detail', existingEntry.id], {
+          relativeTo: this.route,
+          state: {
+            editEntry: existingEntry,
+            selectedDate: date
+          }
+        });
+      } else {
+        const message = this.translateService.instant(TranslateKeys.DAILY_EMOTION_JOURNAL_NO_ENTRY_FOR_DATE);
+        this.showToast(message);
+      }
+    } catch (error) {
+      console.error('ERROR navigating to emotion journal detail:', error);
+      const message = this.translateService.instant('ERROR.unknown');
+      this.showToast(message);
+    }
+  }
+
+  /**
+   * Find journal entry for a specific date
+   * @param date Date to check
+   * @returns Journal entry or undefined
+   */
+  private findEntryForDate(date: Date): ILiyYdmsEmotionalDiary | undefined {
+    if (!this.journalEntries$ || this.journalEntries$.length === 0) return undefined;
+
+    return this.journalEntries$.find(entry => {
+      if (!entry.create_date) return false;
+
+      const entryDate = new Date(entry.create_date);
+      return entryDate.getDate() === date.getDate() &&
+             entryDate.getMonth() === date.getMonth() &&
+             entryDate.getFullYear() === date.getFullYear();
+    });
+  }
+
+  /**
+   * Check if entry has valid answer_id
+   * @param entry Journal entry
+   * @returns True if entry has valid answer_id
+   */
+  private hasValidAnswerId(entry?: ILiyYdmsEmotionalDiary): boolean {
+    return !!(entry && entry.answer_id && entry.answer_id.id);
+  }
+
+  /**
+   * Handle month change from calendar
+   * @param event Month change event with month and year
+   */
+  public async onMonthChanged(event: { month: number, year: number }): Promise<void> {
+    if (!this.currentUser?.id) {
+      console.warn('User not authenticated, cannot load month data');
+      return;
+    }
+
+    try {
+      this.isLoadingSubject.next(true);
+
+      await this.loadEmotionDiaryEntries(
+        this.currentUser.id,
+        event.month,
+        event.year
+      );
+
+    } catch (error) {
+      console.error('ERROR loading entries for month:', error);
+      const message = this.translateService.instant('ERROR.unknown');
+      this.showToast(message);
+    } finally {
+      this.isLoadingSubject.next(false);
+    }
   }
 
   /**
@@ -159,58 +340,5 @@ export class DailyEmotionJournalPage implements OnInit {
     }
   }
 
-  /**
-   * Check if a date is today
-   * @param date Date to check
-   * @returns True if date is today, false otherwise
-   */
-  private isToday(date: Date): boolean {
-    const today = new Date();
-    return date.getDate() === today.getDate() &&
-           date.getMonth() === today.getMonth() &&
-           date.getFullYear() === today.getFullYear();
-  }
 
-  /**
-   * Open add emotion journal modal
-   */
-  public async openEmotionSelector(): Promise<void> {
-    try {
-      // Check if selected date is today
-      if (!this.isToday(this.selectedDate)) {
-        // Show message that only today's entry can be added
-        const message = this.translateService.instant('DAILY_EMOTION_JOURNAL.only_today_allowed');
-        this.showToast(message);
-        return;
-      }
-
-      // Check if selected date already has an entry
-      const entries = await this.journalEntries$.pipe(take(1)).toPromise();
-      if (entries && entries.length > 0) {
-        const hasEntry = entries.some(entry => {
-          const entryDate = new Date(entry.date);
-          return entryDate.getDate() === this.selectedDate.getDate() &&
-                 entryDate.getMonth() === this.selectedDate.getMonth() &&
-                 entryDate.getFullYear() === this.selectedDate.getFullYear();
-        });
-
-        if (hasEntry) {
-          // Show message that date already has an entry
-          const message = this.translateService.instant(TranslateKeys.DAILY_EMOTION_JOURNAL_DATE_HAS_ENTRY);
-          this.showToast(message);
-          return;
-        }
-      }
-
-      // Navigate to add emotion journal page
-      this.router.navigate(['add'], {
-        relativeTo: this.route,
-        state: { selectedDate: this.selectedDate }
-      });
-    } catch (error) {
-      console.error('ERROR in openEmotionSelector:', error);
-      const message = this.translateService.instant('ERROR.unknown');
-      this.showToast(message);
-    }
-  }
 }

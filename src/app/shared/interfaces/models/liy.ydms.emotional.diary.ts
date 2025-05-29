@@ -13,4 +13,7 @@ export interface ILiyYdmsEmotionalDiary extends IBase {
   rank_point: string;
   scores: string;
   teenager_id: IRelatedField;
+  public_emotional?: boolean;
+  public_emotional_to?: string;
+  public_user_ids?: number[] | IRelatedField[];
 }

@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-import { IDailyEmotionJournal } from '../../../../shared/interfaces/daily-emotion-journal/daily-emotion-journal.interfaces';
 import { TranslateKeys } from '../../../../shared/enums/translate-keys';
+import {ILiyYdmsEmotionalDiary} from "../../../../shared/interfaces/models/liy.ydms.emotional.diary";
 
 @Component({
   selector: 'app-emotion-journal-calendar',
@@ -15,13 +15,14 @@ import { TranslateKeys } from '../../../../shared/enums/translate-keys';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class EmotionJournalCalendarComponent implements OnInit, OnChanges {
-  @Input() journalEntries: IDailyEmotionJournal[] = [];
+  @Input() journalEntries: ILiyYdmsEmotionalDiary[] = [];
   @Output() dateSelected = new EventEmitter<Date>();
+  @Output() monthChanged = new EventEmitter<{ month: number, year: number }>();
 
   currentDate: Date = new Date();
   currentMonth: number = new Date().getMonth();
   currentYear: number = new Date().getFullYear();
-  calendarDays: Array<{ date: Date, entry?: IDailyEmotionJournal }> = [];
+  calendarDays: Array<{ date: Date, entry?: ILiyYdmsEmotionalDiary }> = [];
 
   weekdays: string[] = [];
   monthNames: string[] = [];
@@ -112,11 +113,13 @@ export class EmotionJournalCalendarComponent implements OnInit, OnChanges {
    * @param date Date to check
    * @returns Journal entry or undefined
    */
-  private findEntryForDate(date: Date): IDailyEmotionJournal | undefined {
-    if (!this.journalEntries) return undefined;
+  private findEntryForDate(date: Date): ILiyYdmsEmotionalDiary | undefined {
+    if (!this.journalEntries || this.journalEntries.length === 0) return undefined;
 
     return this.journalEntries.find(entry => {
-      const entryDate = new Date(entry.date);
+      if (!entry.create_date) return false;
+
+      const entryDate = new Date(entry.create_date);
       return entryDate.getDate() === date.getDate() &&
              entryDate.getMonth() === date.getMonth() &&
              entryDate.getFullYear() === date.getFullYear();
@@ -145,11 +148,75 @@ export class EmotionJournalCalendarComponent implements OnInit, OnChanges {
   }
 
   /**
+   * Check if today has no entry or incomplete entry (for warning display)
+   * @param date Date to check
+   * @returns True if date is today and has no entry or incomplete entry
+   */
+  public isTodayWithoutEntry(date: Date): boolean {
+    if (!this.isToday(date)) {
+      return false;
+    }
+
+    const entry = this.findEntryForDate(date);
+
+    // No entry at all
+    if (!entry) {
+      return true;
+    }
+
+    // Entry exists but no answer selected (answer_id is null/undefined or has no id)
+    // IRelatedField has structure {id: number, name: string}, when empty the id is falsy
+    if (!entry.answer_id || !entry.answer_id.id) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if entry has valid answer_id
+   * @param entry Journal entry
+   * @returns True if entry has valid answer_id
+   */
+  public hasValidAnswerId(entry?: ILiyYdmsEmotionalDiary): boolean {
+    return !!(entry && entry.answer_id && entry.answer_id.id);
+  }
+
+  /**
+   * Check if today entry is complete
+   * @param date Date to check
+   * @param entry Entry for the date
+   * @returns True if today and entry is complete
+   */
+  public isTodayComplete(date: Date, entry?: ILiyYdmsEmotionalDiary): boolean {
+    return this.isToday(date) && this.hasValidAnswerId(entry);
+  }
+
+  /**
    * Select a date from calendar
    * @param day Calendar day
    */
-  public selectDate(day: { date: Date, entry?: IDailyEmotionJournal }): void {
+  public selectDate(day: { date: Date, entry?: ILiyYdmsEmotionalDiary }): void {
     this.dateSelected.emit(day.date);
+  }
+
+
+
+  /**
+   * Get base64 icon for display
+   * @param entry Journal entry
+   * @returns Base64 icon string or empty string
+   */
+  public getEntryIcon(entry?: ILiyYdmsEmotionalDiary): string {
+    if (!entry?.answer_icon) return '';
+
+    // If the base64 string already includes the data URL prefix, return as is
+    if (entry.answer_icon.startsWith('data:')) {
+      return entry.answer_icon;
+    }
+
+    // Otherwise, add the SVG data URL prefix
+    return `data:image/svg+xml;base64,${entry.answer_icon}`;
   }
 
   /**
@@ -163,6 +230,7 @@ export class EmotionJournalCalendarComponent implements OnInit, OnChanges {
       this.currentMonth--;
     }
     this.generateCalendar();
+    this.emitMonthChanged();
   }
 
   /**
@@ -176,6 +244,7 @@ export class EmotionJournalCalendarComponent implements OnInit, OnChanges {
       this.currentMonth++;
     }
     this.generateCalendar();
+    this.emitMonthChanged();
   }
 
   /**
@@ -186,5 +255,16 @@ export class EmotionJournalCalendarComponent implements OnInit, OnChanges {
     this.currentMonth = today.getMonth();
     this.currentYear = today.getFullYear();
     this.generateCalendar();
+    this.emitMonthChanged();
+  }
+
+  /**
+   * Emit month changed event
+   */
+  private emitMonthChanged(): void {
+    this.monthChanged.emit({
+      month: this.currentMonth + 1, // Convert to 1-12 format
+      year: this.currentYear
+    });
   }
 }
