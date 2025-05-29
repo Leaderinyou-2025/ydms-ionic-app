@@ -324,7 +324,13 @@
     "family_activity": "Family activity",
     "instruction": "Instruction",
     "exercise": "Exercise",
-    "periodic_survey": "Periodic survey"
+    "periodic_survey": "Periodic survey",
+    "friend_requests": "Friend requests",
+    "no_friends": "No friends",
+    "no_friend_requests": "No friend requests",
+    "send_request": "You have sent a request",
+    "request_to_you": "Send a request to you",
+    "no_result_found": "No result found"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",
@@ -346,7 +352,9 @@
     "access_permission_notification_alert": "Please allow the app to display notifications to receive the latest updates.",
     "confirm_logout_alert": "Are you sure you want to log out?",
     "app_update_successful": "App update successful. You are now running the latest version.",
-    "access_permission_gallery_alert": "Please allow the app to access your photo library and use your camera."
+    "access_permission_gallery_alert": "Please allow the app to access your photo library and use your camera.",
+    "confirm_delete_alert": "Are you sure you want to delete?",
+    "confirm_unfriend_alert": "Are you sure you want to unfriend?"
   },
   "BUTTON_TITLES": {
     "confirm": "Confirm",
@@ -366,7 +374,9 @@
     "select": "Select",
     "share": "Share",
     "answer_all_questions": "Please answer all question!",
-    "checkin_emotion": "Check-In"
+    "checkin_emotion": "Check-In",
+    "accept": "Accept",
+    "send_request": "Send a request"
   },
   "TOAST": {
     "error_header": "Error",
@@ -382,7 +392,13 @@
     "task_complete_error": "Could not complete the task. Please try again.",
     "answer_all_questions": "Please answer all questions before submitting.",
     "update_failed": "An error occurred while updating data. Please try again later.",
-    "update_success": "Data update successful."
+    "update_success": "Data update successful.",
+    "send_request_failed": "Request failed. Please try again later.",
+    "send_request_success": "Request sent successfully.",
+    "cancel_request_success": "Friend request canceled successfully.",
+    "cancel_request_failed": "Failed to cancel friend request. Please try again.",
+    "accept_request_success": "Friend request accepted successfully.",
+    "accept_request_failed": "Failed to accept friend request. Please try again."
   },
   "ERROR": {
     "network": "Network error. Please check your internet connection.",

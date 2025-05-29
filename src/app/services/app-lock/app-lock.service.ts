@@ -26,7 +26,7 @@ export class AppLockService {
     private stateService: StateService,
     private biometricService: BiometricService
   ) {
-    this.stateService.verifyByBiometric$.subscribe(() => this.skipNextAppResume = true);
+    this.stateService.verifyByBiometric$.subscribe(() => this.skipNextAppResume = !this.platform.is(NativePlatform.IOS));
   }
 
   /**

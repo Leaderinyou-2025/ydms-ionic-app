@@ -9,6 +9,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { FriendsPage } from './friends.page';
 import { FriendsPageRoutingModule } from './friends-routing.module';
 import { FriendDetailComponent } from './friend-detail/friend-detail.component';
+import { AddNewFriendComponent } from './add-new-friend/add-new-friend.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { FriendDetailComponent } from './friend-detail/friend-detail.component';
     SharedModule,
     TranslateModule
   ],
-  declarations: [FriendsPage, FriendDetailComponent],
+  declarations: [FriendsPage, FriendDetailComponent, AddNewFriendComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class FriendsPageModule {}
+export class FriendsPageModule {
+}

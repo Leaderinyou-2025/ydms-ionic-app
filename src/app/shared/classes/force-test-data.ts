@@ -10,7 +10,7 @@ import {
   ITask,
 } from '../interfaces/home/home.interfaces';
 import { ILiyYdmsNotification } from '../interfaces/models/liy.ydms.notification';
-import { IFriend } from '../interfaces/friend/friend';
+import { FriendStatus } from '../enums/friend-status';
 
 import { IFamilyDialogueSessionHistory, IFamilyDialogueSessionDetail, IFamilyDialogueSessionQuestion } from '../interfaces/family-dialogue-session/family-dialogue-session.interfaces';
 import { EmotionType } from '../enums/personal-diary/personal-diary.enum';
@@ -354,81 +354,6 @@ export class ForceTestData {
       },
     ],
   };
-
-  static friends: Array<IFriend> = [
-    {
-      id: 1,
-      name: 'Zoro Đầu rêu',
-      avatar: 'assets/images/avatar/Shiba-Inu-Dog-1.png',
-      likeCount: 100,
-      rank: 5,
-      achievements: 25,
-      friendshipLevel: 120,
-    },
-    {
-      id: 2,
-      name: 'Bé thân thiện',
-      avatar: 'assets/images/avatar/Shiba-Inu-Dog-2.png',
-      likeCount: 80,
-      rank: 8,
-      achievements: 15,
-      friendshipLevel: 90,
-    },
-    {
-      id: 3,
-      name: 'Hoa tiêu Nami',
-      avatar: 'assets/images/avatar/Shiba-Inu-Dog-3.png',
-      likeCount: 102,
-      rank: 4,
-      achievements: 30,
-      friendshipLevel: 150,
-    },
-    {
-      id: 4,
-      name: 'Tứ hoàng Luffy',
-      avatar: 'assets/images/avatar/Shiba-Inu-Dog.png',
-      likeCount: 186,
-      rank: 1,
-      achievements: 38,
-      friendshipLevel: 186,
-    },
-    {
-      id: 5,
-      name: 'Mèo Tom',
-      avatar: 'assets/images/avatar/Shiba-Inu-Dog-Showing-Muscles.png',
-      likeCount: 90,
-      rank: 6,
-      achievements: 20,
-      friendshipLevel: 95,
-    },
-    {
-      id: 6,
-      name: 'Vịt Donald',
-      avatar: 'assets/images/avatar/Shiba-Inu-Dog-1.png',
-      likeCount: 50,
-      rank: 10,
-      achievements: 12,
-      friendshipLevel: 60,
-    },
-    {
-      id: 7,
-      name: 'Chuột Micky',
-      avatar: 'assets/images/avatar/Shiba-Inu-Dog-2.png',
-      likeCount: 70,
-      rank: 9,
-      achievements: 18,
-      friendshipLevel: 75,
-    },
-    {
-      id: 8,
-      name: 'Nhóc Conan',
-      avatar: 'assets/images/avatar/Shiba-Inu-Dog-3.png',
-      likeCount: 186,
-      rank: 3,
-      achievements: 38,
-      friendshipLevel: 186,
-    },
-  ];
 
   /**
    * Mock user for shared entries in personal diary
