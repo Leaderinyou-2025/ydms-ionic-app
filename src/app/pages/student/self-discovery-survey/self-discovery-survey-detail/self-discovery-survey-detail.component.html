@@ -1,61 +1,49 @@
 <app-header
   [pageTitle]="TranslateKeys.TITLE_SELF_DISCOVERY_SURVEY_DETAIL"
   defaultBackHref="/{{PageRoutes.SELF_DISCOVERY_SURVEY}}"
+  [caption]="TranslateKeys.HOME_WELCOME_SUBTITLE"
   backgroundColor="linear-gradient(to bottom, #9333ea, #4c1d95)"
->
+  [animeImage]="animeImage">
 </app-header>
 
-<ion-content class="ion-padding ">
+<ion-content class="ion-padding">
   <!-- Loading skeleton -->
-  <div *ngIf="isLoading">
-    <ion-skeleton-text animated style="width: 100%; height: 80px;" class="rounded-lg mb-3"></ion-skeleton-text>
-    <ion-skeleton-text animated style="width: 100%; height: 80px;" class="rounded-lg mb-3"></ion-skeleton-text>
-    <ion-skeleton-text animated style="width: 100%; height: 80px;" class="rounded-lg mb-3"></ion-skeleton-text>
+  <div *ngIf="isLoading" class="mt-3">
+    <ion-skeleton-text animated class="w-full h-28 rounded-lg mb-3" *ngFor="let i of Array(10)"></ion-skeleton-text>
   </div>
 
-  <div *ngIf="!isLoading" class="mb-6">
-    <div class="flex items-center justify-between mb-4">
+  <!-- Survey detail content -->
+  <div *ngIf="!isLoading && selfDiscoverySurveyDetail" class="mb-6">
+    <div class="flex items-center justify-between mb-4 hidden">
       <div class="flex items-center">
-        <span class="text-3xl mr-2">{{ getDiscoveryLevelEmoji(surveyDetail.discoveryLevel) }}</span>
+        <span class="text-3xl mr-2"></span>
         <div>
-          <h2 class="text-xl font-bold">{{ surveyDetail.result }}</h2>
-          <p class="text-sm text-gray-500 dark:text-gray-400">{{ formatDate(surveyDetail.date) }}</p>
+          <h2 class="text-xl font-bold"></h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400"></p>
         </div>
       </div>
       <div class="text-center">
-        <div class="text-2xl font-bold">{{ surveyDetail.score }}</div>
-        <div class="text-xs text-gray-500 dark:text-gray-400">{{ TranslateKeys.TITLE_DISCOVERY_POINTS | translate }}</div>
+        <div class="text-2xl font-bold"></div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">{{ TranslateKeys.TITLE_POINTS | translate }}</div>
       </div>
     </div>
 
     <!-- System feedback -->
-    <div *ngIf="surveyDetail.feedback" class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-6">
+    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-6 hidden">
       <div class="flex items-start">
         <ion-icon name="information-circle-outline" class="text-blue-500 text-xl mr-2 mt-1"></ion-icon>
         <div>
           <h3 class="font-medium text-blue-700 dark:text-blue-300 mb-1">{{ TranslateKeys.TITLE_SYSTEM_FEEDBACK | translate }}</h3>
-          <p class="text-blue-600 dark:text-blue-200">{{ surveyDetail.feedback }}</p>
+          <p class="text-blue-600 dark:text-blue-200"></p>
         </div>
       </div>
     </div>
 
-    <h3 class="font-bold text-lg mb-4">{{ TranslateKeys.TITLE_SELF_DISCOVERY_SURVEY_QUESTIONS | translate }}</h3>
-    <div class="space-y-6 pb-8">
-      <div *ngFor="let question of surveyDetail.questions; let i = index" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-        <div class="mb-3">
-          <h4 class="font-medium text-gray-800 dark:text-gray-200">{{ i + 1 }}. {{ question.text }}</h4>
-        </div>
-        <div class="flex flex-col gap-2.5">
-          <ion-radio-group [value]="getSelectedOptionValue(question)" disabled="true" class="w-full">
-            <ion-item *ngFor="let option of question.options" lines="none"
-                class="option-item mb-2 border border-gray-300 dark:border-gray-600 rounded-3xl cursor-default relative z-10 text-gray-700 dark:text-gray-300 py-1 px-4"
-                [ngClass]="{'selected-item bg-[#59cb01] text-white border-transparent': option.selected}">
-              <ion-radio slot="start" [value]="option.id" disabled="true" class="mr-2 pointer-events-none"></ion-radio>
-              <ion-label class="ml-2 pointer-events-none " [ngClass]="{'font-medium': option.selected}">{{ option.text }}</ion-label>
-            </ion-item>
-          </ion-radio-group>
-        </div>
-      </div>
-    </div>
+    <!-- Questions and answers -->
+    <app-form-assessment
+      [questions]="selfDiscoverySurveyDetail.questions"
+      (submitForm)="onSubmitForm($event)"
+      [readonly]="readonly">
+    </app-form-assessment>
   </div>
 </ion-content>

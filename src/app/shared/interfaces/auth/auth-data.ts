@@ -1,6 +1,5 @@
 import { IResUser } from '../models/res.user';
 import { IRelatedField } from '../base/related-field';
-import { UserRoles } from '../../enums/user-roles';
 import { IUserSettings } from '../settings/user-settings';
 
 export interface IAuthData extends IResUser {
@@ -12,6 +11,7 @@ export interface IAuthData extends IResUser {
   edu_id?: string;
   social_id?: string;
   app_settings?: IUserSettings;
+  total_friendly_points?: number;
 
   // User roles
   is_teenager: boolean;

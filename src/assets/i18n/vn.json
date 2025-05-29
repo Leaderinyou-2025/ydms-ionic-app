@@ -333,7 +333,13 @@
     "family_activity": "Hoạt động gia đình",
     "instruction": "Gợi ý, hướng dẫn",
     "exercise": "Bài tập",
-    "periodic_survey": "Khảo sát định kỳ"
+    "periodic_survey": "Khảo sát định kỳ",
+    "friend_requests": "Yêu cầu kết bạn",
+    "no_friends": "Chưa có bạn bè nào",
+    "no_friend_requests": "Không có yêu cầu kết bạn nào",
+    "send_request": "Bạn đã gửi một lời mời kết bạn",
+    "request_to_you": "Yêu cầu kết bạn",
+    "no_result_found": "Không tìm thấy kết quả phù hợp"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",
@@ -355,7 +361,9 @@
     "access_permission_notification_alert": "Vui lòng cho phép ứng dụng có quyền hiển thị thông báo để nhận được các thông tin cập nhật mới nhất. Xin cảm ơn!",
     "confirm_logout_alert": "Bạn có chắc chắn muốn đăng xuất?",
     "app_update_successful": "Cập nhật ứng dụng thành công. Bạn đã sử dụng phiên bản mới nhất.",
-    "access_permission_gallery_alert": "Vui lòng cho phép ứng dụng truy cập thư viện ảnh và sử dụng máy ảnh của bạn."
+    "access_permission_gallery_alert": "Vui lòng cho phép ứng dụng truy cập thư viện ảnh và sử dụng máy ảnh của bạn.",
+    "confirm_delete_alert": "Bạn có chắc chắn muốn xóa?",
+    "confirm_unfriend_alert": "Bạn có chắc chắn muốn hủy kết bạn?"
   },
   "BUTTON_TITLES": {
     "confirm": "Xác nhận",
@@ -374,7 +382,9 @@
     "create_first_survey": "Tạo khảo sát đầu tiên",
     "select": "Chọn",
     "share": "Chia sẻ",
-    "checkin_emotion": "Check-In"
+    "checkin_emotion": "Check-In",
+    "accept": "Đồng ý",
+    "send_request": "Gửi yêu cầu"
   },
   "TOAST": {
     "error_header": "Lỗi",
@@ -390,7 +400,13 @@
     "task_complete_error": "Không thể hoàn thành nhiệm vụ. Vui lòng thử lại.",
     "answer_all_questions": "Vui lòng trả lời tất cả các câu hỏi trước khi gửi.",
     "update_failed": "Có lỗi sảy ra khi cập nhật thông tin. Vui long thử lại sau.",
-    "update_success": "Cập nhật thông tin thành công."
+    "update_success": "Cập nhật thông tin thành công.",
+    "send_request_failed": "Không gửi được yêu cầu. Vui lòng thử lại sau.",
+    "send_request_success": "Gửi yêu cầu thành công.",
+    "cancel_request_success": "Hủy yêu cầu kết bạn thành công.",
+    "cancel_request_failed": "Hủy yêu cầu kết bạn thất bại. Vui lòng thử lại.",
+    "accept_request_success": "Chấp nhận yêu cầu kết bạn thành công.",
+    "accept_request_failed": "Chấp nhận yêu cầu kết bạn thất bại. Vui lòng thử lại."
   },
   "ERROR": {
     "network": "Lỗi mạng. Vui lòng kiểm tra kết nối mạng của bạn và thử lại.",

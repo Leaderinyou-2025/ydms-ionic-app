@@ -7,6 +7,7 @@ export enum ModelName {
   APP_VERSIONS = 'liy.ydms.app.version',
   AVATAR = 'liy.ydms.avatar',
   NOTIFICATION = 'liy.ydms.notification',
+  FRIEND = 'liy.ydms.friend',
   BADGE = 'liy.ydms.badge',
   TASK = 'liy.ydms.task',
   LEADERBOARD = 'liy.ydms.leaderboard',

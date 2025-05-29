@@ -58,7 +58,7 @@ export class RankService {
    * @param teenagerIds
    */
   public async loadTeenagerAvatarResource(teenagerIds: number[]): Promise<IAuthData[]> {
-    const teenagerAvatars = await this.authService.getAvatarByTeenagerIds(teenagerIds);
+    const teenagerAvatars = await this.authService.getTeenagerAvatarByIds(teenagerIds);
     const avatarIds: number[] = Array.from(new Set(
       teenagerAvatars.flatMap(teenager => {
         const id = teenager?.avatar?.id;

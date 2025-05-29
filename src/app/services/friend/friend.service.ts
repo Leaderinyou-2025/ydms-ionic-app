@@ -1,86 +1,45 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 
-import { ForceTestData } from '../../shared/classes/force-test-data';
-import { IFriend } from '../../shared/interfaces/friend/friend';
-import { AuthService } from '../auth/auth.service';
-import { OdooService } from '../odoo/odoo.service';
+import { ResUsersService } from '../models/res.users.service';
+import { LiyYdmsFriendService } from '../models/liy.ydms.friend.service';
+import { SearchDomain } from '../odoo/odoo.service';
+import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
+import { OrderBy } from '../../shared/enums/order-by';
+import { FriendStatus } from '../../shared/enums/friend-status';
+import { ILiyYdmsFriend } from '../../shared/interfaces/models/liy.ydms.friend';
+import { IAuthData } from '../../shared/interfaces/auth/auth-data';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FriendService {
-
   constructor(
-    private odooService: OdooService,
-    private authService: AuthService,
-  ) { }
+    private liyYdmsFriendService: LiyYdmsFriendService,
+    private resUserService: ResUsersService
+  ) {
+  }
 
   /**
    * Get friends list with pagination and search
+   * Filters to show only friends of the current user with accepted status
    * @param searchTerm Optional search term
-   * @param offset Pagination offset
-   * @param limit Pagination limit
+   * @param teenagerId
+   * @param status
+   * @param offset
+   * @param limit
    * @returns Observable with list of friends
    */
-  public getFriends(
+  public async getFriends(
     searchTerm: string = '',
+    teenagerId: number,
+    status: FriendStatus = FriendStatus.ACCEPTED,
     offset: number = 0,
     limit: number = 20
-  ): Observable<{ friends: IFriend[], total: number }> {
-    // TODO: Implement actual API call when backend is ready
-    // Example of how it would be implemented with real API:
-    /*
-    const searchDomain: SearchDomain = [];
-
-    // Add search term filter if provided
-    if (searchTerm) {
-      searchDomain.push(['name', 'ilike', searchTerm]);
-    }
-
-    // Get total count for pagination
-    const totalPromise = this.odooService.searchCount(ModelName.FRIENDS, searchDomain);
-
-    // Get friends data
-    const friendsPromise = this.odooService.searchRead<IFriend>(
-      ModelName.FRIENDS,
-      searchDomain,
-      ['id', 'name', 'avatar', 'likeCount'],
-      offset,
-      limit,
-      OrderBy.NAME_ASC
-    );
-
-    // Return combined result
-    return from(Promise.all([friendsPromise, totalPromise])).pipe(
-      map(([friends, total]) => ({ friends, total }))
-    );
-    */
-
-    // For now, return test data
-    let friends = ForceTestData.friends;
-
-    // Apply search filter if provided
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      friends = friends.filter(friend =>
-        friend.name?.toLowerCase().includes(term)
-      );
-    }
-
-    // Simulate network delay for testing pagination
-    return new Observable(observer => {
-      setTimeout(() => {
-        // Apply pagination
-        const paginatedFriends = friends.slice(offset, offset + limit);
-        const total = friends.length;
-
-        // Return paginated result
-        observer.next({ friends: paginatedFriends, total });
-        observer.complete();
-      }, 500); // 500ms delay to simulate network request
-    });
+  ): Promise<ILiyYdmsFriend[]> {
+    if (!teenagerId) return [];
+    const searchDomain: SearchDomain = [['user_id', OdooDomainOperator.EQUAL, teenagerId], ['nickname', OdooDomainOperator.ILIKE, searchTerm]];
+    if (status) searchDomain.push(['status', OdooDomainOperator.EQUAL, status]);
+    return this.liyYdmsFriendService.getFriendList(searchDomain, offset, limit, OrderBy.NAME_ASC);
   }
 
   /**
@@ -88,23 +47,81 @@ export class FriendService {
    * @param friendId The ID of the friend to retrieve
    * @returns Observable with friend details or undefined if not found
    */
-  public getFriendById(friendId: number): Observable<IFriend | undefined> {
-    // TODO: Implement actual API call when backend is ready
-    // Example of how it would be implemented with real API:
-    /*
-    return from(this.odooService.read<IFriend>(
-      ModelName.FRIENDS,
-      [friendId],
-      ['id', 'name', 'avatar', 'likeCount', 'rank', 'achievements', 'friendshipLevel']
-    )).pipe(
-      map(results => results && results.length > 0 ? results[0] : undefined)
+  public async getFriendById(friendId: number): Promise<ILiyYdmsFriend | undefined> {
+    return this.liyYdmsFriendService.getFriendById(friendId);
+  }
+
+  /**
+   * searchNewFriends
+   * @param nickname
+   * @param userId
+   * @param schoolId
+   * @param classroomId
+   * @param offset
+   * @param limit
+   */
+  public async searchNewFriendsByNickname(
+    nickname: string = '',
+    userId: number,
+    schoolId?: number,
+    classroomId?: number,
+    offset: number = 0,
+    limit: number = 20
+  ): Promise<IAuthData[]> {
+    const results = await this.resUserService.searchUserListBySchoolId(
+      nickname, schoolId, classroomId, offset, limit
     );
-    */
+    if (!results?.length) return [];
 
-    // For now, return test data
-    const friend = ForceTestData.friends.find(f => f.id === friendId);
+    const friendIds = results.map(user => user.id);
+    const friends = await this.liyYdmsFriendService.getFriendsByIds(userId, friendIds);
 
-    // Simulate network delay
-    return of(friend).pipe(delay(300));
+    if (!friends) return results;
+
+    // Filter new friend user
+    const friendUserIds = friends.map(friend => friend.friend_id.id);
+    return results.filter(u => u.id !== userId && !friendUserIds.includes(u.id));
+  }
+
+  /**
+   * getCountUserFriends
+   * @param userId
+   * @param status
+   */
+  public async getCountUserFriends(
+    userId: number,
+    status?: FriendStatus,
+  ): Promise<number> {
+    return this.liyYdmsFriendService.getCountFriends(userId, status);
+  }
+
+  /**
+   * Create a friend request
+   * @param userId
+   * @param friend
+   */
+  public async sendNewFriendRequest(
+    userId: number,
+    friend: IAuthData
+  ): Promise<number | undefined> {
+    return this.liyYdmsFriendService.createFriend(
+      userId, friend.id
+    );
+  }
+
+  /**
+   * Accept friend request
+   * @param friend
+   */
+  public async acceptFriendRequest(friend: ILiyYdmsFriend): Promise<number | boolean> {
+    return this.liyYdmsFriendService.updateFriend(friend.id);
+  }
+
+  /**
+   * Cancel friend request
+   * @param friend
+   */
+  public async cancelFriendRequest(friend: ILiyYdmsFriend): Promise<number | boolean> {
+    return this.liyYdmsFriendService.updateFriend(friend.id, FriendStatus.CANCEL);
   }
 }
