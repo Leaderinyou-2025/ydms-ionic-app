@@ -33,38 +33,41 @@
     </div>
 
     <!--  List friend/request  -->
-    <div class="flex-1 overflow-auto px-2 mb-4">
+    <div class="flex-1 overflow-auto mb-4 mt-2">
       <ion-list class="w-full bg-transparent" *ngIf="friends?.length">
-        <ion-item *ngFor="let friend of friends" (click)="onClickFriendDetail(friend)"
-                  lines="none" detail="false" class="w-full border-b border-gray-200 friend-item">
-          <ion-avatar slot="start" class="w-10 h-10 mr-3 overflow-hidden border border-blue-500">
-            <ion-img [src]="friend.avatar" alt="Friend avatar" class="object-cover w-full h-full"></ion-img>
+        <ion-item *ngFor="let friend of friends" (click)="onClickFriendDetail(friend)" lines="full" detail="false">
+
+          <!--    Friend avatar      -->
+          <ion-avatar slot="start" class="my-3 w-10 h-10 mr-3 overflow-hidden border border-blue-500">
+            <ion-img [src]="CommonConstants.formatBase64ImageUrl(friend.avatar || '')" alt="Friend avatar" class="object-cover w-full h-full"></ion-img>
           </ion-avatar>
-          <div class="text-sm font-medium" *ngIf="friend.user_id.id === authData?.id">
-            {{ friend.nickname || friend.name }}
-            <ng-container *ngIf="friend.status !== FriendStatus.ACCEPTED">
-              <br><span class="text-md italic text-gray-400">{{ TranslateKeys.TITLE_REQUEST_TO_BE_FRIEND | translate }}</span>
-            </ng-container>
+
+          <!--     Friend nickname     -->
+          <div class="font-medium my-3">
+            {{ friend.nickname }}
+            <!-- For request friend -->
+            <div class="text-sm italic text-sky-400" *ngIf="friend.status === FriendStatus.NEW">
+              {{ (friend.create_uid?.id === friend.user_id.id ? TranslateKeys.TITLE_SEND_REQUEST : TranslateKeys.TITLE_REQUEST_TO_YOU)  | translate }}
+            </div>
+            <div class="text-sm italic text-gray-400" *ngIf="friend.status === FriendStatus.NEW">
+              {{friend?.['create_time']}} {{ friend.create_date | date: DateFormat.DATE_ONLY }}
+            </div>
           </div>
-          <div class="text-sm font-medium" *ngIf="friend.friend_id.id === authData?.id">
-            <ng-container *ngIf="friend.status !== FriendStatus.ACCEPTED">
-              <span class="text-md italic text-gray-400">{{ TranslateKeys.TITLE_SEND_REQUEST_TO | translate }}</span><br>
-            </ng-container>
-            {{ friend.user_id.name || friend.name }}
-          </div>
+
+          <!--     End     -->
           <div slot="end" class="flex flex-col items-end min-w-[60px]">
-            <div class="flex items-center text-red-500" *ngIf="activeTab === 'friends' && !isLoading">
+            <!--      Friendly point      -->
+            <div class="flex items-center text-red-500" *ngIf="activeTab === 'friends'">
               <ion-icon name="heart" class="text-lg text-red-500"></ion-icon>
               <span class="ml-1 text-sm font-semibold">{{ friend.friendly_point || 0 }}</span>
             </div>
 
-            <div class="flex flex-col w-28 py-2">
-              <ion-button shape="round" color="primary"
-                          *ngIf="friend.user_id.id === authData?.id && friend.status !== FriendStatus.ACCEPTED && !isLoading">
+            <!--      Confirm/Cancel buttons      -->
+            <div class="flex flex-col w-28" *ngIf="activeTab === 'requests'">
+              <ion-button shape="round" color="primary" (click)="onClickAcceptFriend(friend)" *ngIf="friend.create_uid?.id !== friend.user_id.id">
                 {{ TranslateKeys.BUTTON_ACCEPT | translate }}
               </ion-button>
-              <ion-button shape="round" color="medium"
-                          *ngIf="(friend.user_id.id === authData?.id || friend.friend_id.id === authData?.id) && friend.status !== FriendStatus.ACCEPTED && !isLoading">
+              <ion-button shape="round" color="medium" (click)="onClickCancelFriend(friend)">
                 {{ TranslateKeys.BUTTON_CANCEL | translate }}
               </ion-button>
             </div>
@@ -78,7 +81,9 @@
       </ion-infinite-scroll>
     </div>
 
-    <ion-button expand="block" color="primary" class="h-11 mx-4 text-sm font-semibold uppercase">
+    <ion-button expand="block" color="primary"
+                class="h-11 mx-4 text-sm font-semibold uppercase"
+                (click)="onClickAddNewFriend()">
       {{ TranslateKeys.TITLE_ADD_FRIEND | translate }}
     </ion-button>
   </div>

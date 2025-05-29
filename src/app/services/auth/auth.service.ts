@@ -39,7 +39,7 @@ export class AuthService {
   private userRoles!: UserRoles | undefined;
   private userFields = [
     'name', 'email', 'login', 'phone', 'street', 'precint_id', 'district_id', 'state_id', 'country_id', 'image_128', 'lang',
-    'nickname', 'avatar', 'avatar_512', 'code', 'edu_id', 'social_id', 'gender', 'dob',
+    'nickname', 'avatar', 'avatar_512', 'code', 'edu_id', 'social_id', 'gender', 'dob', 'total_friendly_points',
     'is_teenager', 'is_parent', 'is_teacher',
     'school_id', 'classroom_id', 'parent_id', 'partner_id', 'classroom_ids', 'child_ids',
     'app_settings'
@@ -400,11 +400,21 @@ export class AuthService {
 
   /**
    * Return list user avatar
-   * @param teenagerIds
+   * @param userIds
    */
-  public async getAvatarByTeenagerIds(teenagerIds: Array<number>): Promise<Array<IAuthData>> {
-    if (!teenagerIds?.length) return [];
-    const results = await this.odooService.read<IAuthData>(ModelName.RES_USERS, teenagerIds, ['avatar', 'nickname']);
+  public async getTeenagerAvatarByIds(userIds: Array<number>): Promise<Array<IAuthData>> {
+    if (!userIds?.length) return [];
+    const results = await this.odooService.read<IAuthData>(ModelName.RES_USERS, userIds, ['avatar']);
+    return CommonConstants.convertArr2ListItem(results);
+  }
+
+  /**
+   * Return list user avatar
+   * @param userIds
+   */
+  public async getTeenagerTotalFriendlyPointsByIds(userIds: Array<number>): Promise<Array<IAuthData>> {
+    if (!userIds?.length) return [];
+    const results = await this.odooService.read<IAuthData>(ModelName.RES_USERS, userIds, ['total_friendly_points']);
     return CommonConstants.convertArr2ListItem(results);
   }
 

@@ -11,6 +11,7 @@ export interface IAuthData extends IResUser {
   edu_id?: string;
   social_id?: string;
   app_settings?: IUserSettings;
+  total_friendly_points?: number;
 
   // User roles
   is_teenager: boolean;

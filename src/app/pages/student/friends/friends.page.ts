@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InfiniteScrollCustomEvent, RefresherCustomEvent } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, LoadingController, ModalController, RefresherCustomEvent, ToastButton, ToastController, ToastOptions } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../../../services/auth/auth.service';
@@ -9,10 +9,18 @@ import { TranslateKeys } from '../../../shared/enums/translate-keys';
 import { PageRoutes } from '../../../shared/enums/page-routes';
 import { IHeaderAnimeImage, IHeaderSearchbar, IHeaderSegment } from '../../../shared/interfaces/header/header';
 import { InputTypes } from '../../../shared/enums/input-types';
-import { ILiyYdmsFriend } from '../../../shared/interfaces/models/liy.ydms.friend';
 import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
 import { CommonConstants } from '../../../shared/classes/common-constants';
 import { FriendStatus } from '../../../shared/enums/friend-status';
+import { ILiyYdmsFriend } from '../../../shared/interfaces/models/liy.ydms.friend';
+import { NativePlatform } from '../../../shared/enums/native-platform';
+import { AddNewFriendComponent } from './add-new-friend/add-new-friend.component';
+import { IonicColors } from '../../../shared/enums/ionic-colors';
+import { IonicIcons } from '../../../shared/enums/ionic-icons';
+import { Position } from '../../../shared/enums/position';
+import { BtnRoles } from '../../../shared/enums/btn-roles';
+import { StyleClass } from '../../../shared/enums/style-class';
+import { DateFormat } from '../../../shared/enums/date-format';
 
 @Component({
   selector: 'app-friends',
@@ -30,7 +38,7 @@ export class FriendsPage implements OnInit {
 
   searchTerm: string = '';
   totalFriends: number = 0;
-  isLoading!: boolean;
+  isLoading?: boolean;
   friends: ILiyYdmsFriend[] = [];
   private paged: number = 1;
   private limit: number = 20;
@@ -39,13 +47,17 @@ export class FriendsPage implements OnInit {
   protected readonly PageRoutes = PageRoutes;
   protected readonly Array = Array;
   protected readonly FriendStatus = FriendStatus;
+  protected readonly CommonConstants = CommonConstants;
 
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
     private friendService: FriendService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private modalController: ModalController,
+    private loadingController: LoadingController,
+    private toastController: ToastController,
   ) {
   }
 
@@ -56,7 +68,7 @@ export class FriendsPage implements OnInit {
     });
     this.authData = await this.authService.getAuthData();
     if (this.authData) {
-      this.friendService.getCountUserFriends(this.authData.id, FriendStatus.ACCEPTED).then(countFriends => this.totalFriends = countFriends);
+      this.loadCountFriend();
       await this.getFriends();
     }
   }
@@ -94,6 +106,7 @@ export class FriendsPage implements OnInit {
     }
     this.paged = 1;
     this.friends = new Array<ILiyYdmsFriend>();
+    this.loadCountFriend();
     this.getFriends().finally(() => event?.target.complete());
   }
 
@@ -120,6 +133,64 @@ export class FriendsPage implements OnInit {
   }
 
   /**
+   * Handle accept friend request
+   * @param friend
+   */
+  public async onClickAcceptFriend(friend: ILiyYdmsFriend): Promise<void> {
+    if (!friend) return;
+    const loading = await this.loadingController.create({mode: NativePlatform.IOS});
+    await loading.present();
+    try {
+      const result = await this.friendService.acceptFriendRequest(friend);
+      if (result != undefined) this.showToast(this.translate.instant(TranslateKeys.TOAST_ACCEPT_REQUEST_SUCCESS), IonicColors.SUCCESS);
+      else this.showToast(this.translate.instant(TranslateKeys.TOAST_ACCEPT_REQUEST_FAILED), IonicColors.SUCCESS);
+    } catch (e: any) {
+      console.error(e);
+      this.showToast(e.message, IonicColors.DANGER);
+    } finally {
+      loading?.dismiss();
+      this.doRefresh();
+    }
+  }
+
+  /**
+   * Handle cancel friend request
+   * @param friend
+   */
+  public async onClickCancelFriend(friend: ILiyYdmsFriend): Promise<void> {
+    if (!friend) return;
+    const loading = await this.loadingController.create({mode: NativePlatform.IOS});
+    await loading.present();
+    try {
+      const result = await this.friendService.cancelFriendRequest(friend);
+      if (result != undefined) this.showToast(this.translate.instant(TranslateKeys.TOAST_CANCEL_REQUEST_SUCCESS), IonicColors.SUCCESS);
+      else this.showToast(this.translate.instant(TranslateKeys.TOAST_CANCEL_REQUEST_FAILED), IonicColors.SUCCESS);
+    } catch (e: any) {
+      console.error(e);
+      this.showToast(e.message, IonicColors.DANGER);
+    } finally {
+      loading?.dismiss();
+      this.doRefresh();
+    }
+  }
+
+  /**
+   * On click add new friend
+   */
+  public onClickAddNewFriend(): void {
+    this.modalController.create({
+      component: AddNewFriendComponent,
+      mode: NativePlatform.IOS,
+      initialBreakpoint: 0.8,
+      breakpoints: [0, 0.8],
+      componentProps: {}
+    }).then(modal => {
+      modal.present();
+      modal.onDidDismiss().then(() => this.doRefresh());
+    });
+  }
+
+  /**
    * Get friend list
    * @private
    */
@@ -130,50 +201,41 @@ export class FriendsPage implements OnInit {
     const offset = (this.paged - 1) * this.limit;
 
     let results: ILiyYdmsFriend[];
-    if (this.activeTab === 'friends') {
-      results = await this.friendService.getFriends(
-        this.searchTerm, this.authData.id, FriendStatus.ACCEPTED, offset, this.limit
-      );
-    } else {
-      results = await this.friendService.getFriendRequests(this.authData.id, 0, this.limit);
-    }
+    results = await this.friendService.getFriends(
+      this.searchTerm, this.authData.id, this.activeTab === 'friends' ? FriendStatus.ACCEPTED : FriendStatus.NEW, offset, this.limit
+    );
 
     this.friends = CommonConstants.mergeArrayObjectById(this.friends, results) || [];
-    this.lazyLoadAvatarResource(results);
+    this.lazyLoadTotalFriendPoints(results);
     this.isLoading = false;
   }
 
   /**
-   * Lazy load fried avatar
+   * Get friend total friendly point from res.user model
    * @param friends
    * @private
    */
-  private lazyLoadAvatarResource(friends: ILiyYdmsFriend[]): void {
+  private lazyLoadTotalFriendPoints(friends: ILiyYdmsFriend[]): void {
+    if (!friends?.length) return;
+    const friendUserIds = friends.map((friend) => friend.friend_id.id);
+    this.authService.getTeenagerTotalFriendlyPointsByIds(friendUserIds).then(results => {
+      for (const friend of friends) {
+        const friendListIndex = this.friends.findIndex(f => f.id === friend.id);
+        if (friendListIndex < 0) continue;
+
+        const friendTotalFriendlyPoints = results.find(u => u.id === friend.friend_id.id);
+        this.friends[friendListIndex].friendly_point = friendTotalFriendlyPoints?.total_friendly_points || 0;
+      }
+    });
+  }
+
+  /**
+   * loadCountFriend
+   * @private
+   */
+  private loadCountFriend(): void {
     if (!this.authData) return;
-    this.friendService.loadFriendAvatarImage(this.authData.id, friends)
-      .then(([teenagerAvatars, avatarResources]) => {
-        for (let friend of friends) {
-          const existIndex = this.friends.findIndex((f) => f.id === friend.id);
-          if (existIndex < 0) continue;
-
-          const friendAvatar = teenagerAvatars.find((user) =>
-            (friend.user_id.id !== this.authData?.id && user.id === friend.user_id.id) ||
-            (friend.friend_id.id !== this.authData?.id) && user.id === friend.friend_id.id);
-
-          if (!friendAvatar?.avatar?.id) {
-            this.friends[existIndex].avatar = CommonConstants.defaultUserAvatarImage;
-            if (this.friends[existIndex].user_id.id === this.authData?.id) {
-              this.friends[existIndex].friend_id.name = friendAvatar?.nickname || '';
-            } else {
-              this.friends[existIndex].user_id.name = friendAvatar?.nickname || '';
-            }
-            continue;
-          }
-
-          const avatarImage = avatarResources.find(image => image.id === friendAvatar.avatar?.id);
-          this.friends[existIndex].avatar = avatarImage?.resource_url || CommonConstants.defaultUserAvatarImage;
-        }
-      });
+    this.friendService.getCountUserFriends(this.authData.id, FriendStatus.ACCEPTED).then(countFriends => this.totalFriends = countFriends);
   }
 
   /**
@@ -205,4 +267,33 @@ export class FriendsPage implements OnInit {
       }
     }
   }
+
+  /**
+   * Show toast message
+   * @param message
+   * @param color
+   * @private
+   */
+  private showToast(message: string, color: IonicColors.SUCCESS | IonicColors.DANGER): void {
+    const closeBtn: ToastButton = {
+      icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
+      side: Position.END,
+      role: BtnRoles.CANCEL,
+    }
+
+    const toastOption: ToastOptions = {
+      message,
+      duration: 3000,
+      buttons: [closeBtn],
+      mode: NativePlatform.IOS,
+      cssClass: `${StyleClass.TOAST_ITEM} ${color === IonicColors.DANGER ? StyleClass.TOAST_ERROR : StyleClass.TOAST_SUCCESS}`,
+      position: Position.TOP,
+      icon: color === IonicColors.DANGER ? IonicIcons.WARNING_OUTLINE : IonicIcons.CHECKMARK_CIRCLE_OUTLINE,
+      color,
+      keyboardClose: false
+    }
+    this.toastController.create(toastOption).then(toast => toast.present());
+  }
+
+  protected readonly DateFormat = DateFormat;
 }

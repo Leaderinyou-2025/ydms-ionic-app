@@ -14,12 +14,15 @@ import { FriendStatus } from '../../shared/enums/friend-status';
 export class LiyYdmsFriendService {
 
   public readonly friendFields = [
+    'name',
     'user_id',
     'friend_id',
-    'name',
     'nickname',
+    'avatar',
     'friendly_point',
     'status',
+    'create_uid',
+    'create_date'
   ];
 
   constructor(
@@ -78,11 +81,51 @@ export class LiyYdmsFriendService {
 
   /**
    * getFriendsByIds
-   * @param ids
+   * @param userId
+   * @param friendIds
    */
-  public async getFriendsByIds(ids: Array<number>): Promise<ILiyYdmsFriend[]> {
-    if (!ids?.length) return [];
-    return this.getFriendList([['friend_id', OdooDomainOperator.IN, ids]], 0, 0);
+  public async getFriendsByIds(
+    userId: number,
+    friendIds: Array<number>
+  ): Promise<ILiyYdmsFriend[]> {
+    if (!friendIds?.length) return [];
+    return this.getFriendList([
+      ['user_id', OdooDomainOperator.EQUAL, userId],
+      ['friend_id', OdooDomainOperator.IN, friendIds]
+    ], 0, 0);
+  }
+
+  /**
+   * Create new friend
+   * @param userId
+   * @param friendId
+   * @param status
+   */
+  public async createFriend(
+    userId: number,
+    friendId: number,
+    status: FriendStatus = FriendStatus.NEW,
+  ): Promise<number | undefined> {
+    if (!userId || !friendId) return undefined;
+    const values: any = {
+      user_id: userId,
+      friend_id: friendId,
+      status: status || FriendStatus.NEW
+    };
+    return this.odooService.create<ILiyYdmsFriend>(ModelName.FRIEND, values);
+  }
+
+  /**
+   * Update friend
+   * @param id
+   * @param status
+   */
+  public async updateFriend(
+    id: number,
+    status: FriendStatus = FriendStatus.ACCEPTED,
+  ): Promise<number | boolean> {
+    if (!id) return true;
+    return this.odooService.write<ILiyYdmsFriend>(ModelName.FRIEND, [id], {status: status || FriendStatus.ACCEPTED});
   }
 
 }

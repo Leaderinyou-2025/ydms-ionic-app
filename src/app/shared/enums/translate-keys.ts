@@ -335,8 +335,9 @@ export enum TranslateKeys {
   TITLE_FRIEND_REQUESTS = 'TITLE.friend_requests',
   TITLE_NO_FRIENDS = 'TITLE.no_friends',
   TITLE_NO_FRIEND_REQUESTS = 'TITLE.no_friend_requests',
-  TITLE_SEND_REQUEST_TO = 'TITLE.send_request_to',
-  TITLE_REQUEST_TO_BE_FRIEND = 'TITLE.request_to_be_friend',
+  TITLE_SEND_REQUEST = 'TITLE.send_request',
+  TITLE_REQUEST_TO_YOU = 'TITLE.request_to_you',
+  TITLE_NO_RESULT_FOUND = 'TITLE.no_result_found',
 
   // VALIDATE
   VALIDATE_PHONE_REQUIRED = 'VALIDATE.phone_required',
@@ -358,6 +359,8 @@ export enum TranslateKeys {
   ALERT_ACCESS_PERMISSION_NOTIFICATION = 'ALERT.access_permission_notification_alert',
   ALERT_ACCESS_PERMISSION_GALLERY = 'ALERT.access_permission_gallery_alert',
   ALERT_CONFIRM_LOGOUT = 'ALERT.confirm_logout_alert',
+  ALERT_CONFIRM_DELETE = 'ALERT.confirm_delete_alert',
+  ALERT_CONFIRM_UNFRIEND = 'ALERT.confirm_unfriend_alert',
   ALERT_APP_UPDATE_SUCCESSFUL = 'ALERT.app_update_successful',
 
   // BUTTON TITLES
@@ -378,6 +381,7 @@ export enum TranslateKeys {
   BUTTON_SHARE = 'BUTTON_TITLES.share',
   BUTTON_CHECKIN_EMOTION = 'BUTTON_TITLES.checkin_emotion',
   BUTTON_ACCEPT = 'BUTTON_TITLES.accept',
+  BUTTON_SEND_REQUEST = 'BUTTON_TITLES.send_request',
 
   // TOAST
   TOAST_ERROR_HEADER = 'TOAST.error_header',
@@ -394,6 +398,12 @@ export enum TranslateKeys {
   TOAST_UPDATE_FAILED = 'TOAST.update_failed',
   TOAST_UPDATE_SUCCESS = 'TOAST.update_success',
   TOAST_ANSWER_ALL_QUESTIONS = 'TOAST.answer_all_questions',
+  TOAST_SEND_REQUEST_FAILED = 'TOAST.send_request_failed',
+  TOAST_SEND_REQUEST_SUCCESS = 'TOAST.send_request_success',
+  TOAST_CANCEL_REQUEST_SUCCESS = 'TOAST.cancel_request_success',
+  TOAST_CANCEL_REQUEST_FAILED = 'TOAST.cancel_request_failed',
+  TOAST_ACCEPT_REQUEST_SUCCESS = 'TOAST.accept_request_success',
+  TOAST_ACCEPT_REQUEST_FAILED = 'TOAST.accept_request_failed',
 
   // ERROR
   ERROR_NETWORK = 'ERROR.network',

@@ -48,16 +48,14 @@ export class ResUsersService {
    */
   public async searchUserListBySchoolId(
     nickname: string,
-    schoolId: number,
+    schoolId?: number,
     classroomId?: number,
     offset: number = 0,
     limit: number = 0,
     order: OrderBy = OrderBy.NAME_ASC
   ): Promise<IAuthData[]> {
-    const searchDomain: SearchDomain = [
-      ['nickname', OdooDomainOperator.ILIKE, nickname],
-      ['school_id', OdooDomainOperator.EQUAL, schoolId]
-    ];
+    const searchDomain: SearchDomain = [['nickname', OdooDomainOperator.ILIKE, nickname], ['is_teenager', OdooDomainOperator.EQUAL, true]];
+    if (schoolId) searchDomain.push(['school_id', OdooDomainOperator.EQUAL, schoolId]);
     if (classroomId) searchDomain.push(['classroom_id', OdooDomainOperator.EQUAL, classroomId]);
     return this.getUserList(searchDomain, offset, limit, order);
   }
