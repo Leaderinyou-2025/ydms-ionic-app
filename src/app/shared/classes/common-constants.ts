@@ -469,6 +469,15 @@ export class CommonConstants {
   }
 
   /**
+   * Get random a number from 0 to n
+   * @param n
+   */
+  public static randomInt(n: number): number {
+    if (n >= 0) return Math.floor(Math.random() * n);
+    return 0;
+  }
+
+  /**
    * Weekday names
    */
   public get weekdays(): string[] {

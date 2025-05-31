@@ -36,12 +36,8 @@ export class LiyYdmsEmotionalQuestionService {
     order: OrderBy = OrderBy.CREATE_AT_DESC
   ): Promise<ILiyYdmsEmotionalQuestion[]> {
     const results = await this.odooService.searchRead<ILiyYdmsEmotionalQuestion>(
-      ModelName.EMOTIONAL_QUESTION,
-      searchDomain,
-      this.emotionalQuestionFields,
-      offset,
-      limit,
-      order
+      ModelName.EMOTIONAL_QUESTION, searchDomain, this.emotionalQuestionFields,
+      offset, limit, order
     );
     return CommonConstants.convertArr2ListItem(results);
   }
@@ -53,10 +49,18 @@ export class LiyYdmsEmotionalQuestionService {
    */
   public async getQuestionById(questionId: number): Promise<ILiyYdmsEmotionalQuestion | null> {
     const results = await this.getQuestionList(
-      [['id', OdooDomainOperator.EQUAL, questionId]],
-      0,
-      1
+      [['id', OdooDomainOperator.EQUAL, questionId]], 0, 1
     );
     return results.length > 0 ? results[0] : null;
+  }
+
+  /**
+   * Get count questions
+   * @param searchDomain
+   */
+  public async getCountQuestions(searchDomain: SearchDomain = []): Promise<number> {
+    return this.odooService.searchCount<ILiyYdmsEmotionalQuestion>(
+      ModelName.EMOTIONAL_QUESTION, searchDomain
+    );
   }
 }

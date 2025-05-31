@@ -112,9 +112,16 @@
     "public_share_description": "Cho phép mọi người xem cảm xúc của bạn",
     "select_share_type": "Chia sẻ cho",
     "select_users": "Chọn người dùng để chia sẻ",
-    "share_type_friends": "Bạn bè",
-    "share_type_parent": "Phụ huynh",
-    "share_type_teacher": "Giáo viên",
+    "share_type_all": "Mọi người",
+    "share_type_all_detail": "Bạn bè, bố mẹ và giáo viên chủ nhiệm của bạn",
+    "share_type_all_friends": "Bạn bè",
+    "share_type_all_friends_detail": "Tất cả bạn bè của bạn",
+    "share_type_friends": "Bạn bè cụ thể",
+    "share_type_friends_detail": "Chỉ chia sẻ với một số bạn bè cụ thể",
+    "share_type_parent": "Bố mẹ",
+    "share_type_parent_detail": "Chỉ chia sẻ với bố mẹ của bạn",
+    "share_type_teacher": "Giáo viên chủ nhiệm",
+    "share_type_teacher_detail": "Chỉ chia sẻ với giáo viên chủ nhiệm",
     "no_users_found": "Không tìm thấy người dùng nào",
     "no_entry_for_date": "Không tìm thấy nhật ký cảm xúc cho ngày này",
     "stop_sharing": "Tắt chia sẻ"
@@ -409,7 +416,9 @@
     "cancel_request_success": "Hủy yêu cầu kết bạn thành công.",
     "cancel_request_failed": "Hủy yêu cầu kết bạn thất bại. Vui lòng thử lại.",
     "accept_request_success": "Chấp nhận yêu cầu kết bạn thành công.",
-    "accept_request_failed": "Chấp nhận yêu cầu kết bạn thất bại. Vui lòng thử lại."
+    "accept_request_failed": "Chấp nhận yêu cầu kết bạn thất bại. Vui lòng thử lại.",
+    "checkin_emotion_failed": "Có lỗi sảy ra khi checkin cảm xúc. Vui long thử lại sau.",
+    "checkin_emotion_success": "Checkin cảm xúc thành công. Hãy tiếp tục duy trì chuỗi để nhận thêm nhiều phần thường nhé."
   },
   "ERROR": {
     "network": "Lỗi mạng. Vui lòng kiểm tra kết nối mạng của bạn và thử lại.",

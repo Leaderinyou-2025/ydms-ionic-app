@@ -21,6 +21,7 @@ import { EmotionIconSelectorComponent } from './components/emotion-icon-selector
 import { EmotionShareComponent } from './components/emotion-share/emotion-share.component';
 import { FormAssessmentComponent } from './components/form-assessment/form-assessment.component';
 import { AlertEmotionCheckinComponent } from './components/alert-emotion-checkin/alert-emotion-checkin.component';
+import { SelectFriendComponent } from './components/select-friend/select-friend.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,9 @@ import { AlertEmotionCheckinComponent } from './components/alert-emotion-checkin
     ResourceListComponent,
     FormAssessmentComponent,
     AlertEmotionCheckinComponent,
+    EmotionIconSelectorComponent,
+    EmotionShareComponent,
+    SelectFriendComponent,
   ],
   imports: [
     CommonModule,
@@ -46,8 +50,6 @@ import { AlertEmotionCheckinComponent } from './components/alert-emotion-checkin
     RouterLink,
     RouterLinkActive,
     LottieComponent,
-    EmotionIconSelectorComponent,
-    EmotionShareComponent,
   ],
   exports: [
     SelectDatetimeComponent,
@@ -61,7 +63,10 @@ import { AlertEmotionCheckinComponent } from './components/alert-emotion-checkin
     EmotionDiaryModalComponent,
     ResourceListComponent,
     FormAssessmentComponent,
-    AlertEmotionCheckinComponent
+    AlertEmotionCheckinComponent,
+    EmotionIconSelectorComponent,
+    EmotionShareComponent,
+    SelectFriendComponent,
   ]
 })
 export class SharedModule {

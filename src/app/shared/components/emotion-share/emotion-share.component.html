@@ -1,72 +1,69 @@
 <div class="mb-6">
   <!-- Public Sharing Section -->
-  <div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+  <div class="mt-6 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
     <!-- Public Share Toggle -->
-    <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center justify-between">
+      <ion-icon name="share-social" class="text-3xl pr-2"></ion-icon>
       <div class="flex-1">
         <h3 class="text-lg font-medium mb-1">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_PUBLIC_SHARE | translate }}</h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_PUBLIC_SHARE_DESCRIPTION | translate }}</p>
+        <p class="text-sm italic text-gray-500 dark:text-gray-400">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_PUBLIC_SHARE_DESCRIPTION | translate }}</p>
       </div>
-      <ion-checkbox
-        [(ngModel)]="public_emotional"
-        (ionChange)="onPublicSharingToggle()"
-        class="ml-4">
-      </ion-checkbox>
+      <ion-toggle mode="ios" slot="end" [enableOnOffLabels]="true" [(ngModel)]="public_emotional" (ionChange)="onPublicSharingToggle()"></ion-toggle>
     </div>
 
     <!-- Share Type Selection -->
-    <div *ngIf="public_emotional" class="mb-4">
-        <ion-select
-          class="w-full p-0"
-          [label]="TranslateKeys.DAILY_EMOTION_JOURNAL_SELECT_SHARE_TYPE | translate" label-placement="fixed"
-          [(ngModel)]="public_emotional_to"
-          (ionChange)="onShareTypeChange()"
-          interface="popover">
-          <ion-select-option [value]="PublicShareTargetType.FRIENDS">
-            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_FRIENDS | translate }}
-          </ion-select-option>
-          <ion-select-option [value]="PublicShareTargetType.PARENT">
-            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_PARENT | translate }}
-          </ion-select-option>
-          <ion-select-option [value]="PublicShareTargetType.TEACHER">
-            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_TEACHER | translate }}
-          </ion-select-option>
-        </ion-select>
+    <div *ngIf="public_emotional" class="my-4">
+      <ion-list class="share-type-radio-group bg-transparent">
+        <ion-radio-group [(ngModel)]="public_emotional_to" (ionChange)="onShareTypeChange($event)">
+          <ion-item detail="false">
+            <ion-radio [value]="PublicEmotionalOption.ALL" mode="md" labelPlacement="end" justify="start">
+              {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_ALL | translate }}<br>
+              <span class="pr-2 text-sm italic text-gray-500 dark:text-gray-400">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_ALL_DETAIL | translate }}</span>
+            </ion-radio>
+          </ion-item>
+          <ion-item detail="false">
+            <ion-radio [value]="PublicEmotionalOption.ALL_FRIENDS" mode="md" labelPlacement="end" justify="start">
+              {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_ALL_FRIENDS | translate }}
+              <span class="pr-2 text-sm italic text-gray-500 dark:text-gray-400">
+                <br>{{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_ALL_FRIENDS_DETAIL| translate }}
+              </span>
+            </ion-radio>
+          </ion-item>
+          <ion-item detail="false">
+            <ion-radio [value]="PublicEmotionalOption.FRIENDS" mode="md" labelPlacement="end" justify="start">
+              {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_FRIENDS | translate }}
+              <span class="pr-2 text-sm italic text-gray-500 dark:text-gray-400">
+                <br>{{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_FRIENDS_DETAIL | translate }}
+              </span>
+            </ion-radio>
+          </ion-item>
+          <ion-item detail="false">
+            <ion-radio [value]="PublicEmotionalOption.PARENT" mode="md" labelPlacement="end" justify="start">
+              {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_PARENT | translate }}
+              <span class="pr-2 text-sm italic text-gray-500 dark:text-gray-400">
+                <br>{{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_PARENT_DETAIL | translate }}
+              </span>
+            </ion-radio>
+          </ion-item>
+          <ion-item detail="false" lines="none">
+            <ion-radio [value]="PublicEmotionalOption.TEACHER" mode="md" labelPlacement="end" justify="start">
+              {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_TEACHER | translate }}
+              <span class="pr-2 text-sm italic text-gray-500 dark:text-gray-400">
+                <br>{{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_TEACHER_DETAIL | translate }}
+              </span>
+            </ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
     </div>
 
-    <!-- Users Selection -->
-    <div *ngIf="public_emotional" class="mb-4">
-      <h4 class="text-md font-medium mb-2">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_SELECT_USERS | translate }}</h4>
-
-      <!-- Loading state -->
-      <div *ngIf="isLoadingUsers" class="text-center py-4">
-        <ion-spinner name="crescent"></ion-spinner>
-        <p class="text-sm text-gray-500 mt-2">{{ TranslateKeys.LOADING | translate }}</p>
-      </div>
-
-      <!-- No users found -->
-      <div *ngIf="!isLoadingUsers && loadedUsers.length === 0" class="text-center py-4 text-gray-500">
-        {{ TranslateKeys.DAILY_EMOTION_JOURNAL_NO_USERS_FOUND | translate }}
-      </div>
-
-      <!-- Users list -->
-      <div *ngIf="!isLoadingUsers && loadedUsers.length > 0" class="flex flex-wrap gap-2 max-h-60 overflow-y-auto">
-        <ion-chip
-          *ngFor="let user of loadedUsers"
-          [color]="isUserSelected(user) ? 'primary' : 'medium'"
-          (click)="toggleUserSelection(user)"
-          class="cursor-pointer">
-          <ion-avatar slot="start" class="w-6 h-6">
-            <div class="w-full h-full bg-gray-300 flex items-center justify-center text-xs font-medium text-gray-600 rounded-full">
-              {{ user.name.charAt(0).toUpperCase() }}
-            </div>
-          </ion-avatar>
-          <ion-label>{{ user.name }}</ion-label>
-          <ion-icon
-            [name]="isUserSelected(user) ? 'checkmark-circle' : 'add-circle-outline'"
-            slot="end">
-          </ion-icon>
-        </ion-chip>
+    <!-- Users Selected -->
+    <div *ngIf="public_emotional && selectedPublicUsers?.length"
+         class="flex items-center justify-start flex-wrap gap-2 p-2">
+      <div *ngFor="let friend of selectedPublicUsers;"
+           class="flex items-center justify-center gap-2 flex-nowrap px-2 py-1 border rounded-3xl">
+        <p class="text-sm">{{ friend.nickname }}</p>
+        <ion-icon name="close-circle" class="text-xl" color="danger" (click)="onClickRemovePublicUser(friend)"></ion-icon>
       </div>
     </div>
   </div>

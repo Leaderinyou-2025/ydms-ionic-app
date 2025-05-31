@@ -1,55 +1,9 @@
-/* Using Tailwind CSS classes for container and emotion icon wrapper */
+.share-type-radio-group {
+  --background: transparent;
 
-/* Custom styles for Ionic components that can't be fully styled with Tailwind */
-ion-textarea {
-  --background: #ffffff;
-  --color: #333333;
-  --padding-start: 16px;
-  --padding-end: 16px;
-  --padding-top: 12px;
-  --padding-bottom: 12px;
-  --border-radius: 8px;
-  --border-color: #d1d5db;
-}
-
-ion-chip {
-  --background: #f3f4f6;
-  --color: #4b5563;
-  height: 36px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &.ion-color-primary {
-    --background: #22aff7;
-    --color: #ffffff;
+  ion-item {
+    --background: transparent;
+    --background-activated: transparent;
+    --background-focused: transparent;
   }
-
-  ion-avatar {
-    width: 24px;
-    height: 24px;
-    margin-right: 8px;
-  }
-
-  ion-icon {
-    margin-left: 4px;
-    font-size: 16px;
-  }
-}
-
-ion-select {
-  --padding-start: 0;
-  --padding-end: 0;
-}
-
-ion-button {
-  --background: #22aff7;
-  --background-activated: #1d96d4;
-  --background-focused: #1d96d4;
-  --background-hover: #1d96d4;
-  --border-radius: 8px;
-  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --padding-top: 16px;
-  --padding-bottom: 16px;
-  text-transform: uppercase;
-  font-weight: bold;
 }

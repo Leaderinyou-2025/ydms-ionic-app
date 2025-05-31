@@ -1,0 +1,50 @@
+<ion-header class="select-user-header">
+  <ion-toolbar class="bg-transparent">
+    <ion-buttons slot="start">
+      <ion-icon name="chevron-back" class="text-2xl pr-2" (click)="cancel()"></ion-icon>
+    </ion-buttons>
+    <ion-title class="ion-text-center">
+      {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_FRIENDS | translate }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">{{ TranslateKeys.BUTTON_OK | translate }}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <!-- Search bar -->
+  <div class="flex flex-wrap items-end justify-items-center w-full">
+    <ion-searchbar placeholder="{{TranslateKeys.TITLE_SEARCH_FRIENDS | translate}}"
+                   [debounce]="1000" (ionInput)="onSearchChange($event)"></ion-searchbar>
+  </div>
+</ion-header>
+
+<ion-content class="ion-padding-top ion-padding-bottom">
+  <!-- Loading skeleton -->
+  <div *ngIf="isLoading && !isLoadMore" class="mt-3">
+    <ion-skeleton-text animated class="w-full h-28 rounded-lg mb-3" *ngFor="let i of Array(10)"></ion-skeleton-text>
+  </div>
+
+  <!-- Friend list -->
+  <ion-list class="friend-list bg-transparent" *ngIf="listFriends?.length">
+    <ion-item *ngFor="let item of listFriends;" j>
+      <ion-avatar class="my-3" slot="start">
+        <ion-img [src]="CommonConstants.formatBase64ImageUrl(item.avatar || '')"></ion-img>
+      </ion-avatar>
+      <ion-checkbox mode="md" justify="space-between" (ionChange)="onChangeSelectFriend($event, item)">
+        {{ item.nickname || '' }}
+      </ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+  <!-- Empty state -->
+  <div *ngIf="isLoading === false && !listFriends?.length" class="flex flex-col items-center justify-center py-10">
+    <ion-icon name="person" class="text-6xl text-gray-400 mb-4"></ion-icon>
+    <p class="text-center text-gray-500">{{ TranslateKeys.TITLE_NO_RESULT_FOUND | translate }}</p>
+  </div>
+
+  <!-- Infinite scroll for pagination -->
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+

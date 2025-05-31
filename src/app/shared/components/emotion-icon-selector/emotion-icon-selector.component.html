@@ -1,18 +1,17 @@
-<div class="mb-6">
-  <h3 class="text-lg font-medium mb-2 ">{{ questionText || (TranslateKeys.DAILY_EMOTION_JOURNAL_SELECT_EMOTION | translate) }}</h3>
-  <div class="emotion-swiper-container swiper relative pt-8 pb-16 bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden h-70 shadow-md">
+<div class="mb-6 bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md">
+  <h3 class="px-4 pt-5 text-lg font-medium text-center">
+    {{ questionText }}
+  </h3>
+  <div class="emotion-swiper-container swiper relative pt-8 pb-16 min-h-72 shadow-md">
     <div class="swiper-wrapper">
       <div class="swiper-slide w-full h-full flex flex-col items-center justify-center" *ngFor="let option of emotionAnswerOptions">
         <div class="flex flex-col items-center justify-center">
           <div class="w-30 h-30 mb-2 mt-[80px] rounded-full bg-white/90 dark:bg-gray-700/90 shadow-md leading-none flex items-center justify-center">
-            <img
-              *ngIf="option.image_1920"
-              [src]="'data:image/svg+xml;base64,' + option.image_1920"
-              [alt]="option.name || 'Emotion'"
-              class="w-20 h-20 object-contain"
-            />
+            <ion-img *ngIf="option.image_1920"
+                     [src]="CommonConstants.formatBase64ImageUrl(option.image_1920)" [alt]="option.name || 'Emotion'"
+                     class="w-20 h-20 object-contain"></ion-img>
           </div>
-          <h3 class="text-lg font-bold mb-2 text-center">{{ option.name || 'Emotion' }}</h3>
+          <h3 class="text-xl font-bold mb-2 text-center">{{ option.name || 'Emotion' }}</h3>
         </div>
       </div>
     </div>

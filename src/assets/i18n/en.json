@@ -112,9 +112,16 @@
     "public_share_description": "Allow everyone to see your emotion",
     "select_share_type": "Select share target type",
     "select_users": "Select users to share with",
-    "share_type_friends": "Friends",
-    "share_type_parent": "Parent",
-    "share_type_teacher": "Teacher",
+    "share_type_all": "Everyone",
+    "share_type_all_detail": "Your friends, parents and teachers",
+    "share_type_all_friends": "Your friends",
+    "share_type_all_friends_detail": "All your friends",
+    "share_type_friends": "Specific friends",
+    "share_type_friends_detail": "Share with specific friends only",
+    "share_type_parent": "Your parent",
+    "share_type_parent_detail": "Share with your parent only",
+    "share_type_teacher": "Your teacher",
+    "share_type_teacher_detail": "Share with your teacher only",
     "no_users_found": "No users found",
     "no_entry_for_date": "No emotion journal entry found for this date",
     "stop_sharing": "Stop sharing"
@@ -409,7 +416,9 @@
     "cancel_request_success": "Friend request canceled successfully.",
     "cancel_request_failed": "Failed to cancel friend request. Please try again.",
     "accept_request_success": "Friend request accepted successfully.",
-    "accept_request_failed": "Failed to accept friend request. Please try again."
+    "accept_request_failed": "Failed to accept friend request. Please try again.",
+    "checkin_emotion_failed": "Failed to checkin emotion. Please try again.",
+    "checkin_emotion_success": "Checkin emotion successfully."
   },
   "ERROR": {
     "network": "Network error. Please check your internet connection.",

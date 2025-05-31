@@ -24,8 +24,14 @@
         <div class="flex items-center justify-center w-full text-lg font-medium text-sky-500">
           <ion-icon name="share-social" class="pr-2 text-2xl"></ion-icon>
           {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARED_WITH | translate }}
-          <span class="pl-1 lowercase" *ngIf="emotionalDiary.public_emotional_to === PublicEmotionalOption.FRIEND">
-            {{ TranslateKeys.EMOTION_SHARE_TARGET_FRIENDS  | translate }}
+          <span class="pl-1 lowercase" *ngIf="emotionalDiary.public_emotional_to === PublicEmotionalOption.ALL">
+            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_ALL  | translate }}
+          </span>
+          <span class="pl-1 lowercase" *ngIf="emotionalDiary.public_emotional_to === PublicEmotionalOption.ALL_FRIENDS">
+            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_ALL_FRIENDS  | translate }}
+          </span>
+          <span class="pl-1 lowercase" *ngIf="emotionalDiary.public_emotional_to === PublicEmotionalOption.FRIENDS">
+            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_FRIENDS  | translate }}
           </span>
           <span class="pl-1 lowercase" *ngIf="emotionalDiary.public_emotional_to === PublicEmotionalOption.PARENT">
             {{ TranslateKeys.EMOTION_SHARE_TARGET_FAMILY  | translate }}
@@ -40,7 +46,7 @@
           <ng-container *ngFor="let friend of sharedFriends; let i = index;">
             <ion-badge color="success" *ngIf="i < 5">{{ friend.nickname }}</ion-badge>
           </ng-container>
-          <span *ngIf="sharedFriends.length >= 5" class="text-base font-bold">...(+{{sharedFriends.length - 5}})</span>
+          <span *ngIf="sharedFriends.length >= 5" class="text-base font-bold">...(+{{ sharedFriends.length - 5 }})</span>
         </div>
 
         <!--    Stop sharing button    -->

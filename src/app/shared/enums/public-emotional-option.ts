@@ -1,5 +1,7 @@
 export enum PublicEmotionalOption {
-  FRIEND = 'friend',
+  ALL = 'all',
+  ALL_FRIENDS = 'all_friends',
+  FRIENDS = 'friends',
   PARENT = 'parent',
   TEACHER = 'teacher',
 }

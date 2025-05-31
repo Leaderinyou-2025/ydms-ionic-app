@@ -12,5 +12,18 @@
     <ion-skeleton-text animated class="w-full h-80 rounded-lg mb-3"></ion-skeleton-text>
   </div>
 
+  <ng-container *ngIf="emotionalQuestion && emotionalAnswerOptions">
+    <app-emotion-icon-selector
+      [questionText]="emotionalQuestion.name || ''"
+      [emotionAnswerOptions]="emotionalAnswerOptions"
+      (emotionSelected)="selectedAnswer = $event">
+    </app-emotion-icon-selector>
 
+    <app-emotion-share (shareEmotion)="emotionJournal = $event">
+    </app-emotion-share>
+
+    <ion-button expand="block" color="primary" (click)="onClickSubmit()">
+      {{ TranslateKeys.BUTTON_CONFIRM | translate }}
+    </ion-button>
+  </ng-container>
 </ion-content>

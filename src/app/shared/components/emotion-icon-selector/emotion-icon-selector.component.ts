@@ -1,21 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, AfterViewInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import Swiper from 'swiper';
 
 import { ILiyYdmsEmotionalAnswerOption } from '../../interfaces/models/liy.ydms.emotional.answer.option';
 import { TranslateKeys } from '../../enums/translate-keys';
+import { CommonConstants } from '../../classes/common-constants';
 
 @Component({
   selector: 'app-emotion-icon-selector',
   templateUrl: './emotion-icon-selector.component.html',
   styleUrls: ['./emotion-icon-selector.component.scss'],
-  standalone: true,
-  imports: [CommonModule, IonicModule, TranslateModule, FormsModule]
+  standalone: false,
 })
-export class EmotionIconSelectorComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class EmotionIconSelectorComponent implements AfterViewInit, OnDestroy {
+
   @Input() emotionAnswerOptions: ILiyYdmsEmotionalAnswerOption[] = [];
   @Input() selectedEmotionOption: ILiyYdmsEmotionalAnswerOption | null = null;
   @Input() questionText: string = '';
@@ -23,31 +20,29 @@ export class EmotionIconSelectorComponent implements OnInit, OnChanges, AfterVie
 
   currentSlideIndex = 0;
   private swiper: Swiper | null = null;
+
   protected readonly TranslateKeys = TranslateKeys;
+  protected readonly CommonConstants = CommonConstants;
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
   }
 
   ngAfterViewInit() {
     this.initializeSwiper();
+    this.emotionSelected.emit(this.emotionAnswerOptions?.[0]);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['emotionAnswerOptions'] && this.swiper) {
-      setTimeout(() => {
-        this.updateSwiper();
-      }, 100);
-    }
-
-    if (changes['selectedEmotionOption'] && this.swiper && this.selectedEmotionOption) {
-      setTimeout(() => {
-        this.setSlideToSelectedOption();
-      }, 100);
+  ngOnDestroy() {
+    if (this.swiper) {
+      this.swiper.destroy(true, true);
+      this.swiper = null;
     }
   }
 
+  /**
+   * Initial swiper
+   * @private
+   */
   private initializeSwiper(): void {
     setTimeout(() => {
       try {
@@ -92,31 +87,6 @@ export class EmotionIconSelectorComponent implements OnInit, OnChanges, AfterVie
     }, 200);
   }
 
-  private updateSwiper(): void {
-    if (this.swiper) {
-      try {
-        this.swiper.update();
-        this.swiper.updateSlides();
-        this.swiper.updateProgress();
-        this.swiper.updateSlidesClasses();
-
-        if (this.emotionAnswerOptions.length > 0) {
-          if (this.selectedEmotionOption) {
-            this.setSlideToSelectedOption();
-          } else {
-            this.swiper.slideTo(0, 0);
-            this.currentSlideIndex = 0;
-          }
-        }
-      } catch (error) {
-        console.error('ERROR updating Swiper:', error);
-        this.initializeSwiper();
-      }
-    } else {
-      this.initializeSwiper();
-    }
-  }
-
   /**
    * Set slide to the selected emotion option
    */
@@ -132,13 +102,6 @@ export class EmotionIconSelectorComponent implements OnInit, OnChanges, AfterVie
     if (selectedIndex >= 0 && selectedIndex < this.emotionAnswerOptions.length) {
       this.swiper.slideTo(selectedIndex, 0);
       this.currentSlideIndex = selectedIndex;
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.swiper) {
-      this.swiper.destroy(true, true);
-      this.swiper = null;
     }
   }
 }

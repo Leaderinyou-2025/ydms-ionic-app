@@ -176,6 +176,18 @@ export class LiyYdmsEmotionalDiaryService {
   }
 
   /**
+   * createEmotionDiary
+   * @param body
+   */
+  public async createEmotionDiary(
+    body: Partial<IEmotionJournal>
+  ): Promise<number | undefined> {
+    return this.odooService.create<IEmotionJournal>(
+      ModelName.EMOTIONAL_DIARY, body
+    );
+  }
+
+  /**
    * Get emotion diary by id
    * @param id
    */
