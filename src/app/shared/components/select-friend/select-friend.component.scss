@@ -1,0 +1,22 @@
+ion-header.select-user-header {
+  ion-toolbar {
+    --border-width: 0;
+    --background: transparent;
+  }
+}
+
+ion-list.friend-list {
+  --background: transparent;
+
+  ion-item {
+    --background: transparent;
+
+    ion-checkbox {
+      --checkbox-background: transparent;
+    }
+
+    ion-checkbox::part(label) {
+      padding-right: 8px;
+    }
+  }
+}

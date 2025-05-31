@@ -6,6 +6,7 @@ import { ILiyYdmsEmotionalDiary } from '../../shared/interfaces/models/liy.ydms.
 import { ModelName } from '../../shared/enums/model-name';
 import { CommonConstants } from '../../shared/classes/common-constants';
 import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
+import { IEmotionJournal } from '../../shared/interfaces/function-data/emtion-journal';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class LiyYdmsEmotionalDiaryService {
 
   public readonly emotionalDiaryFields = [
     'answer_icon', 'answer_id', 'answer_text', 'question_id',
-    'nickname', 'teenager_id', 'rank_point', 'scores', 'create_date', 'write_date'
+    'nickname', 'teenager_id', 'rank_point', 'scores', 'create_date', 'write_date',
+    'public_emotional', 'public_emotional_to', 'public_user_ids'
   ];
 
   constructor(
@@ -73,6 +75,33 @@ export class LiyYdmsEmotionalDiaryService {
   }
 
   /**
+   * getUserEmotionDiaryListInMonth
+   * @param teenagerId
+   * @param offset
+   * @param limit
+   * @param order
+   * @param month
+   * @param year
+   */
+  public async getUserEmotionDiaryListInMonth(
+    teenagerId: number,
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.CREATE_AT_DESC,
+    month?: number,
+    year?: number,
+  ): Promise<ILiyYdmsEmotionalDiary[]> {
+    const rangeDateMonth = CommonConstants.getFirstAndLastDateInMonth(month, year);
+    const searchDomain: SearchDomain = [
+      ['teenager_id', OdooDomainOperator.EQUAL, teenagerId],
+      ['create_date', OdooDomainOperator.GREATER_EQUAL, rangeDateMonth.firstDate],
+      ['create_date', OdooDomainOperator.LESS_EQUAL, rangeDateMonth.lastDate],
+    ];
+
+    return this.getEmotionalDiaryList(searchDomain, offset, limit, order);
+  }
+
+  /**
    * Lấy danh sách emotion diary chưa trả lời của user
    * @param teenagerId
    * @param offset
@@ -119,21 +148,14 @@ export class LiyYdmsEmotionalDiaryService {
     teenagerId: number,
     month?: number,
     year?: number
-  ) {
-    const currentDate = new Date();
-    const firstDay = new Date(year || currentDate.getFullYear(), month ? (month - 1) : currentDate.getMonth(), 1, 0, 0, 0);
-    const lastDay = new Date(year || currentDate.getFullYear(), month || (currentDate.getMonth() + 1), 0, 23, 59, 59);
-
-    const firstDayFormatted = `${firstDay.toISOString().split('T')[0]} 00:00:00`;
-    const lastDayFormatted = `${lastDay.toISOString().split('T')[0]} 23:59:59`;
-
+  ): Promise<number> {
+    const rangeDateMonth = CommonConstants.getFirstAndLastDateInMonth(month, year);
     const searchDomain: SearchDomain = [
       ['teenager_id', OdooDomainOperator.EQUAL, teenagerId],
-      ['create_date', OdooDomainOperator.GREATER_EQUAL, firstDayFormatted],
-      ['create_date', OdooDomainOperator.LESS_EQUAL, lastDayFormatted],
+      ['create_date', OdooDomainOperator.GREATER_EQUAL, rangeDateMonth.firstDate],
+      ['create_date', OdooDomainOperator.LESS_EQUAL, rangeDateMonth.lastDate],
       ['answer_id', OdooDomainOperator.NOT_EQUAL, false],
     ];
-
     return this.getCountEmotionDiaryList(searchDomain);
   }
 
@@ -142,11 +164,37 @@ export class LiyYdmsEmotionalDiaryService {
    * @param id
    * @param body
    */
-  public async updateEmotionDiary(id: number, body: Partial<ILiyYdmsEmotionalDiary>): Promise<boolean | number> {
-    return this.odooService.write<ILiyYdmsEmotionalDiary>(
+  public async updateEmotionDiary(
+    id: number,
+    body: Partial<IEmotionJournal>
+  ): Promise<boolean | number> {
+    return this.odooService.write<IEmotionJournal>(
       ModelName.EMOTIONAL_DIARY,
       [id],
       body
     );
+  }
+
+  /**
+   * createEmotionDiary
+   * @param body
+   */
+  public async createEmotionDiary(
+    body: Partial<IEmotionJournal>
+  ): Promise<number | undefined> {
+    return this.odooService.create<IEmotionJournal>(
+      ModelName.EMOTIONAL_DIARY, body
+    );
+  }
+
+  /**
+   * Get emotion diary by id
+   * @param id
+   */
+  public async getEmotionDiary(id: number): Promise<Partial<ILiyYdmsEmotionalDiary> | undefined> {
+    let results = await this.odooService.read<ILiyYdmsEmotionalDiary>(
+      ModelName.EMOTIONAL_DIARY, [id], this.emotionalDiaryFields
+    );
+    return CommonConstants.convertArr2ListItem(results)?.[0];
   }
 }

@@ -1,0 +1,45 @@
+<div class="w-full overflow-hidden bg-white dark:bg-gray-800 rounded-xl shadow-md p-4">
+  <!-- Action buttons -->
+  <div class="flex justify-between items-center mb-4">
+    <button class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300" (click)="previousMonth()">
+      <ion-icon name="chevron-back-outline" class="text-xl"></ion-icon>
+    </button>
+
+    <div class="text-center">
+      <h2 class="text-xl font-bold ">{{ monthNames[currentMonth] }} {{ currentYear }}</h2>
+    </div>
+
+    <button class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300" (click)="nextMonth()">
+      <ion-icon name="chevron-forward-outline" class="text-xl"></ion-icon>
+    </button>
+  </div>
+
+  <!-- Today button -->
+  <button class="block mx-auto mb-4 text-sm text-blue-500  px-2 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/10" (click)="goToToday()">
+    {{ TranslateKeys.CALENDAR_TODAY | translate }}
+  </button>
+
+  <!-- Weekday row header -->
+  <div class="grid grid-cols-7 gap-1 mb-2">
+    <div *ngFor="let day of weekdays" class="text-center font-medium text-gray-600 dark:text-gray-300 ">
+      {{ day }}
+    </div>
+  </div>
+
+  <!-- Month grid -->
+  <div class="grid grid-cols-7 gap-1">
+    <div *ngFor="let day of calendarDays" (click)="selectDate(day)"
+         class="flex flex-col items-center justify-center relative aspect-square rounded-lg border-solid" [class]="getClassOfDate(day.date)">
+
+      <!--   Date label   -->
+      <div class="text-sm mb-0.5" [ngClass]="{'intense-shake-zoom': isTodayWithoutEntry(day.date)}">
+        {{ day.date.getDate() }}
+      </div>
+
+      <!--   Check-in Icon   -->
+      <div class="flex items-center justify-center absolute top-0 left-0 w-full h-full leading-none" *ngIf="day.entry && hasValidAnswerId(day.entry)">
+        <ion-img [src]="CommonConstants.formatBase64ImageUrl(day.entry.answer_icon || '')" class="p-2" alt="emotion icon"></ion-img>
+      </div>
+    </div>
+  </div>
+</div>

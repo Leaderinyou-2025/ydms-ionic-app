@@ -1,89 +1,32 @@
 <app-header
+  class="z-10"
   [pageTitle]="TranslateKeys.TITLE_DAILY_EMOTION_JOURNAL"
+  [caption]="TranslateKeys.HOME_WELCOME_SUBTITLE"
+  defaultBackHref="/{{PageRoutes.TASK}}"
   backgroundColor="linear-gradient(to bottom, #9333ea, #4c1d95)"
-  [segment]="segment"
-  [animeImage]="animeImage"
-  (changeSegment)="segmentChanged($event)">
+  [animeImage]="animeImage">
 </app-header>
 
-<ion-content [fullscreen]="true" class=" custom-page-bg-light">
+<ion-content [fullscreen]="true" class="ion-padding-start ion-padding-end custom-page-bg-light">
   <!-- Refresh data -->
   <ion-refresher slot="fixed" mode="md" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Loading indicator -->
-  <div *ngIf="isLoading$ | async" class="flex justify-center items-center py-8">
-    <ion-spinner name="crescent" color="primary"></ion-spinner>
+  <!-- Streak status -->
+  <div class="flex items-center justify-center gap-2 my-5 text-xl">
+    {{ TranslateKeys.TITLE_EMOTION_STREAK_MONTH | translate }}
+    <span class="text-3xl text-sky-500 font-bold">{{ monthlyCheckIns }}/{{ CommonConstants.getDaysInMonth() }}</span>
+    {{ TranslateKeys.TITLE_DAYS | translate }}
   </div>
 
-  <!-- Main content -->
-  <div class="px-4 py-2" *ngIf="!(isLoading$ | async)">
-    <!-- Calendar view -->
-    <div *ngIf="segment.value === 'calendar'">
-      <!-- Streak status -->
-      <app-emotion-journal-streak
-        [streakStatus]="streakStatus$ | async"
-        class="mb-6 block">
-      </app-emotion-journal-streak>
-
-      <!-- Calendar -->
-      <app-emotion-journal-calendar
-        [journalEntries]="(journalEntries$ | async) || []"
-        (dateSelected)="onDateSelected($event)"
-        class="mb-6 block">
-      </app-emotion-journal-calendar>
-
-      <!-- Add new entry button -->
-      <div class="fixed bottom-6 right-6">
-        <ion-button
-          (click)="openEmotionSelector()"
-          class="rounded-full shadow-lg"
-          color="primary"
-          size="large">
-          <ion-icon slot="icon-only" name="add"></ion-icon>
-        </ion-button>
-      </div>
-    </div>
-
-    <!-- History view -->
-    <div *ngIf="segment.value === 'history'">
-      <ng-container *ngIf="journalEntries$ | async as entries">
-        <div *ngIf="entries.length === 0" class="flex flex-col items-center justify-center py-12">
-          <span class="text-5xl text-gray-400 mb-4">📝</span>
-          <p class="text-gray-500 dark:text-gray-400 text-center italic">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_NO_ENTRIES | translate }}</p>
-        </div>
-
-        <div *ngFor="let entry of entries" class="bg-white dark:bg-gray-800 rounded-xl shadow-md mb-4 overflow-hidden">
-          <!-- Entry date -->
-          <div class="p-4 border-b border-gray-100 dark:border-gray-700">
-            <div class="flex justify-between items-center">
-              <h3 class="text-base font-medium text-gray-800 dark:text-gray-200">
-                {{ entry.date | date:'fullDate' }}
-              </h3>
-              <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white/90 dark:bg-gray-700/90 shadow-sm leading-none">
-                <span class="text-2xl flex items-center justify-center">{{ entry.emotionIcon.emoji }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Entry content -->
-          <div class="p-4">
-            <p *ngIf="entry.caption" class="text-gray-700 dark:text-gray-300 mb-2">{{ entry.caption }}</p>
-            <p *ngIf="!entry.caption" class="text-gray-500 dark:text-gray-400 italic">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_NO_CAPTION | translate }}</p>
-
-            <!-- Shared with -->
-            <div *ngIf="entry.sharedWith && entry.sharedWith.length > 0" class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
-              <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">{{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARED_WITH | translate }}:</p>
-              <div class="flex flex-wrap gap-2">
-                <ion-chip *ngFor="let target of entry.sharedWith" color="medium" class="text-xs">
-                  {{ target.name }}
-                </ion-chip>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-    </div>
-  </div>
+  <!-- Calendar -->
+  <app-emotion-journal-calendar
+    [journalEntries]="journalEntries || []"
+    (monthChanged)="onMonthChanged($event)"
+    (dateSelected)="onDateSelected($event)" class="mb-6 block">
+  </app-emotion-journal-calendar>
 </ion-content>
+
+<!-- Checkin modal -->
+<app-alert-emotion-checkin *ngIf="showCheckinModal" (closeEvent)="showCheckinModal = false"></app-alert-emotion-checkin>

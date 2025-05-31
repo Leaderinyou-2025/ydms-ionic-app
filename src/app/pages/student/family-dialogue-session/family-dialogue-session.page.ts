@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonContent, IonInfiniteScroll, RefresherCustomEvent, ToastController } from '@ionic/angular';
+import { IonContent, IonInfiniteScroll, RefresherCustomEvent, ToastButton, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -9,6 +9,11 @@ import { TranslateKeys } from '../../../shared/enums/translate-keys';
 import { PageRoutes } from '../../../shared/enums/page-routes';
 import { IonicColors } from '../../../shared/enums/ionic-colors';
 import { IHeaderAnimeImage } from "../../../shared/interfaces/header/header";
+import { IonicIcons } from '../../../shared/enums/ionic-icons';
+import { Position } from '../../../shared/enums/position';
+import { BtnRoles } from '../../../shared/enums/btn-roles';
+import { NativePlatform } from '../../../shared/enums/native-platform';
+import { StyleClass } from '../../../shared/enums/style-class';
 
 @Component({
   selector: 'app-family-dialogue-session',
@@ -155,11 +160,21 @@ export class FamilyDialogueSessionPage implements OnInit {
    * @param color Color
    */
   private async showToast(message: string, color: IonicColors): Promise<void> {
+    const closeBtn: ToastButton = {
+      icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
+      side: Position.END,
+      role: BtnRoles.CANCEL,
+    }
     const toast = await this.toastController.create({
       message,
-      duration: 2000,
-      position: 'bottom',
-      color
+      duration: 5000,
+      buttons: [closeBtn],
+      mode: NativePlatform.IOS,
+      cssClass: `${StyleClass.TOAST_ITEM} ${color === IonicColors.DANGER ? StyleClass.TOAST_ERROR : StyleClass.TOAST_SUCCESS}`,
+      position: Position.TOP,
+      icon: color === IonicColors.DANGER ? IonicIcons.WARNING_OUTLINE : IonicIcons.CHECKMARK_CIRCLE_OUTLINE,
+      color,
+      keyboardClose: false
     });
     await toast.present();
   }

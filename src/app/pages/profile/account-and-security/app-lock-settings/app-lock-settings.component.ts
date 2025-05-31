@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActionSheetButton, ActionSheetController, ModalController } from '@ionic/angular';
+import { ActionSheetButton, ActionSheetController, ModalController, ToggleCustomEvent } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { AvailableResult } from 'capacitor-native-biometric';
 
@@ -45,7 +45,7 @@ export class AppLockSettingsComponent implements OnInit {
   /**
    * Toggle app lock
    */
-  async toggleAppLock(event: any) {
+  async toggleAppLock(event: ToggleCustomEvent) {
     const isEnabled = event.detail.checked;
 
     if (isEnabled) {
@@ -95,7 +95,7 @@ export class AppLockSettingsComponent implements OnInit {
   /**
    * Toggle biometric unlock
    */
-  async toggleBiometricUnlock(event: any) {
+  async toggleBiometricUnlock(event: ToggleCustomEvent) {
     const verifyBiometricResult = await this.biometricService.verifyIdentity();
     if (!verifyBiometricResult) return;
 

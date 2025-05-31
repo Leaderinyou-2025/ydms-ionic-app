@@ -1,5 +1,6 @@
 import { IBase } from '../base/base';
 import { IRelatedField } from '../base/related-field';
+import { PublicEmotionalOption } from '../../enums/public-emotional-option';
 
 /**
  * Model: Nhật ký cảm xúc
@@ -13,4 +14,7 @@ export interface ILiyYdmsEmotionalDiary extends IBase {
   rank_point: string;
   scores: string;
   teenager_id: IRelatedField;
+  public_emotional?: boolean;
+  public_emotional_to?: PublicEmotionalOption;
+  public_user_ids?: number[];
 }

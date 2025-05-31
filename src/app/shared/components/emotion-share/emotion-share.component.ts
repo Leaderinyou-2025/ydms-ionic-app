@@ -1,74 +1,119 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ModalController, RadioGroupCustomEvent } from '@ionic/angular';
 
-import { IEmotionIcon, IEmotionShareTarget, EmotionShareTargetType } from '../../interfaces/daily-emotion-journal/daily-emotion-journal.interfaces';
 import { TranslateKeys } from '../../enums/translate-keys';
+import { AuthService } from '../../../services/auth/auth.service';
+import { IAuthData } from '../../interfaces/auth/auth-data';
+import { PublicEmotionalOption } from '../../enums/public-emotional-option';
+import { IEmotionJournal } from '../../interfaces/function-data/emtion-journal';
+import { NativePlatform } from '../../enums/native-platform';
+import { CommonConstants } from '../../classes/common-constants';
+import { SelectFriendComponent } from '../select-friend/select-friend.component';
+import { ILiyYdmsFriend } from '../../interfaces/models/liy.ydms.friend';
 
 @Component({
   selector: 'app-emotion-share',
   templateUrl: './emotion-share.component.html',
   styleUrls: ['./emotion-share.component.scss'],
-  standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule, TranslateModule]
+  standalone: false,
 })
 export class EmotionShareComponent implements OnInit {
-  @Input() emotionIcon: IEmotionIcon | null = null;
-  @Input() availableShareTargets: IEmotionShareTarget[] = [];
-  @Output() shareEmotion = new EventEmitter<{caption: string, shareTargets: IEmotionShareTarget[]}>();
 
-  caption: string = '';
-  selectedShareTargets: IEmotionShareTarget[] = [];
+  @Output() shareEmotion = new EventEmitter<IEmotionJournal>();
+
+  public_emotional: boolean = false;
+  public_emotional_to: PublicEmotionalOption = PublicEmotionalOption.ALL;
+  public_user_ids: number[] = [];
+  selectedPublicUsers: ILiyYdmsFriend[] = [];
+  authData?: IAuthData;
 
   protected readonly TranslateKeys = TranslateKeys;
-  protected readonly EmotionShareTargetType = EmotionShareTargetType;
+  protected readonly PublicEmotionalOption = PublicEmotionalOption;
+  protected readonly CommonConstants = CommonConstants;
 
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+    private modalController: ModalController,
+  ) {
+  }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.authData = await this.authService.getAuthData();
+    this.emitShareData();
   }
 
   /**
-   * Get share targets by type
-   * @param type Share target type
-   * @returns Array of share targets
+   * Handle public sharing toggle
    */
-  getShareTargetsByType(type: EmotionShareTargetType): IEmotionShareTarget[] {
-    return this.availableShareTargets.filter(target => target.type === type);
+  public async onPublicSharingToggle(): Promise<void> {
+    if (!this.public_emotional) {
+      this.selectedPublicUsers = [];
+      this.public_user_ids = [];
+      this.public_emotional_to = PublicEmotionalOption.ALL;
+    }
+    this.emitShareData();
   }
 
   /**
-   * Check if share target is selected
-   * @param target Share target
-   * @returns True if target is selected
+   * Handle share type change
    */
-  isShareTargetSelected(target: IEmotionShareTarget): boolean {
-    return this.selectedShareTargets.some(t => t.id === target.id && t.type === target.type);
-  }
-
-  /**
-   * Toggle share target selection
-   * @param target Share target
-   */
-  toggleShareTarget(target: IEmotionShareTarget): void {
-    if (this.isShareTargetSelected(target)) {
-      this.selectedShareTargets = this.selectedShareTargets.filter(
-        t => !(t.id === target.id && t.type === target.type)
-      );
+  public async onShareTypeChange(event: RadioGroupCustomEvent): Promise<void> {
+    this.selectedPublicUsers = [];
+    this.public_user_ids = [];
+    if (event.detail.value === PublicEmotionalOption.FRIENDS) {
+      this.openSelectUserModal();
     } else {
-      this.selectedShareTargets.push(target);
+      this.emitShareData();
     }
   }
 
   /**
-   * Update share data when changes occur
+   * On click remove a public user
+   * @param friend
    */
-  ngDoCheck() {
+  public onClickRemovePublicUser(friend: ILiyYdmsFriend): void {
+    if (!friend) return;
+    const existIndex = this.selectedPublicUsers.findIndex(f => f.id === friend.id);
+    if (existIndex < 0) return;
+    this.selectedPublicUsers.splice(existIndex, 1);
+    if (this.selectedPublicUsers.length === 0) this.public_emotional_to = PublicEmotionalOption.ALL_FRIENDS;
+    this.emitShareData();
+  }
+
+  /**
+   * Handle open dialog to select friends
+   * @private
+   */
+  private openSelectUserModal(): void {
+    this.modalController.create({
+      mode: NativePlatform.IOS,
+      component: SelectFriendComponent,
+      initialBreakpoint: 0.8,
+      breakpoints: [0, 0.8],
+      componentProps: {}
+    }).then(modal => {
+      modal.present();
+      modal.onDidDismiss().then((result) => {
+        if (!result.data?.length) {
+          this.public_emotional_to = PublicEmotionalOption.ALL_FRIENDS;
+          this.selectedPublicUsers = new Array<ILiyYdmsFriend>();
+        } else {
+          this.selectedPublicUsers = result.data;
+        }
+        this.emitShareData();
+      });
+    });
+  }
+
+  /**
+   * Emit share data when changes occur
+   */
+  private emitShareData(): void {
+    const userIds = this.selectedPublicUsers.map(f => f.friend_id.id);
     this.shareEmotion.emit({
-      caption: this.caption,
-      shareTargets: this.selectedShareTargets
+      public_emotional: this.public_emotional,
+      public_emotional_to: this.public_emotional_to,
+      public_user_ids: userIds
     });
   }
 }

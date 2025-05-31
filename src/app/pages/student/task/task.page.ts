@@ -18,6 +18,7 @@ import { GuideType } from '../../../shared/enums/guide-type';
 import { IonInfiniteHorizontalDirective } from '../../../core/directive/ion-infinite-horizontal.directive';
 import { TaskStatus } from '../../../shared/enums/task-status';
 import { DateFormat } from '../../../shared/enums/date-format';
+import { RefresherCustomEvent } from '@ionic/angular';
 
 @Component({
   selector: 'app-task',
@@ -88,12 +89,12 @@ export class TaskPage implements OnInit {
    * Handle refresh
    * @param event
    */
-  public handleRefresh(event?: CustomEvent): void {
+  public handleRefresh(event?: RefresherCustomEvent): void {
     setTimeout(async () => {
       this.loadEmotionDiaryData();
       this.loadSurveyData();
       await this.loadDataTask();
-      if (event) await (event.target as HTMLIonRefresherElement).complete();
+      event?.target.complete();
     }, 500);
   }
 

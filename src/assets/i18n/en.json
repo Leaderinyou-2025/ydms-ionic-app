@@ -18,7 +18,8 @@
   "LOADING": {
     "pull_to_refresh": "Pull to refresh",
     "refreshing": "Refreshing...",
-    "loading_more_items": "Loading more items..."
+    "loading_more_items": "Loading more items...",
+    "loading": "Loading..."
   },
   "MESSAGE": {
     "feature_under_development": "This feature is under development"
@@ -98,21 +99,36 @@
     "date_has_entry": "This date already has an emotion journal entry",
     "entry_created": "Emotion journal entry created successfully",
     "entry_creation_failed": "Failed to create emotion journal entry",
+    "entry_updated": "Emotion journal entry updated successfully",
+    "entry_update_failed": "Failed to update emotion journal entry",
     "add_entry": "Add Emotion Journal Entry",
+    "edit_entry": "Edit Emotion Journal Entry",
     "select_emotion": "How are you feeling today?",
     "add_caption": "Add a note (optional)",
     "caption_placeholder": "Write something about your day...",
     "share_with": "Share with (optional)",
-    "only_today_allowed": "You can only add an emotion journal entry for today"
+    "only_today_allowed": "You can only add an emotion journal entry for today",
+    "public_share": "Public Share",
+    "public_share_description": "Allow everyone to see your emotion",
+    "select_share_type": "Select share target type",
+    "select_users": "Select users to share with",
+    "share_type_all": "Everyone",
+    "share_type_all_detail": "Your friends, parents and teachers",
+    "share_type_all_friends": "Your friends",
+    "share_type_all_friends_detail": "All your friends",
+    "share_type_friends": "Specific friends",
+    "share_type_friends_detail": "Share with specific friends only",
+    "share_type_parent": "Your parent",
+    "share_type_parent_detail": "Share with your parent only",
+    "share_type_teacher": "Your teacher",
+    "share_type_teacher_detail": "Share with your teacher only",
+    "no_users_found": "No users found",
+    "no_entry_for_date": "No emotion journal entry found for this date",
+    "stop_sharing": "Stop sharing"
   },
   "EMOTION_STREAK": {
-    "current": "Current Streak",
-    "longest": "Longest Streak",
-    "days_3": "3 Days Streak",
-    "days_5": "5 Days Streak",
-    "days_7": "7 Days Streak",
-    "days_15": "15 Days Streak",
-    "days_28": "28 Days Streak"
+    "monthly": "Check-ins this month",
+    "days_in_month": "Days in month"
   },
   "EMOTION_SHARE": {
     "target_class": "Class Groups",
@@ -330,7 +346,8 @@
     "no_friend_requests": "No friend requests",
     "send_request": "You have sent a request",
     "request_to_you": "Send a request to you",
-    "no_result_found": "No result found"
+    "no_result_found": "No result found",
+    "checkin_emotion_now": "Hãy Check-In cảm xúc hôm nay để nhận thưởng nhé!"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",
@@ -354,7 +371,8 @@
     "app_update_successful": "App update successful. You are now running the latest version.",
     "access_permission_gallery_alert": "Please allow the app to access your photo library and use your camera.",
     "confirm_delete_alert": "Are you sure you want to delete?",
-    "confirm_unfriend_alert": "Are you sure you want to unfriend?"
+    "confirm_unfriend_alert": "Are you sure you want to unfriend?",
+    "confirm_un_public_alert": "Are you sure you want to stop sharing?"
   },
   "BUTTON_TITLES": {
     "confirm": "Confirm",
@@ -398,7 +416,9 @@
     "cancel_request_success": "Friend request canceled successfully.",
     "cancel_request_failed": "Failed to cancel friend request. Please try again.",
     "accept_request_success": "Friend request accepted successfully.",
-    "accept_request_failed": "Failed to accept friend request. Please try again."
+    "accept_request_failed": "Failed to accept friend request. Please try again.",
+    "checkin_emotion_failed": "Failed to checkin emotion. Please try again.",
+    "checkin_emotion_success": "Checkin emotion successfully."
   },
   "ERROR": {
     "network": "Network error. Please check your internet connection.",
@@ -409,7 +429,11 @@
     "server": "Server error. Please try again later.",
     "unknown": "An unknown error occurred. Please try again.",
     "server_connection": "Unable to connect to server. Please try again later.",
-    "invalid_current_password": "Current password is incorrect."
+    "invalid_current_password": "Current password is incorrect.",
+    "invalid_edit_mode": "Invalid edit mode. Please try again.",
+    "no_emotion_selected": "Please select an emotion before saving.",
+    "no_auth_data": "Authentication data not available. Please login again.",
+    "can_only_create_today": "You can only create emotion journal entries for today."
   },
   "WARNING": {
     "app_lock": "If you forget the encryption app, you must uninstall and reinstall the app to remove the old passcode."

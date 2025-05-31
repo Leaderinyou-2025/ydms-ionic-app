@@ -1,0 +1,16 @@
+<ion-content [fullscreen]="true" class="alert-emotion-checkin absolute top-0 left-0 z-50 bg-transparent">
+  <div class="flex items-center justify-center ion-padding w-full h-full bg-black/70">
+    <div class="flex flex-col items-center justify-center relative">
+      <ion-icon class="absolute -top-10 right-5 text-4xl text-gray-200" name="close-circle-outline" (click)="onClickClose()"></ion-icon>
+      <ion-img src="/assets/images/daily_emotion_journal.png" class="w-72 h-auto float-animation"></ion-img>
+      <p class="py-3 px-2 italic font-bold text-2xl text-center text-sky-500">
+        {{ TranslateKeys.TITLE_CHECKIN_EMOTION_NOW | translate }}
+      </p>
+      <ion-button color="primary" class="w-1/2 checkin-btn"
+                  (pointerdown)="onClickClose(500)"
+                  routerLink="/{{PageRoutes.DAILY_EMOTION_JOURNAL}}/{{PageRoutes.EMOTION_CHECKIN}}">
+        {{ TranslateKeys.BUTTON_CHECKIN_EMOTION | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

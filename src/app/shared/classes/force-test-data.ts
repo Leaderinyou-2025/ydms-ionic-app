@@ -1,29 +1,13 @@
 import { IAuthData } from '../interfaces/auth/auth-data';
-import { Theme } from '../enums/theme';
-import { IAssetsResource } from '../interfaces/settings/assets-resource';
-import { TextZoomSize } from '../enums/text-zoom-size';
-import { AssetResourceCategory } from '../enums/asset-resource-category';
-import { StatusItemType } from '../enums/home/status-item-type.enum';
-import {
-  ICharacter,
-  IStatusItem,
-  ITask,
-} from '../interfaces/home/home.interfaces';
 import { ILiyYdmsNotification } from '../interfaces/models/liy.ydms.notification';
-import { FriendStatus } from '../enums/friend-status';
 
-import { IFamilyDialogueSessionHistory, IFamilyDialogueSessionDetail, IFamilyDialogueSessionQuestion } from '../interfaces/family-dialogue-session/family-dialogue-session.interfaces';
+import { IFamilyDialogueSessionDetail, IFamilyDialogueSessionHistory, IFamilyDialogueSessionQuestion } from '../interfaces/family-dialogue-session/family-dialogue-session.interfaces';
 import { EmotionType } from '../enums/personal-diary/personal-diary.enum';
-import {
-  IEmotionSuggestion,
-  IPersonalDiaryEntry,
-} from '../interfaces/personal-diary/personal-diary.interfaces';
+import { IEmotionSuggestion, IPersonalDiaryEntry, } from '../interfaces/personal-diary/personal-diary.interfaces';
 import { NotificationTypes } from '../enums/notification-type';
 import { IResource } from '../interfaces/resource/resource.interface';
 import { ResourceType } from '../enums/libary/resource-type.enum';
 import { ResourceTopic } from '../enums/libary/resource-topic.enum';
-import { IDailyEmotionJournal, IEmotionIcon, IEmotionStreakStatus, EmotionShareTargetType } from '../interfaces/daily-emotion-journal/daily-emotion-journal.interfaces';
-import { UserRoles } from '../enums/user-roles';
 
 export class ForceTestData {
 
@@ -244,63 +228,6 @@ export class ForceTestData {
 
   // Original ForceTestData content starts here
 
-  /**
-   * Status bar items data
-   */
-  static statusItems: IStatusItem[] = [
-    {
-      type: StatusItemType.BADGE,
-      value: 38,
-      label: 'Huy hiệu',
-    },
-    {
-      type: StatusItemType.RANK,
-      value: 3,
-      label: 'Xếp hạng',
-    },
-    {
-      type: StatusItemType.MISSION,
-      value: 15,
-      label: 'Nhiệm vụ',
-    },
-    {
-      type: StatusItemType.FRIENDLY,
-      value: 186,
-      label: 'Thân thiện',
-    },
-  ];
-
-  /**
-   * Character information
-   */
-  static character: ICharacter = {
-    name: 'Nhóc Conan',
-    imagePath: '/assets/images/avatar/conan.png',
-  };
-
-  /**
-   * Tasks data
-   */
-  static tasks: ITask[] = [
-    {
-      id: 1,
-      description:
-        'Nếu cảm xúc của con là thời tiết, thì hôm nay là nắng, mưa hay nhiều mây?',
-      points: 5,
-    },
-    {
-      id: 2,
-      description: 'Tuần lễ cảm xúc tích cực',
-      points: 15,
-    },
-    {
-      id: 3,
-      description:
-        'Bạn thích sáng tạo? Hãy thử khóa học vẽ tranh sơ dành cho người mới bắt đầu.',
-      points: 10,
-    },
-  ];
-
   static loginResult = { result: 1 };
 
   static authData: IAuthData = {
@@ -464,130 +391,6 @@ export class ForceTestData {
       isPublic: true,
       likes: 10,
     },
-  ];
-
-  /**
-   * Mock emotion icons for daily emotion journal
-   */
-  static emotionIcons: IEmotionIcon[] = [
-  {
-    id: 1,
-    name: 'Vui vẻ',
-    emoji: '😊',
-  },
-  {
-    id: 2,
-    name: 'Buồn',
-    emoji: '😢',
-  },
-  {
-    id: 3,
-    name: 'Tức giận',
-    emoji: '😡',
-  },
-  {
-    id: 4,
-    name: 'Lo lắng',
-    emoji: '😰',
-  },
-  {
-    id: 5,
-    name: 'Hào hứng',
-    emoji: '🤩',
-  },
-  {
-    id: 6,
-    name: 'Mệt mỏi',
-    emoji: '😴',
-  },
-  {
-    id: 7,
-    name: 'Bình tĩnh',
-    emoji: '😌',
-  },
-  {
-    id: 8,
-    name: 'Bối rối',
-    emoji: '🤔',
-  },
-  {
-    id: 9,
-    name: 'Tự hào',
-    emoji: '🥳',
-  },
-  {
-    id: 10,
-    name: 'Biết ơn',
-    emoji: '🙏',
-  }
-];
-
-  /**
-   * Mock emotion streak status for daily emotion journal
-   */
-  static emotionStreakStatus: IEmotionStreakStatus = {
-    currentStreak: 4,
-    longestStreak: 7,
-    streakMilestones: {
-      days3: true,
-      days5: false,
-      days7: true,
-      days15: false,
-      days28: false
-    }
-  };
-
-  /**
-   * Mock daily emotion journal entries
-   */
-  static dailyEmotionJournalEntries: IDailyEmotionJournal[] = [
-    {
-      id: 1,
-      date: new Date(new Date().setDate(new Date().getDate() - 1)), // Yesterday
-      emotionIcon: this.emotionIcons[0], // Happy
-      caption: 'Nay là 1 ngày tuyệt vời!',
-      userId: 1
-    },
-    {
-      id: 2,
-      date: new Date(new Date().setDate(new Date().getDate() - 2)), // 2 days ago
-      emotionIcon: this.emotionIcons[4], // Excited
-      caption: 'Mong chờ đến cuối tuần!',
-      userId: 1,
-      sharedWith: [
-        { id: 1, type: EmotionShareTargetType.CLASS_GROUP, name: 'Lớp 6A' },
-        { id: 2, type: EmotionShareTargetType.FRIEND, name: 'Bạn thân' }
-      ]
-    },
-    {
-      id: 3,
-      date: new Date(new Date().setDate(new Date().getDate() - 3)), // 3 days ago
-      emotionIcon: this.emotionIcons[6], // Calm
-      caption: 'Tận hưởng cuốn sách yêu thích',
-      userId: 1
-    },
-    {
-      id: 4,
-      date: new Date(new Date().setDate(new Date().getDate() - 4)), // 4 days ago
-      emotionIcon: this.emotionIcons[1], // Sad
-      caption: 'Nhớ người bạn đã chuyển đi',
-      userId: 1,
-      sharedWith: [
-        { id: 3, type: EmotionShareTargetType.FAMILY, name: 'Mẹ' }
-      ]
-    },
-    {
-      id: 5,
-      date: new Date(new Date().setDate(new Date().getDate() - 7)), // 7 days ago
-      emotionIcon: this.emotionIcons[8], // Proud
-      caption: 'Nay được điểm cao trong bài kiểm tra!',
-      userId: 1,
-      sharedWith: [
-        { id: 1, type: EmotionShareTargetType.CLASS_GROUP, name: 'Lớp 6A' },
-        { id: 4, type: EmotionShareTargetType.TEACHER, name: 'Giáo viên' },
-        { id: 3, type: EmotionShareTargetType.FAMILY, name: 'Mẹ' }
-      ]
-    }
   ];
 
   /**

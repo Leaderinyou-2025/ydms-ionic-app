@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToggleCustomEvent } from '@ionic/angular';
 
 import { AuthService } from '../../../services/auth/auth.service';
 import { SoundService } from '../../../services/sound/sound.service';
@@ -56,7 +56,7 @@ export class NotificationAndSoundComponent implements OnInit {
    * onSwitchNotificationEnable
    * @param event
    */
-  public onSwitchNotificationEnable(event: CustomEvent) {
+  public onSwitchNotificationEnable(event: ToggleCustomEvent) {
     if (this.notificationSettings) this.notificationSettings.enabled = event.detail.checked;
     this.isChangeNotificationSettings = true;
   }
@@ -65,7 +65,7 @@ export class NotificationAndSoundComponent implements OnInit {
    * onSwitchSoundEnable
    * @param event
    */
-  public onSwitchSoundEnable(event: CustomEvent) {
+  public onSwitchSoundEnable(event: ToggleCustomEvent) {
     if (this.soundSettings) this.soundSettings.enabled = event.detail.checked;
     this.isChangeSoundSettings = true;
   }
@@ -74,7 +74,7 @@ export class NotificationAndSoundComponent implements OnInit {
    * onSwitchBackgroundEnable
    * @param event
    */
-  public onSwitchBackgroundEnable(event: CustomEvent) {
+  public onSwitchBackgroundEnable(event: ToggleCustomEvent) {
     if (this.soundSettings?.background) this.soundSettings.background.enabled = event.detail.checked;
     this.isChangeSoundSettings = true;
   }
