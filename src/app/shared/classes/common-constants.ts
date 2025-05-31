@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, formatDate } from '@angular/common';
 import { HttpHeaders } from '@angular/common/http';
 import { Device } from '@capacitor/device';
 import { TranslateService } from '@ngx-translate/core';
@@ -475,6 +475,13 @@ export class CommonConstants {
   public static randomInt(n: number): number {
     if (n >= 0) return Math.floor(Math.random() * n);
     return 0;
+  }
+
+  /**
+   * Get current date formated yyyy-MM-dd
+   */
+  public static getCurrentDateFormated(): string {
+    return formatDate(new Date(), 'yyyy-MM-dd', 'en').toString();
   }
 
   /**

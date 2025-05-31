@@ -6,6 +6,7 @@ import { AuthService } from '../../../../services/auth/auth.service';
 import { LiyYdmsEmotionalDiaryService } from '../../../../services/models/liy.ydms.emotional.diary.service';
 import { LiyYdmsEmotionalQuestionService } from '../../../../services/models/liy.ydms.emotional.question.service';
 import { LiyYdmsEmotionalAnswerOptionService } from '../../../../services/models/liy.ydms.emotional.answer.option.service';
+import { LocalStorageService } from '../../../../services/local-storage/local-storage.service';
 import { TranslateKeys } from '../../../../shared/enums/translate-keys';
 import { PageRoutes } from '../../../../shared/enums/page-routes';
 import { IHeaderAnimeImage } from '../../../../shared/interfaces/header/header';
@@ -20,6 +21,7 @@ import { IonicIcons } from '../../../../shared/enums/ionic-icons';
 import { Position } from '../../../../shared/enums/position';
 import { BtnRoles } from '../../../../shared/enums/btn-roles';
 import { StyleClass } from '../../../../shared/enums/style-class';
+import { StorageKey } from '../../../../shared/enums/storage-key';
 
 @Component({
   selector: 'app-emotion-checkin',
@@ -49,6 +51,7 @@ export class EmotionCheckinComponent implements OnInit {
     private loadingController: LoadingController,
     private toastController: ToastController,
     private translate: TranslateService,
+    private localStorageService: LocalStorageService,
   ) {
   }
 
@@ -75,6 +78,7 @@ export class EmotionCheckinComponent implements OnInit {
       this.liyYdmsEmotionalDiaryService.createEmotionDiary(body).then(result => {
         if (result) {
           this.showToast(this.translate.instant(TranslateKeys.TOAST_CHECKIN_EMOTION_SUCCESS), IonicColors.SUCCESS);
+          this.localStorageService.set<string>(StorageKey.LAST_EMOTION_CHECKIN, CommonConstants.getCurrentDateFormated());
           this.navCtrl.navigateRoot(`${PageRoutes.DAILY_EMOTION_JOURNAL}/${result}`);
         } else {
           this.showToast(this.translate.instant(TranslateKeys.TOAST_CHECKIN_EMOTION_FAILED), IonicColors.DANGER);
