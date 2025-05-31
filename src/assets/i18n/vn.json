@@ -116,7 +116,8 @@
     "share_type_parent": "Phụ huynh",
     "share_type_teacher": "Giáo viên",
     "no_users_found": "Không tìm thấy người dùng nào",
-    "no_entry_for_date": "Không tìm thấy nhật ký cảm xúc cho ngày này"
+    "no_entry_for_date": "Không tìm thấy nhật ký cảm xúc cho ngày này",
+    "stop_sharing": "Tắt chia sẻ"
   },
   "EMOTION_STREAK": {
     "monthly": "Đã check-in trong tháng",
@@ -200,7 +201,7 @@
     "friendly": "Thân thiện",
     "school": "Trường",
     "class": "Lớp",
-    "daily_emotion_journal": "Nhật ký cảm xúc hàng ngày",
+    "daily_emotion_journal": "Nhật ký cảm xúc",
     "calendar": "Lịch",
     "history": "Lịch sử",
     "emotion_streak": "Chuỗi cảm xúc",
@@ -339,7 +340,8 @@
     "no_friend_requests": "Không có yêu cầu kết bạn nào",
     "send_request": "Bạn đã gửi một lời mời kết bạn",
     "request_to_you": "Yêu cầu kết bạn",
-    "no_result_found": "Không tìm thấy kết quả phù hợp"
+    "no_result_found": "Không tìm thấy kết quả phù hợp",
+    "checkin_emotion_now": "Hãy Check-In cảm xúc hôm nay để nhận thưởng nhé!"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",
@@ -363,7 +365,8 @@
     "app_update_successful": "Cập nhật ứng dụng thành công. Bạn đã sử dụng phiên bản mới nhất.",
     "access_permission_gallery_alert": "Vui lòng cho phép ứng dụng truy cập thư viện ảnh và sử dụng máy ảnh của bạn.",
     "confirm_delete_alert": "Bạn có chắc chắn muốn xóa?",
-    "confirm_unfriend_alert": "Bạn có chắc chắn muốn hủy kết bạn?"
+    "confirm_unfriend_alert": "Bạn có chắc chắn muốn hủy kết bạn?",
+    "confirm_un_public_alert": "Bạn có chắc chắn muốn tắt chia sẻ?"
   },
   "BUTTON_TITLES": {
     "confirm": "Xác nhận",

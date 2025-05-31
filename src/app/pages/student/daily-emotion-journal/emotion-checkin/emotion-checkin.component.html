@@ -1,0 +1,16 @@
+<app-header
+  [pageTitle]="TranslateKeys.TITLE_DAILY_EMOTION_JOURNAL"
+  [caption]="TranslateKeys.HOME_WELCOME_SUBTITLE"
+  defaultBackHref="/{{PageRoutes.DAILY_EMOTION_JOURNAL}}"
+  backgroundColor="linear-gradient(to bottom, #9333ea, #4c1d95)"
+  [animeImage]="animeImage">
+</app-header>
+
+<ion-content [fullscreen]="true" class="custom-page-bg-light ion-padding">
+  <!-- Loading skeleton -->
+  <div *ngIf="isLoading" class="mt-3">
+    <ion-skeleton-text animated class="w-full h-80 rounded-lg mb-3"></ion-skeleton-text>
+  </div>
+
+
+</ion-content>

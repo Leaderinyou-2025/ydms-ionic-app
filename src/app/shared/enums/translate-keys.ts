@@ -118,6 +118,7 @@ export enum TranslateKeys {
   DAILY_EMOTION_JOURNAL_SHARE_TYPE_TEACHER = 'DAILY_EMOTION_JOURNAL.share_type_teacher',
   DAILY_EMOTION_JOURNAL_NO_USERS_FOUND = 'DAILY_EMOTION_JOURNAL.no_users_found',
   DAILY_EMOTION_JOURNAL_NO_ENTRY_FOR_DATE = 'DAILY_EMOTION_JOURNAL.no_entry_for_date',
+  DAILY_EMOTION_JOURNAL_STOP_SHARING = 'DAILY_EMOTION_JOURNAL.stop_sharing',
 
   // CALENDAR
   CALENDAR_TODAY = 'CALENDAR.today',
@@ -334,6 +335,7 @@ export enum TranslateKeys {
   TITLE_TASK = 'TITLE.task',
   TITLE_ACTIVITY = 'TITLE.activity',
   TITLE_CHECKIN_EMOTION_DAILY = 'TITLE.checkin_emotion_daily',
+  TITLE_CHECKIN_EMOTION_NOW = 'TITLE.checkin_emotion_now',
   TITLE_HAS_SURVEY_PENDING = 'TITLE.has_survey_pending',
   TITLE_GROUP_CHALLENGE = 'TITLE.group_challenge',
   TITLE_FAMILY_ACTIVITY = 'TITLE.family_activity',
@@ -370,6 +372,7 @@ export enum TranslateKeys {
   ALERT_CONFIRM_DELETE = 'ALERT.confirm_delete_alert',
   ALERT_CONFIRM_UNFRIEND = 'ALERT.confirm_unfriend_alert',
   ALERT_APP_UPDATE_SUCCESSFUL = 'ALERT.app_update_successful',
+  ALERT_CONFIRM_UN_PUBLIC = 'ALERT.confirm_un_public_alert',
 
   // BUTTON TITLES
   BUTTON_CONFIRM = 'BUTTON_TITLES.confirm',

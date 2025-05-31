@@ -20,6 +20,7 @@ import { ResourceListComponent } from './components/resource-list/resource-list.
 import { EmotionIconSelectorComponent } from './components/emotion-icon-selector/emotion-icon-selector.component';
 import { EmotionShareComponent } from './components/emotion-share/emotion-share.component';
 import { FormAssessmentComponent } from './components/form-assessment/form-assessment.component';
+import { AlertEmotionCheckinComponent } from './components/alert-emotion-checkin/alert-emotion-checkin.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { FormAssessmentComponent } from './components/form-assessment/form-asses
     EmotionDiaryModalComponent,
     ResourceListComponent,
     FormAssessmentComponent,
+    AlertEmotionCheckinComponent,
   ],
   imports: [
     CommonModule,
@@ -59,6 +61,7 @@ import { FormAssessmentComponent } from './components/form-assessment/form-asses
     EmotionDiaryModalComponent,
     ResourceListComponent,
     FormAssessmentComponent,
+    AlertEmotionCheckinComponent
   ]
 })
 export class SharedModule {

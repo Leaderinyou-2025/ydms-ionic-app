@@ -1,39 +1,32 @@
 <app-header
+  class="z-10"
   [pageTitle]="TranslateKeys.TITLE_DAILY_EMOTION_JOURNAL"
   [caption]="TranslateKeys.HOME_WELCOME_SUBTITLE"
+  defaultBackHref="/{{PageRoutes.TASK}}"
   backgroundColor="linear-gradient(to bottom, #9333ea, #4c1d95)"
-  [animeImage]="animeImage"
->
+  [animeImage]="animeImage">
 </app-header>
 
-<ion-content [fullscreen]="true" class=" custom-page-bg-light">
+<ion-content [fullscreen]="true" class="ion-padding-start ion-padding-end custom-page-bg-light">
   <!-- Refresh data -->
   <ion-refresher slot="fixed" mode="md" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Loading indicator -->
-  <div *ngIf="isLoading$ | async" class="flex justify-center items-center py-8">
-    <ion-spinner name="crescent" color="primary"></ion-spinner>
+  <!-- Streak status -->
+  <div class="flex items-center justify-center gap-2 my-5 text-xl">
+    {{ TranslateKeys.TITLE_EMOTION_STREAK_MONTH | translate }}
+    <span class="text-3xl text-sky-500 font-bold">{{ monthlyCheckIns }}/{{ CommonConstants.getDaysInMonth() }}</span>
+    {{ TranslateKeys.TITLE_DAYS | translate }}
   </div>
 
-  <!-- Main content -->
-  <div class="px-4 py-2">
-    <!-- Calendar view -->
-    <div>
-      <!-- Streak status -->
-      <app-emotion-journal-streak
-        class="mb-6 block">
-      </app-emotion-journal-streak>
-
-      <!-- Calendar -->
-      <app-emotion-journal-calendar
-        [journalEntries]="journalEntries$ || []"
-        (dateSelected)="onDateSelected($event)"
-        (monthChanged)="onMonthChanged($event)"
-        class="mb-6 block">
-      </app-emotion-journal-calendar>
-
-    </div>
-  </div>
+  <!-- Calendar -->
+  <app-emotion-journal-calendar
+    [journalEntries]="journalEntries || []"
+    (monthChanged)="onMonthChanged($event)"
+    (dateSelected)="onDateSelected($event)" class="mb-6 block">
+  </app-emotion-journal-calendar>
 </ion-content>
+
+<!-- Checkin modal -->
+<app-alert-emotion-checkin *ngIf="showCheckinModal" (closeEvent)="showCheckinModal = false"></app-alert-emotion-checkin>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Platform } from '@ionic/angular';
+import { Platform, ToggleCustomEvent } from '@ionic/angular';
 import { AvailableResult } from 'capacitor-native-biometric';
 
 import { BiometricService } from '../../../services/biometric/biometric.service';
@@ -68,7 +68,7 @@ export class AccountAndSecurityComponent implements OnInit {
    * On toggle biometric
    * @param event
    */
-  public async toggleBiometric(event: any): Promise<void> {
+  public async toggleBiometric(event: ToggleCustomEvent): Promise<void> {
     const verifyResult = await this.biometricService.verifyIdentity();
     if (!verifyResult || !this.authData) return;
 

@@ -59,13 +59,11 @@ export class LiyYdmsEmotionalAnswerOptionService {
    * @param id Answer option ID
    * @returns Promise<ILiyYdmsEmotionalAnswerOption | null>
    */
-  public async getAnswerOptionById(id: number): Promise<ILiyYdmsEmotionalAnswerOption | null> {
+  public async getAnswerOptionById(id: number): Promise<ILiyYdmsEmotionalAnswerOption | undefined> {
     const results = await this.getAnswerOptionList(
-      [['id', OdooDomainOperator.EQUAL, id]],
-      0,
-      1
+      [['id', OdooDomainOperator.EQUAL, id]], 0, 1
     );
-    return results.length > 0 ? results[0] : null;
+    return results?.[0];
   }
 
   /**

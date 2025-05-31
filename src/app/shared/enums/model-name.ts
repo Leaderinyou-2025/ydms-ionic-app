@@ -20,4 +20,6 @@ export enum ModelName {
   EMOTIONAL_DIARY = 'liy.ydms.emotional.diary',
   EMOTIONAL_QUESTION = 'liy.ydms.emotional.question',
   EMOTIONAL_ANSWER_OPTION = 'liy.ydms.emotional.answer.option',
+  GUIDE = 'liy.ydms.guide',
+  CATEGORY = 'liy.ydms.category',
 }

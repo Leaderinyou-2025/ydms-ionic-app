@@ -1,14 +1,21 @@
 import { DatePipe } from '@angular/common';
 import { HttpHeaders } from '@angular/common/http';
 import { Device } from '@capacitor/device';
+import { TranslateService } from '@ngx-translate/core';
 
 import { IBase } from '../interfaces/base/base';
 import { environment } from '../../../environments/environment';
 import { IAssetsResource } from '../interfaces/settings/assets-resource';
 import { AssetResourceCategory } from '../enums/asset-resource-category';
 import { SoundKeys } from '../enums/sound-keys';
+import { TranslateKeys } from '../enums/translate-keys';
 
 export class CommonConstants {
+
+  constructor(
+    private translate: TranslateService
+  ) {
+  }
 
   /**
    * Device ID
@@ -69,7 +76,8 @@ export class CommonConstants {
     UklGR: CommonConstants.IMAGE_WEBP_BASE64_PREFIX, // WebP
     Qk1: CommonConstants.IMAGE_BMP_BASE64_PREFIX, // BMP
     AAAB: CommonConstants.IMAGE_ICO_BASE64_PREFIX, // ICO
-    PD94: CommonConstants.IMAGE_SVG_BASE64_PREFIX // SVG (<?xml)
+    PD94: CommonConstants.IMAGE_SVG_BASE64_PREFIX, // SVG (<?xml)
+    PHN2Zy: CommonConstants.IMAGE_SVG_BASE64_PREFIX // SVG (<svg)
   };
 
   public static detectMimeType(b64: string): string | undefined {
@@ -427,5 +435,71 @@ export class CommonConstants {
   public static getDaysInMonth(month?: number, year?: number): number {
     const current = new Date();
     return new Date(year || current.getFullYear(), month || (current.getMonth() + 1), 0).getDate();
+  }
+
+  /**
+   * Get first date and last date in month, format to UTC string "yyyy-MM-dd HH:mm:ss"
+   * @param month (1 - 12)
+   * @param year
+   */
+  public static getFirstAndLastDateInMonth(month?: number, year?: number): { firstDate: string, lastDate: string } {
+    const currentDate = new Date();
+    const y = year || currentDate.getFullYear();
+    const m = month ? (month - 1) : currentDate.getMonth();
+
+    // Create local dates first
+    const firstDay = new Date(y, m, 1, 0, 0, 0);
+    const lastDay = new Date(y, m + 1, 0, 23, 59, 59);
+
+    // Convert to UTC and format
+    const formatUTC = (date: Date): string => {
+      const yyyy = date.getUTCFullYear();
+      const MM = ('0' + (date.getUTCMonth() + 1)).slice(-2);
+      const dd = ('0' + date.getUTCDate()).slice(-2);
+      const HH = ('0' + date.getUTCHours()).slice(-2);
+      const mm = ('0' + date.getUTCMinutes()).slice(-2);
+      const ss = ('0' + date.getUTCSeconds()).slice(-2);
+      return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
+    };
+
+    return {
+      firstDate: formatUTC(firstDay),
+      lastDate: formatUTC(lastDay),
+    };
+  }
+
+  /**
+   * Weekday names
+   */
+  public get weekdays(): string[] {
+    return [
+      this.translate.instant(TranslateKeys.CALENDAR_SUNDAY_SHORT),
+      this.translate.instant(TranslateKeys.CALENDAR_MONDAY_SHORT),
+      this.translate.instant(TranslateKeys.CALENDAR_TUESDAY_SHORT),
+      this.translate.instant(TranslateKeys.CALENDAR_WEDNESDAY_SHORT),
+      this.translate.instant(TranslateKeys.CALENDAR_THURSDAY_SHORT),
+      this.translate.instant(TranslateKeys.CALENDAR_FRIDAY_SHORT),
+      this.translate.instant(TranslateKeys.CALENDAR_SATURDAY_SHORT),
+    ];
+  }
+
+  /**
+   * Month names
+   */
+  public get monthNames(): string[] {
+    return [
+      this.translate.instant(TranslateKeys.CALENDAR_JANUARY),
+      this.translate.instant(TranslateKeys.CALENDAR_FEBRUARY),
+      this.translate.instant(TranslateKeys.CALENDAR_MARCH),
+      this.translate.instant(TranslateKeys.CALENDAR_APRIL),
+      this.translate.instant(TranslateKeys.CALENDAR_MAY),
+      this.translate.instant(TranslateKeys.CALENDAR_JUNE),
+      this.translate.instant(TranslateKeys.CALENDAR_JULY),
+      this.translate.instant(TranslateKeys.CALENDAR_AUGUST),
+      this.translate.instant(TranslateKeys.CALENDAR_SEPTEMBER),
+      this.translate.instant(TranslateKeys.CALENDAR_OCTOBER),
+      this.translate.instant(TranslateKeys.CALENDAR_NOVEMBER),
+      this.translate.instant(TranslateKeys.CALENDAR_DECEMBER),
+    ];
   }
 }

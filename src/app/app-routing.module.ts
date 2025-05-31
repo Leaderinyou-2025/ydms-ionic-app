@@ -34,15 +34,6 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'school-dashboard',
-    loadChildren: () => import('./pages/school/school-dashboard/school-dashboard.module').then(m => m.SchoolDashboardPageModule),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'badge-collection',
-    loadChildren: () => import('./pages/student/badge-collection/badge-collection.module').then(m => m.BadgeCollectionPageModule)
-  },
-  {
     path: 'family-group',
     loadChildren: () => import('./pages/social-network/family-group/family-group.module').then(m => m.FamilyGroupPageModule)
   },

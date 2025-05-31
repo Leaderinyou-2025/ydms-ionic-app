@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, ToastButton, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
 import { TranslateKeys } from '../../../../shared/enums/translate-keys';
@@ -10,6 +10,10 @@ import { SurveyService } from '../../../../services/survey/survey.service';
 import { IHeaderAnimeImage } from '../../../../shared/interfaces/header/header';
 import { NativePlatform } from '../../../../shared/enums/native-platform';
 import { IonicColors } from '../../../../shared/enums/ionic-colors';
+import { Position } from '../../../../shared/enums/position';
+import { IonicIcons } from '../../../../shared/enums/ionic-icons';
+import { BtnRoles } from '../../../../shared/enums/btn-roles';
+import { StyleClass } from '../../../../shared/enums/style-class';
 
 @Component({
   selector: 'app-self-discovery-survey-detail',
@@ -101,11 +105,22 @@ export class SelfDiscoverySurveyDetailComponent implements OnInit {
    * @private
    */
   private async showToast(message: string, color: IonicColors): Promise<void> {
+    const closeBtn: ToastButton = {
+      icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
+      side: Position.END,
+      role: BtnRoles.CANCEL,
+    }
+
     const toast = await this.toastController.create({
       message,
-      duration: 3000,
-      position: 'top',
-      color
+      duration: 5000,
+      buttons: [closeBtn],
+      mode: NativePlatform.IOS,
+      cssClass: `${StyleClass.TOAST_ITEM} ${color === IonicColors.DANGER ? StyleClass.TOAST_ERROR : StyleClass.TOAST_SUCCESS}`,
+      position: Position.TOP,
+      icon: color === IonicColors.DANGER ? IonicIcons.WARNING_OUTLINE : IonicIcons.CHECKMARK_CIRCLE_OUTLINE,
+      color,
+      keyboardClose: false
     });
     await toast.present();
   }

@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
+import { Platform } from '@ionic/angular';
 
 import { PageRoutes } from '../../enums/page-routes';
 import { KeyboardService } from '../../../services/keyboard/keyboard.service';
 import { TranslateKeys } from '../../enums/translate-keys';
 import { AuthService } from '../../../services/auth/auth.service';
 import { UserRoles } from '../../enums/user-roles';
+import { NativePlatform } from '../../enums/native-platform';
 
 @Component({
   selector: 'app-footer',
@@ -26,6 +28,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   private keyboardSubscription!: Subscription;
 
   constructor(
+    public platform: Platform,
     private router: Router,
     private keyboardService: KeyboardService,
     private authService: AuthService,
@@ -45,7 +48,13 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.keyboardSubscription?.unsubscribe();
   }
 
+  /**
+   * Check path is active
+   * @param path
+   */
   public isActive(path: string): boolean {
     return this.activePage === path;
   }
+
+  protected readonly NativePlatform = NativePlatform;
 }

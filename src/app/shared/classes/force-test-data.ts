@@ -1,28 +1,13 @@
 import { IAuthData } from '../interfaces/auth/auth-data';
-import { Theme } from '../enums/theme';
-import { IAssetsResource } from '../interfaces/settings/assets-resource';
-import { TextZoomSize } from '../enums/text-zoom-size';
-import { AssetResourceCategory } from '../enums/asset-resource-category';
-import { StatusItemType } from '../enums/home/status-item-type.enum';
-import {
-  ICharacter,
-  IStatusItem,
-  ITask,
-} from '../interfaces/home/home.interfaces';
 import { ILiyYdmsNotification } from '../interfaces/models/liy.ydms.notification';
-import { FriendStatus } from '../enums/friend-status';
 
-import { IFamilyDialogueSessionHistory, IFamilyDialogueSessionDetail, IFamilyDialogueSessionQuestion } from '../interfaces/family-dialogue-session/family-dialogue-session.interfaces';
+import { IFamilyDialogueSessionDetail, IFamilyDialogueSessionHistory, IFamilyDialogueSessionQuestion } from '../interfaces/family-dialogue-session/family-dialogue-session.interfaces';
 import { EmotionType } from '../enums/personal-diary/personal-diary.enum';
-import {
-  IEmotionSuggestion,
-  IPersonalDiaryEntry,
-} from '../interfaces/personal-diary/personal-diary.interfaces';
+import { IEmotionSuggestion, IPersonalDiaryEntry, } from '../interfaces/personal-diary/personal-diary.interfaces';
 import { NotificationTypes } from '../enums/notification-type';
 import { IResource } from '../interfaces/resource/resource.interface';
 import { ResourceType } from '../enums/libary/resource-type.enum';
 import { ResourceTopic } from '../enums/libary/resource-topic.enum';
-import { UserRoles } from '../enums/user-roles';
 
 export class ForceTestData {
 
@@ -242,63 +227,6 @@ export class ForceTestData {
   }
 
   // Original ForceTestData content starts here
-
-  /**
-   * Status bar items data
-   */
-  static statusItems: IStatusItem[] = [
-    {
-      type: StatusItemType.BADGE,
-      value: 38,
-      label: 'Huy hiệu',
-    },
-    {
-      type: StatusItemType.RANK,
-      value: 3,
-      label: 'Xếp hạng',
-    },
-    {
-      type: StatusItemType.MISSION,
-      value: 15,
-      label: 'Nhiệm vụ',
-    },
-    {
-      type: StatusItemType.FRIENDLY,
-      value: 186,
-      label: 'Thân thiện',
-    },
-  ];
-
-  /**
-   * Character information
-   */
-  static character: ICharacter = {
-    name: 'Nhóc Conan',
-    imagePath: '/assets/images/avatar/conan.png',
-  };
-
-  /**
-   * Tasks data
-   */
-  static tasks: ITask[] = [
-    {
-      id: 1,
-      description:
-        'Nếu cảm xúc của con là thời tiết, thì hôm nay là nắng, mưa hay nhiều mây?',
-      points: 5,
-    },
-    {
-      id: 2,
-      description: 'Tuần lễ cảm xúc tích cực',
-      points: 15,
-    },
-    {
-      id: 3,
-      description:
-        'Bạn thích sáng tạo? Hãy thử khóa học vẽ tranh sơ dành cho người mới bắt đầu.',
-      points: 10,
-    },
-  ];
 
   static loginResult = { result: 1 };
 

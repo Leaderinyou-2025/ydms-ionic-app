@@ -9,6 +9,4 @@ export enum OrderBy {
   RANKING_DESC = 'ranking DESC',
   AREA_OF_EXPERTISE_ASC = 'area_of_expertise ASC',
   AREA_OF_EXPERTISE_DESC = 'area_of_expertise DESC',
-  NAME_ASC = 'name ASC',
-  NAME_DESC = 'name DESC',
 }

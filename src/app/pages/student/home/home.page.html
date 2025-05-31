@@ -1,5 +1,6 @@
 <ion-toolbar class="home-toolbar">
-  <div class="flex justify-between py-3 w-full h-auto ion-padding-start ion-padding-end">
+  <div class="flex justify-between pb-3 w-full h-auto ion-padding-start ion-padding-end"
+       [class.pt-3]="!(platform.is(NativePlatform.CAPACITOR) && platform.is(NativePlatform.IOS))">
     <!--  Huy hiệu  -->
     <div class="flex items-center" [routerLink]="['/' + PageRoutes.RANK]" [queryParams]="{ activeTab: 'achievements' }">
       <ion-img src="assets/icons/svg/ico_top_achievement.svg" alt="icon" class="w-7 h-7 mr-1 object-contain"></ion-img>
@@ -55,7 +56,7 @@
         <!--   Nickname and animation     -->
         <ng-container *ngIf="authData.nickname">
           <span class="text-2xl text-teal-500 italic z-10">{{ authData.nickname }}</span>
-          <ng-lottie class="absolute right-[-20px] top-[-46px]" [options]="options" style="width: 80px; height: 80px;"></ng-lottie>
+          <ng-lottie class="absolute right-[-20px] top-[-46px]" [options]="animationOption" style="width: 80px; height: 80px;"></ng-lottie>
         </ng-container>
 
         <!--    Chưa thiết lập nickname    -->

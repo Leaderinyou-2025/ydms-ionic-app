@@ -112,4 +112,13 @@ export class ResUserService {
     const results = await this.odooService.searchCount(ModelName.RES_USERS, searchDomain);
     return results || 0;
   }
+
+  /**
+   * Get friends list by ids
+   * @param ids
+   */
+  public async getFriendListByIds(ids: Array<number>): Promise<Partial<IAuthData>[]> {
+    const results = await this.odooService.read<IAuthData>(ModelName.RES_USERS, ids, ['nickname', 'avatar_512', 'school_id', 'classroom_id']);
+    return CommonConstants.convertArr2ListItem(results);
+  }
 }

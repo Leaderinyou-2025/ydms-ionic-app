@@ -1,16 +1,15 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { DailyEmotionJournalPageRoutingModule } from './daily-emotion-journal-routing.module';
 import { DailyEmotionJournalPage } from './daily-emotion-journal.page';
-import { EmotionJournalCalendarComponent } from './calendar/emotion-journal-calendar.component';
-import { EmotionJournalStreakComponent } from './streak-status/emotion-journal-streak.component';
-import { EmotionJournalDetailComponent } from './detail/emotion-journal-detail.component';
 import { SharedModule } from '../../../shared/shared.module';
-
+import { EmotionJournalCalendarComponent } from './emotion-journal-calendar/emotion-journal-calendar.component';
+import { EmotionCheckinComponent } from './emotion-checkin/emotion-checkin.component';
+import { EmotionJournalDetailComponent } from './emotion-journal-detail/emotion-journal-detail.component';
 
 @NgModule({
   imports: [
@@ -18,14 +17,15 @@ import { SharedModule } from '../../../shared/shared.module';
     FormsModule,
     IonicModule,
     DailyEmotionJournalPageRoutingModule,
-    TranslateModule,
-    SharedModule,
-    DailyEmotionJournalPage,
-    EmotionJournalDetailComponent,
-    EmotionJournalCalendarComponent,
-    EmotionJournalStreakComponent
+    TranslatePipe,
+    SharedModule
   ],
-  declarations: [],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  declarations: [
+    DailyEmotionJournalPage,
+    EmotionJournalCalendarComponent,
+    EmotionJournalDetailComponent,
+    EmotionCheckinComponent
+  ]
 })
-export class DailyEmotionJournalPageModule {}
+export class DailyEmotionJournalPageModule {
+}

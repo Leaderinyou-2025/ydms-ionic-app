@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { DailyEmotionJournalPage } from './daily-emotion-journal.page';
-import { EmotionJournalDetailComponent } from './detail/emotion-journal-detail.component';
+import { EmotionCheckinComponent } from './emotion-checkin/emotion-checkin.component';
+import { EmotionJournalDetailComponent } from './emotion-journal-detail/emotion-journal-detail.component';
 
 const routes: Routes = [
   {
@@ -10,13 +11,18 @@ const routes: Routes = [
     component: DailyEmotionJournalPage
   },
   {
-    path: 'detail/:id',
+    path: 'emotion-checkin',
+    component: EmotionCheckinComponent
+  },
+  {
+    path: ':id',
     component: EmotionJournalDetailComponent
-  }
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DailyEmotionJournalPageRoutingModule {}
+export class DailyEmotionJournalPageRoutingModule {
+}

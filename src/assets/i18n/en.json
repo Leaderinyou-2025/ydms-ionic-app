@@ -116,7 +116,8 @@
     "share_type_parent": "Parent",
     "share_type_teacher": "Teacher",
     "no_users_found": "No users found",
-    "no_entry_for_date": "No emotion journal entry found for this date"
+    "no_entry_for_date": "No emotion journal entry found for this date",
+    "stop_sharing": "Stop sharing"
   },
   "EMOTION_STREAK": {
     "monthly": "Check-ins this month",
@@ -338,7 +339,8 @@
     "no_friend_requests": "No friend requests",
     "send_request": "You have sent a request",
     "request_to_you": "Send a request to you",
-    "no_result_found": "No result found"
+    "no_result_found": "No result found",
+    "checkin_emotion_now": "Hãy Check-In cảm xúc hôm nay để nhận thưởng nhé!"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",
@@ -362,7 +364,8 @@
     "app_update_successful": "App update successful. You are now running the latest version.",
     "access_permission_gallery_alert": "Please allow the app to access your photo library and use your camera.",
     "confirm_delete_alert": "Are you sure you want to delete?",
-    "confirm_unfriend_alert": "Are you sure you want to unfriend?"
+    "confirm_unfriend_alert": "Are you sure you want to unfriend?",
+    "confirm_un_public_alert": "Are you sure you want to stop sharing?"
   },
   "BUTTON_TITLES": {
     "confirm": "Confirm",

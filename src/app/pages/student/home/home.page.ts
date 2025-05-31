@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { AlertButton, AlertController, AlertInput, InfiniteScrollCustomEvent, ToastButton, ToastController, ToastOptions } from '@ionic/angular';
+import { AlertButton, AlertController, AlertInput, InfiniteScrollCustomEvent, Platform, RefresherCustomEvent, ToastButton, ToastController, ToastOptions } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { AnimationOptions } from 'ngx-lottie';
 
@@ -36,8 +36,7 @@ export class HomePage implements OnInit {
   authData?: IAuthData;
   background!: string;
   avatar?: string;
-  // Animation option show in nickname
-  options: AnimationOptions = {
+  animationOption: AnimationOptions = {
     path: '/assets/animations/1747072943680.json',
     loop: true,
     autoplay: true,
@@ -58,15 +57,16 @@ export class HomePage implements OnInit {
     total: 0
   };
   isLoading!: boolean;
-  isRefreshing!: boolean;
   isLoadMore!: boolean;
   private paged: number = 1;
   private readonly limit: number = 20;
 
   protected readonly TranslateKeys = TranslateKeys;
   protected readonly PageRoutes = PageRoutes;
+  protected readonly NativePlatform = NativePlatform;
 
   constructor(
+    public platform: Platform,
     private authService: AuthService,
     private toastController: ToastController,
     private alertController: AlertController,
@@ -129,11 +129,11 @@ export class HomePage implements OnInit {
    * Reload data
    * @param event
    */
-  public handleRefresh(event?: CustomEvent): void {
+  public handleRefresh(event?: RefresherCustomEvent): void {
     setTimeout(async () => {
       await this.authService.loadUserProfile();
       await this.loadHomeData();
-      if (event) await (event.target as HTMLIonRefresherElement).complete();
+      event?.target.complete();
     }, 500);
   }
 
