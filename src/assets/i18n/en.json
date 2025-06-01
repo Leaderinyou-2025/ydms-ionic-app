@@ -41,6 +41,8 @@
     "search_to_date": "To Date",
     "type_emotion": "Emotion Shared",
     "type_task": "Personal Task",
+    "type_experience": "Experience Shared",
+    "type_assessment": "Assessment",
     "type_other": "Other",
     "time_today": "Today",
     "time_this_week": "This Week",
