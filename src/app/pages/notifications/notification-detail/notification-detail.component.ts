@@ -4,13 +4,13 @@ import { LoadingController, Platform } from '@ionic/angular';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FileOpener } from '@capacitor-community/file-opener';
 
-import { NotificationService } from '../../../services/notification/notification.service';
 import { TranslateKeys } from '../../../shared/enums/translate-keys';
 import { PageRoutes } from '../../../shared/enums/page-routes';
 import { ILiyYdmsNotification } from '../../../shared/interfaces/models/liy.ydms.notification';
 import { CommonConstants } from '../../../shared/classes/common-constants';
 import { NativePlatform } from '../../../shared/enums/native-platform';
 import { DateFormat } from '../../../shared/enums/date-format';
+import { LiyYdmsNotificationService } from '../../../services/models/liy.ydms.notification.service';
 
 @Component({
   selector: 'app-notification-detail',
@@ -28,7 +28,7 @@ export class NotificationDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private notificationService: NotificationService,
+    private notificationService: LiyYdmsNotificationService,
     private platform: Platform,
     private loadingController: LoadingController,
   ) {

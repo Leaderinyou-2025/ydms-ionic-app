@@ -1,5 +1,8 @@
 export enum NotificationTypes {
-  EMOTION_SHARED = 'emotion_shared',
-  PERSONAL_TASK = 'personal_task',
+  ALL = 'all',
+  EMOTIONAL = 'emotional',
+  TASK = 'task',
+  EXPERIENCE = 'experience',
+  ASSESSMENT = 'assessment',
   OTHER = 'other'
 }

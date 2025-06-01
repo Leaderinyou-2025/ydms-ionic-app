@@ -10,7 +10,10 @@
       <ion-row>
         <ion-col size="12">
           <h2 class="text-xl text-blue-500 font-medium">{{ notification.name }}</h2>
-          <span class="text-xs italic">{{ notification.create_date | date: DateFormat.DATE_TIME }}</span>
+          <span class="text-xs italic">
+            {{ notification['create_time'] }}
+            {{ notification.create_date | date: DateFormat.DATE_ONLY }}
+          </span>
         </ion-col>
       </ion-row>
 

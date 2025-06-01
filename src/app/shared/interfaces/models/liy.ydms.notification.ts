@@ -10,8 +10,8 @@ export interface ILiyYdmsNotification extends IBase {
   body: string;
   sender_id: IRelatedField;
   recipient_ids: Array<number>;
-  state: boolean;
-  type?: NotificationTypes;
+  is_viewed: boolean;
   attachment_id?: string;
   attachment_name?: string;
+  notification_type?: NotificationTypes;
 }

@@ -6,19 +6,17 @@ import { SearchNotificationParams } from '../../shared/interfaces/notification/n
 import { OrderBy } from '../../shared/enums/order-by';
 import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
 import { ModelName } from '../../shared/enums/model-name';
-import { ForceTestData } from '../../shared/classes/force-test-data';
 import { CommonConstants } from '../../shared/classes/common-constants';
 
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationService {
-
+export class LiyYdmsNotificationService {
   // Notification fields
   public notificationFields = [
     'name', 'description', 'body',
-    'sender_id', 'recipient_ids',
-    'state', 'create_date',
+    'sender_id', 'recipient_ids', 'notification_type',
+    'is_viewed', 'create_date',
     'attachment_id', 'attachment_name',
   ];
 
@@ -44,18 +42,13 @@ export class NotificationService {
     // Search domain
     const query: SearchDomain = [];
     if (searchParams.name) query.push(['name', OdooDomainOperator.ILIKE, searchParams.name]);
-    if (searchParams.state != undefined) query.push(['state', OdooDomainOperator.EQUAL, searchParams.state]);
+    if (searchParams.user_id) query.push(['recipient_ids', OdooDomainOperator.IN, [searchParams.user_id]]);
+    if (searchParams.is_viewed != undefined) query.push(['is_viewed', OdooDomainOperator.EQUAL, searchParams.is_viewed]);
     if (searchParams.start_date != undefined) query.push(['create_date', OdooDomainOperator.GREATER_EQUAL, searchParams.start_date]);
     if (searchParams.end_date != undefined) query.push(['create_date', OdooDomainOperator.LESS_EQUAL, searchParams.end_date]);
-    if (searchParams.type != undefined) query.push(['type', OdooDomainOperator.LESS_EQUAL, searchParams.type]);
-
-    // Fields
-    let fields = [...this.notificationFields];
-    fields.splice(this.notificationFields.indexOf('attachment_id'), 1);
-
-    // Test data
-    const results = await this.odooService.searchRead<ILiyYdmsNotification>(ModelName.NOTIFICATION, query, fields, offset, limit, order);
-    return results?.length ? CommonConstants.convertArr2ListItem(results) : ForceTestData.notifications;
+    if (searchParams.notification_type != undefined) query.push(['notification_type', OdooDomainOperator.EQUAL, searchParams.notification_type]);
+    const results = await this.odooService.searchRead<ILiyYdmsNotification>(ModelName.NOTIFICATION, query, this.notificationFields, offset, limit, order);
+    return CommonConstants.convertArr2ListItem(results);
   }
 
   /**
@@ -64,9 +57,6 @@ export class NotificationService {
    */
   public async getNotificationDetail(id: number): Promise<ILiyYdmsNotification | undefined> {
     if (!id) return undefined;
-
-    // Test data
-    return ForceTestData.notifications.find(u => u.id === id);
 
     let results = await this.odooService.read<ILiyYdmsNotification>(ModelName.NOTIFICATION, [id], this.notificationFields);
     if (!results || !results?.length) return undefined;
@@ -80,7 +70,6 @@ export class NotificationService {
    */
   public async markAsRead(notificationIds: Array<number>): Promise<number | boolean> {
     if (!notificationIds) return true;
-    return this.odooService.write<ILiyYdmsNotification>(ModelName.NOTIFICATION, notificationIds, {state: true});
+    return this.odooService.write<ILiyYdmsNotification>(ModelName.NOTIFICATION, notificationIds, {is_viewed: true});
   }
-
 }

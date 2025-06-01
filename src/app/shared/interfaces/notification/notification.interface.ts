@@ -2,8 +2,9 @@ import { NotificationTypes } from '../../enums/notification-type';
 
 export interface SearchNotificationParams {
   name?: string;
-  state?: boolean;
+  is_viewed?: boolean;
   start_date?: string;
   end_date?: string;
-  type?: NotificationTypes;
+  notification_type?: NotificationTypes;
+  user_id?: number;
 }
