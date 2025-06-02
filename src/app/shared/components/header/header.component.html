@@ -4,16 +4,20 @@
     <ion-buttons slot="start">
       <ion-back-button text="" mode="ios" [defaultHref]="defaultBackHref"></ion-back-button>
     </ion-buttons>
-    <ion-label *ngIf="pageTitle && !caption && !animeImage && !searchbar && !animation && !segment"
+    <ion-label *ngIf="(pageTitle || pageTitleString) && !caption && !animeImage && !searchbar && !animation && !segment"
                class="text-base text-white">
-      {{ pageTitle | translate }}
+      <ng-container *ngIf="pageTitle && !pageTitleString">{{ pageTitle | translate }}</ng-container>
+      <ng-container *ngIf="pageTitleString">{{ pageTitleString }}</ng-container>
     </ion-label>
   </ion-toolbar>
 
   <!-- Page title -->
-  <div *ngIf="pageTitle && (caption || animeImage || searchbar || animation || segment)" class="block pt-2 ion-padding-start ion-padding-end" [class]="(animation || animeImage) ? 'w-2/3' : 'w-full'">
+  <div *ngIf="(pageTitle || pageTitleString) && (caption || animeImage || searchbar || animation || segment)"
+       class="block pt-2 ion-padding-start ion-padding-end"
+       [class]="(animation || animeImage) ? 'w-2/3' : 'w-full'">
     <h1 class="text-2xl font-semibold text-white m-0 p-0" [class.pb-3]="!caption">
-      {{ pageTitle | translate }}
+      <ng-container *ngIf="pageTitle && !pageTitleString">{{ pageTitle | translate }}</ng-container>
+      <ng-container *ngIf="pageTitleString">{{ pageTitleString }}</ng-container>
     </h1>
     <p *ngIf="caption" class="text-base italic pb-5 pt-2">
       {{ caption | translate }}

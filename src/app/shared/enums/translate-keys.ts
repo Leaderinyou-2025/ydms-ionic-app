@@ -292,7 +292,7 @@ export enum TranslateKeys {
   TITLE_FAILED_SOUND = 'TITLE.failed_sound',
   TITLE_MUSIC = 'TITLE.music',
   TITLE_NOTIFICATION = 'TITLE.notification',
-  EXPERT_GUIDE = 'TITLE.expert_guide',
+  TITLE_EXPERT_GUIDE = 'TITLE.expert_guide',
   TITLE_SHARE = 'TITLE.share',
   TITLE_ON = 'TITLE.on',
   TITLE_OFF = 'TITLE.off',
@@ -357,6 +357,12 @@ export enum TranslateKeys {
   TITLE_SEND_REQUEST = 'TITLE.send_request',
   TITLE_REQUEST_TO_YOU = 'TITLE.request_to_you',
   TITLE_NO_RESULT_FOUND = 'TITLE.no_result_found',
+  TITLE_SELF_DISCOVERY_PROGRESS = 'TITLE.sel_discovery_progress',
+  TITLE_NO_DATA = 'TITLE.no_data',
+  TITLE_COMPLETED = 'TITLE.completed',
+  TITLE_IN_PROGRESS = 'TITLE.in_progress',
+  TITLE_PENDING = 'TITLE.pending',
+  TITLE_IGNORE = 'TITLE.ignore',
 
   // VALIDATE
   VALIDATE_PHONE_REQUIRED = 'VALIDATE.phone_required',

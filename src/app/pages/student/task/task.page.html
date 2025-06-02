@@ -17,23 +17,23 @@
     <ion-col size="12">
       <h2 class="pb-2 text-2xl font-medium">{{ TranslateKeys.TITLE_CHECKIN_EMOTION_DAILY | translate }}</h2>
 
-      <ng-container *ngIf="emotionDiaryList?.length">
-        <div class="relative mb-3 p-4 w-full rounded-2xl border-2 border-gray-300" *ngFor="let emotionDiary of emotionDiaryList">
-          <div class="block w-full">
-            <h3 class="text-lg font-medium">
-              {{ emotionDiary.question_id.name }}
-            </h3>
-            <div class="flex items-center justify-start py-4 text-2xl text-orange-500">
-              <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>
-              <span class="font-bold">+{{ emotionDiary.rank_point }}</span>
-            </div>
-            <ion-button shape="round" class="checkin-emotion-btn absolute right-2 bottom-3">
-              {{ TranslateKeys.BUTTON_CHECKIN_EMOTION | translate }}
-            </ion-button>
+      <!--   Random emotion question   -->
+      <div class="relative mb-3 p-4 w-full rounded-2xl border-2 border-gray-300" *ngIf="emotionQuestion">
+        <div class="block w-full">
+          <h3 class="text-lg font-medium">
+            {{ emotionQuestion.name }}
+          </h3>
+          <div class="flex items-center justify-start py-4 text-2xl text-orange-500">
+            <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>
+            <span class="font-bold">+{{ emotionQuestion.rank_point }}</span>
           </div>
+          <ion-button shape="round" class="checkin-emotion-btn absolute right-2 bottom-3" (click)="onClickCheckinEmotion()">
+            {{ TranslateKeys.BUTTON_CHECKIN_EMOTION | translate }}
+          </ion-button>
         </div>
-      </ng-container>
+      </div>
 
+      <!--   Chuỗi checkin   -->
       <div class="p-4 w-full rounded-2xl border-2 border-gray-300" routerLink="/{{PageRoutes.DAILY_EMOTION_JOURNAL}}">
         <div class="flex items-center justify-between w-full">
           <h3 class="text-lg text-sky-500 font-medium">
@@ -80,8 +80,9 @@
     <ion-col size="12" *ngIf="groupTaskList?.length">
       <h2 class="pt-3 pb-3 text-2xl font-medium">{{ TranslateKeys.TITLE_GROUP_CHALLENGE | translate }}</h2>
       <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto"
-           appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreFamilyTask($event)">
-        <div class="flex flex-col p-4 h-full border-2 rounded-2xl" *ngFor="let task of groupTaskList">
+           appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreGroupTask($event)">
+        <div class="flex flex-col p-4 h-full border-2 rounded-2xl" *ngFor="let task of groupTaskList"
+             routerLink="/{{PageRoutes.TASK_EXECUTING}}" [queryParams]="{ guideType: GuideType.GROUP_ACTIVITY }">
           <div class="flex items-center justify-center text-2xl text-orange-500 mb-2">
             <ng-container *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS">
               <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>
@@ -102,7 +103,8 @@
       <h2 class="pt-3 pb-3 text-2xl font-medium">{{ TranslateKeys.TITLE_FAMILY_ACTIVITY | translate }}</h2>
       <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto"
            appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreFamilyTask($event)">
-        <div class="flex flex-col p-4 h-full border-2 rounded-2xl" *ngFor="let task of familyTaskList">
+        <div class="flex flex-col p-4 h-full border-2 rounded-2xl" *ngFor="let task of familyTaskList"
+             routerLink="/{{PageRoutes.TASK_EXECUTING}}" [queryParams]="{ guideType: GuideType.FAMILY_ACTIVITY }">
           <div class="flex items-center justify-center text-2xl text-orange-500 mb-2">
             <ng-container *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS">
               <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>
@@ -122,8 +124,9 @@
     <ion-col size="12" *ngIf="instructionTaskList?.length">
       <h2 class="pt-3 pb-3 text-2xl font-medium">{{ TranslateKeys.TITLE_INSTRUCTION | translate }}</h2>
       <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto"
-           appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreFamilyTask($event)">
-        <div class="flex flex-col p-4 border-2 rounded-2xl" *ngFor="let task of instructionTaskList">
+           appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreInstructionTask($event)">
+        <div class="flex flex-col p-4 border-2 rounded-2xl" *ngFor="let task of instructionTaskList"
+             routerLink="/{{PageRoutes.TASK_EXECUTING}}" [queryParams]="{ guideType: GuideType.INSTRUCTION }">
           <div class="flex justify-center text-2xl text-orange-500 mb-2">
             <ng-container *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS">
               <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>
@@ -139,12 +142,13 @@
       </div>
     </ion-col>
 
-    <!--  Bài tập  -->
+    <!--  Bài tập, phát triển bản thân  -->
     <ion-col size="12" *ngIf="exerciseTaskList?.length">
-      <h2 class="pt-3 pb-3 text-2xl font-medium">{{ TranslateKeys.TITLE_EXERCISE | translate }}</h2>
+      <h2 class="pt-3 pb-3 text-2xl font-medium">{{ TranslateKeys.TITLE_SELF_DISCOVERY_PROGRESS | translate }}</h2>
       <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto"
-           appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreFamilyTask($event)">
-        <div class="flex flex-col p-4 border-2 rounded-2xl" *ngFor="let task of exerciseTaskList">
+           appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreExerciseTask($event)">
+        <div class="flex flex-col p-4 border-2 rounded-2xl" *ngFor="let task of exerciseTaskList"
+             routerLink="/{{PageRoutes.TASK_EXECUTING}}" [queryParams]="{ guideType: GuideType.EXERCISE }">
           <div class="flex justify-center text-2xl text-orange-500 mb-2">
             <ng-container *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS">
               <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 intense-shake-zoom"></ion-img>

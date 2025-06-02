@@ -349,7 +349,13 @@
     "send_request": "You have sent a request",
     "request_to_you": "Send a request to you",
     "no_result_found": "No result found",
-    "checkin_emotion_now": "Hãy Check-In cảm xúc hôm nay để nhận thưởng nhé!"
+    "checkin_emotion_now": "Check-In right now to receive rewards!",
+    "sel_discovery_progress": "Self-discovery progress",
+    "no_data": "No data",
+    "completed": "Completed",
+    "in_progress": "In progress",
+    "pending": "Pending",
+    "ignore": "Ignore"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",

@@ -88,7 +88,7 @@
       <!-- Emotion diary List -->
       <ng-container *ngIf="emotionDiaryList?.length">
         <ion-item class="task-item mb-3" lines="none" *ngFor="let item of emotionDiaryList">
-          <div class="flex justify-between items-center w-full p-4 bg-[#cd83fe] text-white rounded-xl">
+          <div class="flex justify-between items-center w-full p-4 bg-purple-500 text-white rounded-xl">
             <div class="flex-1">
               <p class="text-sm mb-1">{{ item.question_id.name }}</p>
               <div class="flex items-center text-sm">
@@ -106,7 +106,7 @@
       <!--   Survey list   -->
       <ng-container *ngIf="surveyList?.length">
         <ion-item class="task-item mb-3" lines="none" *ngFor="let item of surveyList">
-          <div class="flex justify-between items-center w-full p-4 bg-[#cd83fe] text-white rounded-xl">
+          <div class="flex justify-between items-center w-full p-4 bg-purple-500 text-white rounded-xl">
             <div class="flex-1">
               <p class="text-sm mb-1">{{ item.name }}</p>
               <div class="flex items-center text-sm">
@@ -124,7 +124,7 @@
       <!-- Task List -->
       <ng-container *ngIf="tasks?.length">
         <ion-item class="task-item mb-3" lines="none" *ngFor="let task of tasks">
-          <div class="flex justify-between items-center w-full p-4 bg-[#cd83fe] text-white rounded-xl">
+          <div class="flex justify-between items-center w-full p-4 bg-purple-500 text-white rounded-xl">
             <div class="flex-1">
               <p class="text-sm mb-1">{{ task.name }}</p>
               <div class="flex items-center text-sm">

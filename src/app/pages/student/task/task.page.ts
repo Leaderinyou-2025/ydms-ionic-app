@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
+import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
+import { TaskService } from '../../../services/task/task.service';
+import { SurveyService } from '../../../services/survey/survey.service';
+import { AuthService } from '../../../services/auth/auth.service';
 import { TranslateKeys } from '../../../shared/enums/translate-keys';
 import { IHeaderAnimation, IHeaderAnimeImage } from '../../../shared/interfaces/header/header';
 import { PageRoutes } from '../../../shared/enums/page-routes';
-import { TaskService } from '../../../services/task/task.service';
-import { SurveyService } from '../../../services/survey/survey.service';
 import { CommonConstants } from '../../../shared/classes/common-constants';
-import { ILiyYdmsEmotionalDiary } from '../../../shared/interfaces/models/liy.ydms.emotional.diary';
-import { AuthService } from '../../../services/auth/auth.service';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
 import { ILiyYdmsAssessmentResult } from '../../../shared/interfaces/models/liy.ydms.assessment.result';
 import { AreaOfExpertise } from '../../../shared/enums/area-of-expertise';
@@ -19,6 +19,8 @@ import { IonInfiniteHorizontalDirective } from '../../../core/directive/ion-infi
 import { TaskStatus } from '../../../shared/enums/task-status';
 import { DateFormat } from '../../../shared/enums/date-format';
 import { RefresherCustomEvent } from '@ionic/angular';
+import { IEmotionQuestion } from '../../../shared/interfaces/function-data/emotion-question';
+import { StorageKey } from '../../../shared/enums/storage-key';
 
 @Component({
   selector: 'app-task',
@@ -34,7 +36,7 @@ export class TaskPage implements OnInit {
   daysOfMonths: number = CommonConstants.getDaysInMonth();
 
   // Emotion diary
-  emotionDiaryList?: ILiyYdmsEmotionalDiary[];
+  emotionQuestion?: IEmotionQuestion;
   emotionStreak: number = 0;
 
   // Survey
@@ -66,6 +68,8 @@ export class TaskPage implements OnInit {
   protected readonly PageRoutes = PageRoutes;
   protected readonly TranslateKeys = TranslateKeys;
   protected readonly AreaOfExpertise = AreaOfExpertise;
+  protected readonly TaskStatus = TaskStatus;
+  protected readonly DateFormat = DateFormat;
 
   constructor(
     private authService: AuthService,
@@ -73,6 +77,7 @@ export class TaskPage implements OnInit {
     private surveyService: SurveyService,
     private router: Router,
     private translate: TranslateService,
+    private localStorageService: LocalStorageService,
   ) {
   }
 
@@ -96,6 +101,15 @@ export class TaskPage implements OnInit {
       await this.loadDataTask();
       event?.target.complete();
     }, 500);
+  }
+
+  /**
+   * On click checkin emotion
+   */
+  public onClickCheckinEmotion(): void {
+    if (!this.emotionQuestion) return;
+    const navigationExtras: NavigationExtras = {state: {question: this.emotionQuestion}};
+    this.router.navigateByUrl(`${PageRoutes.DAILY_EMOTION_JOURNAL}/${PageRoutes.EMOTION_CHECKIN}`, navigationExtras);
   }
 
   /**
@@ -148,6 +162,69 @@ export class TaskPage implements OnInit {
   }
 
   /**
+   * loadMoreGroupTask
+   * @param event
+   */
+  public loadMoreGroupTask(event: IonInfiniteHorizontalDirective): void {
+    if (this.groupTaskLoading) {
+      event.complete();
+      return;
+    }
+
+    if (this.groupTaskList.length < ((this.groupTaskPaged - 1) * this.limit)) {
+      event.complete();
+      return;
+    }
+
+    setTimeout(() => {
+      this.groupTaskPaged += 1;
+      this.loadGroupTasks().finally(() => event.complete());
+    }, 500);
+  }
+
+  /**
+   * loadMoreInstructionTask
+   * @param event
+   */
+  public loadMoreInstructionTask(event: IonInfiniteHorizontalDirective): void {
+    if (this.instructionTaskLoading) {
+      event.complete();
+      return;
+    }
+
+    if (this.instructionTaskList.length < ((this.instructionTaskPaged - 1) * this.limit)) {
+      event.complete();
+      return;
+    }
+
+    setTimeout(() => {
+      this.instructionTaskPaged += 1;
+      this.loadInstructionTasks().finally(() => event.complete());
+    }, 500);
+  }
+
+  /**
+   * loadMoreInstructionTask
+   * @param event
+   */
+  public loadMoreExerciseTask(event: IonInfiniteHorizontalDirective): void {
+    if (this.exerciseTaskLoading) {
+      event.complete();
+      return;
+    }
+
+    if (this.exerciseTaskList.length < ((this.exerciseTaskPaged - 1) * this.limit)) {
+      event.complete();
+      return;
+    }
+
+    setTimeout(() => {
+      this.exerciseTaskPaged += 1;
+      this.loadExerciseTasks().finally(() => event.complete());
+    }, 500);
+  }
+
+  /**
    * On loading data task
    * @private
    */
@@ -166,7 +243,10 @@ export class TaskPage implements OnInit {
    */
   private loadEmotionDiaryData(): void {
     if (!this.authData) return;
-    this.taskService.getEmotionDiaryPending(this.authData.id).then((results) => this.emotionDiaryList = results);
+    const lastCheckinDate = this.localStorageService.get<string>(StorageKey.LAST_EMOTION_CHECKIN);
+    if (!lastCheckinDate || lastCheckinDate !== CommonConstants.getCurrentDateFormated()) {
+      this.taskService.getRandomEmotionQuestion().then(emotionQuestion => this.emotionQuestion = emotionQuestion);
+    }
     this.taskService.getCountEmotionDiaryInMonth(this.authData.id).then((results) => this.emotionStreak = results);
   }
 
@@ -282,6 +362,5 @@ export class TaskPage implements OnInit {
     }
   }
 
-  protected readonly TaskStatus = TaskStatus;
-  protected readonly DateFormat = DateFormat;
+  protected readonly GuideType = GuideType;
 }

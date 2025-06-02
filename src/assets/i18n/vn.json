@@ -350,7 +350,13 @@
     "send_request": "Bạn đã gửi một lời mời kết bạn",
     "request_to_you": "Yêu cầu kết bạn",
     "no_result_found": "Không tìm thấy kết quả phù hợp",
-    "checkin_emotion_now": "Hãy Check-In cảm xúc hôm nay để nhận thưởng nhé!"
+    "checkin_emotion_now": "Hãy Check-In cảm xúc hôm nay để nhận thưởng nhé!",
+    "sel_discovery_progress": "Hành trình phát triển bản thân",
+    "no_data": "Không có dữ liêu",
+    "completed": "Đã hoàn thành",
+    "in_progress": "Đang diễn ra",
+    "pending": "Chờ thực hiện",
+    "ignore": "Không thực hiện"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",

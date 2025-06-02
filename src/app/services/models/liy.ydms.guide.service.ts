@@ -58,4 +58,13 @@ export class LiyYdmsGuideService {
       [['category_ids', OdooDomainOperator.IN, categoryIds]], offset, limit, order,
     );
   }
+
+  /**
+   * Get guide list by category_ids
+   * @param id
+   */
+  public async getGuideById(id: number): Promise<ILiyYdmsGuide | undefined> {
+    const results = await this.getGuideList([['id', OdooDomainOperator.EQUAL, id]], 0, 1,);
+    return results?.[0];
+  }
 }
