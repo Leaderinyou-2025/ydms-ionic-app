@@ -123,6 +123,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/task-executing/task-executing.module').then(m => m.TaskExecutingPageModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: PageRoutes.SHARE_EXPERIENCE,
+    loadChildren: () => import('./pages/parent/share-experience/share-experience.module').then(m => m.ShareExperiencePageModule),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

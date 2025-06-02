@@ -1,0 +1,148 @@
+<!-- Header trang tạo bài chia sẻ kinh nghiệm -->
+<app-header
+  [pageTitle]="TranslateKeys.CREATE_EXPERIENCE_TITLE"
+  [caption]="TranslateKeys.SHARE_EXPERIENCE_CAPTION"
+  backgroundImageUrl="/assets/images/banner.svg"
+  [animeImage]="animeImage">
+</app-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Hiển thị loading khi chưa khởi tạo form -->
+  <div *ngIf="!experienceForm" class="flex justify-center items-center py-8">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+
+  <!-- Form tạo bài chia sẻ kinh nghiệm -->
+  <form *ngIf="experienceForm" [formGroup]="experienceForm" (ngSubmit)="onSubmit()" class="py-4">
+
+    <!-- Trường nhập tiêu đề bài chia sẻ -->
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        {{ TranslateKeys.CREATE_EXPERIENCE_NAME_LABEL | translate }} <span class="text-red-500">*</span>
+      </label>
+
+      <ion-item
+        lines="none"
+        class="name-input-item rounded-lg"
+        [class.ion-invalid]="experienceForm.get('name')?.invalid && experienceForm.get('name')?.touched">
+        <ion-input
+          formControlName="name"
+          [placeholder]="TranslateKeys.CREATE_EXPERIENCE_NAME_PLACEHOLDER | translate">
+        </ion-input>
+      </ion-item>
+
+      <!-- Hiển thị lỗi validation cho tiêu đề -->
+      <div *ngIf="experienceForm.get('name')?.invalid && experienceForm.get('name')?.touched"
+           class="text-red-500 text-sm mt-1 ml-4">
+        <span *ngIf="experienceForm.get('name')?.errors?.['required']">
+          {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
+        </span>
+        <span *ngIf="experienceForm.get('name')?.errors?.['minlength']">
+          {{ TranslateKeys.VALIDATION_MIN_LENGTH | translate: {min: 5} }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Trường chọn khía cạnh -->
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        {{ TranslateKeys.CREATE_EXPERIENCE_AREA_LABEL | translate }} <span class="text-red-500">*</span>
+      </label>
+
+      <ion-item
+        lines="none"
+        class="area-select-item rounded-lg"
+        [class.ion-invalid]="experienceForm.get('area_of_expertise')?.invalid && experienceForm.get('area_of_expertise')?.touched">
+        <ion-select
+          formControlName="area_of_expertise"
+          interface="action-sheet"
+          [placeholder]="TranslateKeys.CREATE_EXPERIENCE_AREA_PLACEHOLDER | translate">
+          <!-- Danh sách các lĩnh vực chuyên môn -->
+          <ion-select-option
+            *ngFor="let area of areaOfExpertiseOptions"
+            [value]="area.area">
+            {{ area.title | translate }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Hiển thị lỗi validation cho lĩnh vực -->
+      <div *ngIf="experienceForm.get('area_of_expertise')?.invalid && experienceForm.get('area_of_expertise')?.touched"
+           class="text-red-500 text-sm mt-1 ml-4">
+        <span *ngIf="experienceForm.get('area_of_expertise')?.errors?.['required']">
+          {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Trường nhập nội dung kinh nghiệm -->
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        {{ TranslateKeys.CREATE_EXPERIENCE_CONTENT_LABEL | translate }} <span class="text-red-500">*</span>
+      </label>
+
+      <!-- Quill Editor cho viết nội dung rich text -->
+      <quill-editor
+        formControlName="experience_content"
+        [placeholder]="TranslateKeys.CREATE_EXPERIENCE_CONTENT_PLACEHOLDER | translate"
+        [modules]="quillModules"
+        [styles]="quillStyles"
+        class="custom-quill-editor"
+        [class.quill-error]="experienceForm.get('experience_content')?.invalid && experienceForm.get('experience_content')?.touched">
+      </quill-editor>
+
+      <!-- Hiển thị lỗi validation cho nội dung -->
+      <div *ngIf="experienceForm.get('experience_content')?.invalid && experienceForm.get('experience_content')?.touched"
+           class="text-red-500 text-sm mt-1">
+        <span *ngIf="experienceForm.get('experience_content')?.errors?.['required']">
+          {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
+        </span>
+        <span *ngIf="experienceForm.get('experience_content')?.errors?.['minlength']">
+          {{ TranslateKeys.VALIDATION_MIN_LENGTH | translate: {min: 20} }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Trường đính kèm file -->
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        {{ TranslateKeys.CREATE_EXPERIENCE_ATTACHMENT_LABEL | translate }}
+      </label>
+
+      <!-- File input container -->
+      <ion-button
+        expand="block"
+        fill="outline"
+        color="medium"
+        class="file-upload-button h-20">
+        <div class="flex flex-col items-center space-y-1">
+          <ion-icon name="attach-outline" class="text-2xl"></ion-icon>
+          <span class="text-sm font-medium">
+            {{ TranslateKeys.CREATE_EXPERIENCE_ATTACHMENT_PLACEHOLDER | translate }}
+          </span>
+          <span class="text-xs opacity-70">
+            {{ TranslateKeys.CREATE_EXPERIENCE_ATTACHMENT_HINT | translate }}
+          </span>
+        </div>
+      </ion-button>
+    </div>
+
+  </form>
+</ion-content>
+
+<!-- Footer với nút gửi -->
+<ion-footer *ngIf="experienceForm">
+  <ion-toolbar>
+    <div class="p-4">
+      <!-- Nút gửi bài chia sẻ -->
+      <ion-button
+        (click)="onSubmit()"
+        expand="block"
+        [disabled]="experienceForm.invalid || isSubmitting"
+        class="submit-btn">
+        <ion-spinner *ngIf="isSubmitting" name="crescent" class="mr-2"></ion-spinner>
+        {{ isSubmitting ? (TranslateKeys.BUTTON_SUBMITTING | translate) : (TranslateKeys.CREATE_EXPERIENCE_SUBMIT | translate) }}
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,91 @@
+<!-- Header trang chi tiết bài chia sẻ kinh nghiệm -->
+<app-header
+  [pageTitle]="TranslateKeys.SHARE_EXPERIENCE_DETAIL_TITLE"
+  [caption]="TranslateKeys.SHARE_EXPERIENCE_CAPTION"
+  backgroundImageUrl="/assets/images/banner.svg"
+  [animeImage]="animeImage">
+</app-header>
+
+<ion-content [fullscreen]="true" class="ion-padding-start ion-padding-end">
+  <!-- Hiển thị loading khi đang tải dữ liệu -->
+  <div *ngIf="isLoading" class="flex justify-center items-center py-8">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+
+  <!-- Nội dung chi tiết bài chia sẻ kinh nghiệm -->
+  <div *ngIf="!isLoading && experienceDetail" class="py-4">
+    <!-- Card nội dung chính -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+
+      <!-- Header card với thông tin tác giả -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex items-center flex-1">
+          <!-- Avatar tác giả -->
+          <ion-avatar class="w-12 h-12 mr-4">
+            <img src="assets/icons/svg/avatar.svg" alt="Avatar" class="rounded-full">
+          </ion-avatar>
+          <!-- Thông tin tác giả -->
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ experienceDetail.parent_id.name }}</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{ experienceDetail.create_date | date: DateFormat.DATE_ONLY }}</p>
+          </div>
+        </div>
+
+        <!-- Chip lĩnh vực chuyên môn -->
+        <div class="flex items-center">
+          <ion-chip [color]="getAreaColor(experienceDetail.area_of_expertise)" class="text-xs">
+            {{ getAreaLabel(experienceDetail.area_of_expertise) | translate }}
+          </ion-chip>
+        </div>
+      </div>
+
+      <!-- Tiêu đề bài chia sẻ -->
+      <div class="px-6 pt-6">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">{{ experienceDetail.name }}</h1>
+      </div>
+
+      <!-- Nội dung kinh nghiệm -->
+      <div class="px-6 pb-6">
+        <div class="experience-content text-gray-700 dark:text-gray-300 text-base leading-relaxed">
+          <quill-view [content]="experienceDetail.experience_content" theme="bubble"></quill-view>
+        </div>
+      </div>
+
+      <!-- Số lượt tương tác và trạng thái -->
+      <div class="flex items-center justify-between px-6 py-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+        <!-- Số lượt Like và Love -->
+        <div class="flex items-center space-x-3">
+          <ion-chip *ngIf="reactionCounts.like > 0" color="primary">
+            <span>{{ reactionCounts.like }}</span>
+            <ion-icon name="thumbs-up" class="ml-1"></ion-icon>
+          </ion-chip>
+          <ion-chip *ngIf="reactionCounts.love > 0" color="danger">
+            <span>{{ reactionCounts.love }}</span>
+            <ion-icon name="heart" class="ml-1"></ion-icon>
+          </ion-chip>
+
+          <!-- Thông báo khi chưa có tương tác -->
+          <div *ngIf="reactionCounts.like === 0 && reactionCounts.love === 0" class="text-gray-500 dark:text-gray-400 text-sm italic">
+            Chưa có phản ứng nào
+          </div>
+        </div>
+
+        <!-- Trạng thái bài viết (chỉ hiển thị cho người tạo) -->
+        <div *ngIf="isOwnPost()" class="flex items-center">
+          <ion-badge
+            [color]="getStatusColor(experienceDetail.status)"
+            class="text-xs px-2 py-1 rounded-full">
+            {{ getStatusLabel(experienceDetail.status) | translate }}
+          </ion-badge>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trạng thái lỗi khi không tìm thấy dữ liệu -->
+  <div *ngIf="!isLoading && !experienceDetail" class="flex flex-col items-center justify-center py-12">
+    <span class="text-5xl text-gray-400 mb-4">❌</span>
+    <p class="text-gray-500 dark:text-gray-400 text-center">Không tìm thấy bài chia sẻ kinh nghiệm</p>
+  </div>
+
+</ion-content>
