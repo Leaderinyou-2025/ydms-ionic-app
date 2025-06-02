@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FamilyDialogueSessionPageRoutingModule } from './family-dialogue-session-routing.module';
 import { FamilyDialogueSessionPage } from './family-dialogue-session.page';
 import { FamilyDialogueSessionDetailComponent } from './family-dialogue-session-detail/family-dialogue-session-detail.component';
-import { SharedModule } from "../../../shared/shared.module";
+import { SharedModule } from "../../../../shared/shared.module";
 
 @NgModule({
   imports: [

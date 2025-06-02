@@ -92,20 +92,20 @@ const routes: Routes = [
   },
   {
     path: 'family-conflict-survey',
-    loadChildren: () => import('./pages/student/family-conflict-survey/family-conflict-survey.module').then(m => m.FamilyConflictSurveyPageModule)
+    loadChildren: () => import('./pages/survey/family-conflict-survey/family-conflict-survey.module').then(m => m.FamilyConflictSurveyPageModule)
   },
   {
     path: 'family-communication-quality-survey',
-    loadChildren: () => import('./pages/student/family-communication-quality-survey/family-communication-quality-survey.module').then(m => m.FamilyCommunicationQualitySurveyPageModule)
+    loadChildren: () => import('./pages/survey/family-communication-quality-survey/family-communication-quality-survey.module').then(m => m.FamilyCommunicationQualitySurveyPageModule)
   },
   {
     path: 'emotional-survey',
-    loadChildren: () => import('./pages/student/emotional-survey/emotional-survey.module').then(m => m.EmotionalSurveyPageModule)
+    loadChildren: () => import('./pages/survey/emotional-survey/emotional-survey.module').then(m => m.EmotionalSurveyPageModule)
   },
   {
     path: 'self-discovery-survey',
-    loadChildren: () => import('./pages/student/self-discovery-survey/self-discovery-survey.module').then(m => m.SelfDiscoverySurveyPageModule)
-  },
+    loadChildren: () => import('./pages/survey/self-discovery-survey/self-discovery-survey.module').then(m => m.SelfDiscoverySurveyPageModule)
+  }
 ];
 
 @NgModule({

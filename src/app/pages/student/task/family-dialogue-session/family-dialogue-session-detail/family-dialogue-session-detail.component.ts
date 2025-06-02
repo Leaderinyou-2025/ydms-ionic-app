@@ -3,16 +3,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastButton, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
-import { IFamilyDialogueSessionDetail, IFamilyDialogueSessionQuestion } from '../../../../shared/interfaces/family-dialogue-session/family-dialogue-session.interfaces';
-import { TranslateKeys } from '../../../../shared/enums/translate-keys';
-import { PageRoutes } from '../../../../shared/enums/page-routes';
-import { FamilyDialogueSessionService } from '../../../../services/family-dialogue-session/family-dialogue-session.service';
-import { IonicColors } from '../../../../shared/enums/ionic-colors';
-import { IonicIcons } from '../../../../shared/enums/ionic-icons';
-import { Position } from '../../../../shared/enums/position';
-import { BtnRoles } from '../../../../shared/enums/btn-roles';
-import { NativePlatform } from '../../../../shared/enums/native-platform';
-import { StyleClass } from '../../../../shared/enums/style-class';
+import { IFamilyDialogueSessionDetail, IFamilyDialogueSessionQuestion } from '../../../../../shared/interfaces/family-dialogue-session/family-dialogue-session.interfaces';
+import { TranslateKeys } from '../../../../../shared/enums/translate-keys';
+import { PageRoutes } from '../../../../../shared/enums/page-routes';
+import { FamilyDialogueSessionService } from '../../../../../services/family-dialogue-session/family-dialogue-session.service';
+import { IonicColors } from '../../../../../shared/enums/ionic-colors';
+import { IonicIcons } from '../../../../../shared/enums/ionic-icons';
+import { Position } from '../../../../../shared/enums/position';
+import { BtnRoles } from '../../../../../shared/enums/btn-roles';
+import { NativePlatform } from '../../../../../shared/enums/native-platform';
+import { StyleClass } from '../../../../../shared/enums/style-class';
 
 @Component({
   selector: 'app-family-dialogue-session-detail',
