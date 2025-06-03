@@ -1,15 +1,14 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {TranslatePipe} from '@ngx-translate/core';
+import {QuillEditorComponent} from "ngx-quill";
+import {IonicModule} from '@ionic/angular';
 
-import { IonicModule } from '@ionic/angular';
-
-import { TaskExecutingPageRoutingModule } from './task-executing-routing.module';
-
-import { TaskExecutingPage } from './task-executing.page';
-import { SharedModule } from '../../shared/shared.module';
-import { TaskExecutingDetailComponent } from './task-executing-detail/task-executing-detail.component';
-import { TranslatePipe } from '@ngx-translate/core';
+import {TaskExecutingPageRoutingModule} from './task-executing-routing.module';
+import {TaskExecutingPage} from './task-executing.page';
+import {SharedModule} from '../../shared/shared.module';
+import {TaskExecutingDetailComponent} from './task-executing-detail/task-executing-detail.component';
 
 @NgModule({
   imports: [
@@ -18,7 +17,8 @@ import { TranslatePipe } from '@ngx-translate/core';
     IonicModule,
     TaskExecutingPageRoutingModule,
     SharedModule,
-    TranslatePipe
+    TranslatePipe,
+    QuillEditorComponent
   ],
   declarations: [
     TaskExecutingPage,

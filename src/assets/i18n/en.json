@@ -355,7 +355,13 @@
     "completed": "Completed",
     "in_progress": "In progress",
     "pending": "Pending",
-    "ignore": "Ignore"
+    "ignore": "Ignore",
+    "progress_updating": "Progress updating",
+    "result": "Result",
+    "progress_result": "Progress",
+    "result_description": "Result description",
+    "capture": "capture",
+    "gallery": "gallery"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",
@@ -380,7 +386,8 @@
     "access_permission_gallery_alert": "Please allow the app to access your photo library and use your camera.",
     "confirm_delete_alert": "Are you sure you want to delete?",
     "confirm_unfriend_alert": "Are you sure you want to unfriend?",
-    "confirm_un_public_alert": "Are you sure you want to stop sharing?"
+    "confirm_un_public_alert": "Are you sure you want to stop sharing?",
+    "confirm_end_task": "Are you sure you want to end this task? Doing so will mark it as incomplete."
   },
   "BUTTON_TITLES": {
     "confirm": "Confirm",
@@ -402,7 +409,11 @@
     "answer_all_questions": "Please answer all question!",
     "checkin_emotion": "Check-In",
     "accept": "Accept",
-    "send_request": "Send a request"
+    "send_request": "Send a request",
+    "executing": "Executing",
+    "no_execution": "No execution",
+    "ignore": "Ignore",
+    "end": "End"
   },
   "TOAST": {
     "error_header": "Error",

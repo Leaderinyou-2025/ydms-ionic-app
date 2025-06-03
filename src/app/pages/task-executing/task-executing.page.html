@@ -26,12 +26,18 @@
 
   <!--  Task list -->
   <ng-container *ngIf="taskList?.length">
-    <div class="relative p-4 mb-4 bg-purple-500 text-white rounded-xl" *ngFor="let task of taskList" routerLink="{{task.id}}">
-      <ion-icon name="checkmark-circle" class="absolute right-2 top-2 text-3xl text-sky-200" *ngIf="task.status === TaskStatus.COMPLETED"></ion-icon>
-      <ion-icon name="warning" class="absolute right-2 top-2 text-3xl text-yellow-300 intense-shake-zoom" *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS"></ion-icon>
-      <ion-icon name="ban" class="absolute right-2 top-2 text-3xl text-white" *ngIf="task.status === TaskStatus.IGNORE"></ion-icon>
-      <p class="mb-1 pr-2 text-lg font-bold">{{ task.name }}</p>
+    <div class="relative p-4 mb-4 bg-purple-500 text-white rounded-xl" *ngFor="let task of taskList"
+         routerLink="{{task.id}}">
+      <ion-icon name="checkmark-circle" class="absolute right-2 top-2 text-3xl text-sky-200"
+                *ngIf="task.status === TaskStatus.COMPLETED"></ion-icon>
+      <ion-icon name="warning" class="absolute right-2 top-2 text-3xl text-yellow-300 intense-shake-zoom"
+                *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS"></ion-icon>
+      <ion-icon name="ban" class="absolute right-2 top-2 text-3xl text-white"
+                *ngIf="task.status === TaskStatus.IGNORE"></ion-icon>
       <!--   Task name   -->
+      <p class="mb-1 pr-2 text-lg font-bold">{{ task.name }}</p>
+
+      <!--   Task rank points   -->
       <div class="flex items-center text-base">
         <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 object-contain"
                  [class.intense-shake-zoom]="task.status === TaskStatus.IN_PROGRESS || task.status === TaskStatus.PENDING">
@@ -40,9 +46,13 @@
       </div>
 
       <!--   Task progress   -->
-      <div class="relative mt-0" *ngIf="task.guide_type === GuideType.EXERCISE && task.task_percentage_result !== 1 && task.status === TaskStatus.IN_PROGRESS">
-        <p class="pb-1 pr-1 text-sm italic text-gray-100 font-medium text-right">{{ (task.task_percentage_result || 0) * 100 }}%</p>
-        <ion-progress-bar color="success" class="h-3 mb-4" type="determinate" [value]="task.task_percentage_result"></ion-progress-bar>
+      <div class="relative mt-0"
+           *ngIf="task.guide_type === GuideType.EXERCISE && task.task_percentage_result !== 1 && task.status === TaskStatus.IN_PROGRESS">
+        <p class="pb-1 pr-1 text-sm italic text-gray-100 font-medium text-right">
+          {{ task.task_percentage_result || 0 }}%
+        </p>
+        <ion-progress-bar color="success" class="h-3 mb-4" type="determinate"
+                          [value]="(task.task_percentage_result || 0) / 100"></ion-progress-bar>
       </div>
 
       <!--   Task status and create date   -->

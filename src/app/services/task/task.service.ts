@@ -13,6 +13,7 @@ import { GuideType } from '../../shared/enums/guide-type';
 import { IEmotionQuestion } from '../../shared/interfaces/function-data/emotion-question';
 import { CommonConstants } from '../../shared/classes/common-constants';
 import { ITaskDetail } from '../../shared/interfaces/function-data/task-detail';
+import { TaskProgressUpdate } from '../../shared/interfaces/function-data/task-progress-update';
 
 @Injectable({
   providedIn: 'root'
@@ -88,7 +89,6 @@ export class TaskService {
       order
     );
   }
-
 
   /**
    * getEmotionDiaryList
@@ -187,5 +187,35 @@ export class TaskService {
       ...task,
       guide: guide
     };
+  }
+
+  /**
+   * Update task status
+   * @param taskId
+   * @param status
+   */
+  public async updateTaskStatus(
+    taskId: number,
+    status: TaskStatus
+  ): Promise<boolean | number> {
+    if (!taskId || !status) return false;
+    return this.liyYdmsTaskService.updateTask(
+      taskId, {status: status}
+    );
+  }
+
+  /**
+   * Update task progress
+   * @param taskId
+   * @param body
+   */
+  public async updateTaskProgress(
+    taskId: number,
+    body: TaskProgressUpdate
+  ): Promise<boolean | number> {
+    if (!taskId || !body) return false;
+    return this.liyYdmsTaskService.updateTask(
+      taskId, body
+    );
   }
 }

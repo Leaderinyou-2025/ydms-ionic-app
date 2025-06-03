@@ -1,0 +1,7 @@
+ion-content.custom-page-bg-light {
+  --background: var(--custom-page-bg-light);
+}
+
+:host-context(.dark) ion-content.custom-page-bg-light {
+  --background: var(--ion-backdrop-color);
+}

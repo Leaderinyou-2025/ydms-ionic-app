@@ -63,6 +63,8 @@
     "ionicons": "^7.0.0",
     "lottie-web": "^5.12.2",
     "ngx-lottie": "^13.0.1",
+    "ngx-quill": "^27.1.2",
+    "quill": "^2.0.3",
     "rxjs": "~7.8.0",
     "swiper": "^11.2.6",
     "tslib": "^2.3.0",

@@ -9,6 +9,7 @@ import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
 import { TaskStatus } from '../../shared/enums/task-status';
 import { AreaOfExpertise } from '../../shared/enums/area-of-expertise';
 import { GuideType } from '../../shared/enums/guide-type';
+import { TaskProgressUpdate } from '../../shared/interfaces/function-data/task-progress-update';
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +66,20 @@ export class LiyYdmsTaskService {
   public async getCountTask(searchDomain: SearchDomain = []): Promise<number> {
     const results = await this.odooService.searchCount(ModelName.TASK, searchDomain);
     return results || 0;
+  }
+
+  /**
+   * updateTask
+   * @param taskId
+   * @param body
+   */
+  public async updateTask(
+    taskId: number,
+    body: TaskProgressUpdate
+  ): Promise<boolean | number> {
+    return this.odooService.write<ILiyYdmsTask>(
+      ModelName.TASK, [taskId], body
+    );
   }
 
   /**
