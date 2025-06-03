@@ -19,7 +19,8 @@
     "pull_to_refresh": "Kéo để làm mới",
     "refreshing": "Đang làm mới...",
     "loading_more_items": "Đang tải thêm...",
-    "loading": "Đang tải..."
+    "loading": "Đang tải...",
+    "loading_more": "Đang tải thêm..."
   },
   "MESSAGE": {
     "feature_under_development": "Tính năng đang được phát triển"
@@ -245,7 +246,8 @@
     "notification": "Thông báo",
     "share": "Chia sẻ",
     "actions": "Hoạt động",
-    "expert_guide": "Chuyên gia",
+    "expert_guide": "Hướng dẫn chuyên môn",
+    "expert_guide_detail": "Chi tiết hướng dẫn chuyên môn",
     "on": "Bật",
     "off": "Tắt",
     "show": "Hiển thị",
@@ -504,6 +506,19 @@
   },
   "ACHIEVEMENT": {
     "badge_no_achievements_yet": "Chưa có huy hiệu nào trong danh mục này"
+  },
+  "EXPERT_GUIDE": {
+    "title": "Hướng dẫn chuyên môn",
+    "list_subtitle": "Khám phá các hướng dẫn chuyên môn hữu ích",
+    "categories": "Khía cạnh",
+    "scores": "Điểm số",
+    "rank_point": "Điểm xếp hạng",
+    "description": "Mô tả",
+    "content": "Nội dung hướng dẫn",
+    "no_data": "Không tìm thấy hướng dẫn chuyên môn nào",
+    "search_placeholder": "Tìm kiếm hướng dẫn chuyên môn...",
+    "filter_all": "Tất cả",
+    "filter_area": "Khía cạnh"
   },
   "CONFLICT_LEVEL": {
     "low": "Mức độ mâu thuẫn thấp",
