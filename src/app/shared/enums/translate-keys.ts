@@ -293,6 +293,7 @@ export enum TranslateKeys {
   TITLE_MUSIC = 'TITLE.music',
   TITLE_NOTIFICATION = 'TITLE.notification',
   TITLE_EXPERT_GUIDE = 'TITLE.expert_guide',
+  TITLE_EXPERT_GUIDE_DETAIL = 'TITLE.expert_guide_detail',
   TITLE_SHARE = 'TITLE.share',
   TITLE_ON = 'TITLE.on',
   TITLE_OFF = 'TITLE.off',
@@ -492,6 +493,17 @@ export enum TranslateKeys {
 
   // CAPTION
   CAPTION_CHATBOT = 'CAPTION.chatbot',
+
+  // EXPERT GUIDE
+  EXPERT_GUIDE = 'EXPERT_GUIDE.title',
+  EXPERT_GUIDE_LIST_SUBTITLE = 'EXPERT_GUIDE.list_subtitle',
+  EXPERT_GUIDE_CATEGORIES = 'EXPERT_GUIDE.categories',
+  EXPERT_GUIDE_SCORES = 'EXPERT_GUIDE.scores',
+  EXPERT_GUIDE_RANK_POINT = 'EXPERT_GUIDE.rank_point',
+  EXPERT_GUIDE_DESCRIPTION = 'EXPERT_GUIDE.description',
+  EXPERT_GUIDE_CONTENT = 'EXPERT_GUIDE.content',
+  EXPERT_GUIDE_NO_DATA = 'EXPERT_GUIDE.no_data',
+  LOADING_MORE = 'LOADING.loading_more',
 
   // CONFLICT LEVEL
   CONFLICT_LEVEL_LOW = 'CONFLICT_LEVEL.low',

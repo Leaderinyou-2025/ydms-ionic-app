@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { ExpertGuidePageRoutingModule } from './expert-guide-routing.module';
 
 import { ExpertGuidePage } from './expert-guide.page';
+import { ExpertGuideDetailComponent } from './expert-guide-detail/expert-guide-detail.component';
 import { SharedModule } from '../../../shared/shared.module';
 
 @NgModule({
@@ -15,8 +17,9 @@ import { SharedModule } from '../../../shared/shared.module';
         FormsModule,
         IonicModule,
         ExpertGuidePageRoutingModule,
-        SharedModule
+        SharedModule,
+        TranslatePipe
     ],
-  declarations: [ExpertGuidePage]
+  declarations: [ExpertGuidePage, ExpertGuideDetailComponent]
 })
 export class ExpertGuidePageModule {}
