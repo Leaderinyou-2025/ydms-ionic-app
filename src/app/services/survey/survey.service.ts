@@ -75,7 +75,7 @@ export class SurveyService {
     const surveyDetail: ISurvey = {
       assessment_result: assessmentResult,
       questions: new Array<ISurveyQuestion>(),
-    }
+    };
     for (const question of questions) {
       const answerResult = assessmentResultAnswer?.find(u => u.question_id.id === question.id);
       if (!answerResult) continue;
@@ -112,25 +112,71 @@ export class SurveyService {
    * Get count survey pending
    * @param assigneeId
    * @param areaOfExpertise
+   * @param month
+   * @param year
    */
-  public async getCountSurveyPending(
+  public async getCountSurveyPendingInMonth(
     assigneeId: number,
-    areaOfExpertise?: AreaOfExpertise
+    areaOfExpertise?: AreaOfExpertise,
+    month?: number,
+    year?: number,
   ): Promise<number> {
-    return this.liyYdmsAssessmentResultService.getCountAssessmentResultPending(assigneeId, areaOfExpertise);
+    return this.liyYdmsAssessmentResultService.getCountAssessmentResultPendingInMonth(
+      assigneeId, areaOfExpertise, month, year
+    );
+  }
+
+  /**
+   * Get count survey pending
+   * @param assigneeId
+   * @param areaOfExpertise
+   * @param month
+   * @param year
+   */
+  public async getCountSurveyCompleteInMonth(
+    assigneeId: number,
+    areaOfExpertise?: AreaOfExpertise,
+    month?: number,
+    year?: number,
+  ): Promise<number> {
+    return this.liyYdmsAssessmentResultService.getCountAssessmentResultCompleteInMonth(
+      assigneeId, areaOfExpertise, month, year
+    );
+  }
+
+  /**
+   * Get count survey pending
+   * @param assigneeId
+   * @param areaOfExpertise
+   * @param month
+   * @param year
+   */
+  public async getCountSurveyInMonth(
+    assigneeId: number,
+    month?: number,
+    year?: number,
+    areaOfExpertise?: AreaOfExpertise,
+  ): Promise<number> {
+    return this.liyYdmsAssessmentResultService.getCountAssessmentResultInMonth(
+      assigneeId, month, year, areaOfExpertise
+    );
   }
 
   /**
    * Get Survey Pending List
    * @param assigneeId
    * @param areaOfExpertise
+   * @param month
+   * @param year
    */
-  public async getSurveyPendingList(
+  public async getSurveyPendingListInMonth(
     assigneeId: number,
-    areaOfExpertise?: AreaOfExpertise
+    areaOfExpertise?: AreaOfExpertise,
+    month?: number,
+    year?: number
   ): Promise<ILiyYdmsAssessmentResult[]> {
-    return this.liyYdmsAssessmentResultService.getAssessmentResultPending(
-      assigneeId, areaOfExpertise
+    return this.liyYdmsAssessmentResultService.getAssessmentResultPendingInMonth(
+      assigneeId, areaOfExpertise, month, year
     );
   }
 

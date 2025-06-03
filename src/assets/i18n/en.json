@@ -387,7 +387,8 @@
     "confirm_delete_alert": "Are you sure you want to delete?",
     "confirm_unfriend_alert": "Are you sure you want to unfriend?",
     "confirm_un_public_alert": "Are you sure you want to stop sharing?",
-    "confirm_end_task": "Are you sure you want to end this task? Doing so will mark it as incomplete."
+    "confirm_end_task": "Are you sure you want to end this task? Doing so will mark it as incomplete.",
+    "feature_developing": "We're working on this feature. Please come back soon!"
   },
   "BUTTON_TITLES": {
     "confirm": "Confirm",

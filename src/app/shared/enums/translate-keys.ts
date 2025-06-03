@@ -395,6 +395,7 @@ export enum TranslateKeys {
   ALERT_APP_UPDATE_SUCCESSFUL = 'ALERT.app_update_successful',
   ALERT_CONFIRM_UN_PUBLIC = 'ALERT.confirm_un_public_alert',
   ALERT_CONFIRM_END_TASK = 'ALERT.confirm_end_task',
+  ALERT_FEATURE_DEVELOPING = 'ALERT.feature_developing',
 
   // BUTTON TITLES
   BUTTON_CONFIRM = 'BUTTON_TITLES.confirm',

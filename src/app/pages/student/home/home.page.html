@@ -6,7 +6,8 @@
       <ion-img src="assets/icons/svg/ico_top_achievement.svg" alt="icon" class="w-7 h-7 mr-1 object-contain"></ion-img>
       <div class="flex flex-col justify-center">
         <span class="text-xs text-green-500 font-bold">{{ totalBadges || 0 }}</span>
-        <span class="block text-center text-xs text-gray-600 dark:text-gray-400">{{ TranslateKeys.TITLE_BADGES | translate }}</span>
+        <span
+          class="block text-center text-xs text-gray-600 dark:text-gray-400">{{ TranslateKeys.TITLE_BADGES | translate }}</span>
       </div>
     </div>
 
@@ -15,16 +16,19 @@
       <ion-img src="assets/icons/svg/ico_top_rank.svg" alt="icon" class="w-7 h-7 mr-1 object-contain"></ion-img>
       <div class="flex flex-col justify-center">
         <span class="text-xs text-green-500 font-bold">{{ ranking || 0 }}</span>
-        <span class="block text-center text-xs text-gray-600 dark:text-gray-400">{{ TranslateKeys.TITLE_RANK | translate }}</span>
+        <span
+          class="block text-center text-xs text-gray-600 dark:text-gray-400">{{ TranslateKeys.TITLE_RANK | translate }}</span>
       </div>
     </div>
 
     <!-- Nhiệm vụ -->
     <div class="flex items-center" routerLink="/{{PageRoutes.TASK}}">
-      <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 mr-1 object-contain intense-shake-zoom"></ion-img>
+      <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon"
+               class="w-7 h-7 mr-1 object-contain intense-shake-zoom"></ion-img>
       <div class="flex flex-col justify-center">
         <span class="text-xs text-green-500 font-bold">{{ totalTask || 0 }}</span>
-        <span class="block text-center text-xs text-gray-600 dark:text-gray-400">{{ TranslateKeys.TITLE_MISSIONS | translate }}</span>
+        <span
+          class="block text-center text-xs text-gray-600 dark:text-gray-400">{{ TranslateKeys.TITLE_MISSIONS | translate }}</span>
       </div>
     </div>
 
@@ -33,7 +37,8 @@
       <ion-img src="assets/icons/svg/ico_top_friendly.svg" alt="icon" class="w-7 h-7 mr-1 object-contain"></ion-img>
       <div class="flex flex-col justify-center">
         <span class="text-xs text-green-500 font-bold">{{ totalFriendly || 0 }}</span>
-        <span class="block text-center text-xs text-gray-600 dark:text-gray-400">{{ TranslateKeys.TITLE_FRIENDLY | translate }}</span>
+        <span
+          class="block text-center text-xs text-gray-600 dark:text-gray-400">{{ TranslateKeys.TITLE_FRIENDLY | translate }}</span>
       </div>
     </div>
   </div>
@@ -56,7 +61,8 @@
         <!--   Nickname and animation     -->
         <ng-container *ngIf="authData.nickname">
           <span class="text-2xl text-teal-500 italic z-10">{{ authData.nickname }}</span>
-          <ng-lottie class="absolute right-[-20px] top-[-46px]" [options]="animationOption" style="width: 80px; height: 80px;"></ng-lottie>
+          <ng-lottie class="absolute right-[-20px] top-[-46px]" [options]="animationOption"
+                     style="width: 80px; height: 80px;"></ng-lottie>
         </ng-container>
 
         <!--    Chưa thiết lập nickname    -->
@@ -78,31 +84,16 @@
     <p class="text-sm font-medium">{{ TranslateKeys.HOME_WELCOME_SUBTITLE | translate }}</p>
 
     <div class="flex gap-1 items-center">
-      <ion-progress-bar class="task-progress h-4" type="determinate" [value]="progress.completed / progress.total"></ion-progress-bar>
-      <div class="text-[#53ad0d]"><span class="completed text-sm">{{ progress.completed }}</span>/<span class="total text-base">{{ progress.total }}</span></div>
+      <ion-progress-bar class="task-progress h-4" type="determinate"
+                        [value]="taskCompleted / (totalTask || 1)"></ion-progress-bar>
+      <div class="text-[#53ad0d]"><span class="completed text-sm">{{ taskCompleted }}</span>/<span
+        class="total text-base">{{ totalTask || 0 }}</span></div>
     </div>
   </div>
 
+  <!-- Task list -->
   <div class="ion-padding-start ion-padding-end">
     <ion-list class="bg-transparent p-0">
-      <!-- Emotion diary List -->
-      <ng-container *ngIf="emotionDiaryList?.length">
-        <ion-item class="task-item mb-3" lines="none" *ngFor="let item of emotionDiaryList">
-          <div class="flex justify-between items-center w-full p-4 bg-purple-500 text-white rounded-xl">
-            <div class="flex-1">
-              <p class="text-sm mb-1">{{ item.question_id.name }}</p>
-              <div class="flex items-center text-sm">
-                <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-5 h-5 object-contain"></ion-img>
-                <span>+{{ item.rank_point || 0 }}</span>
-              </div>
-            </div>
-            <ion-button class="task-button ml-2 h-9" fill="outline" (click)="onClickExecuteEmotionDiary(item)">
-              {{ TranslateKeys.BUTTON_EXECUTE | translate }}
-            </ion-button>
-          </div>
-        </ion-item>
-      </ng-container>
-
       <!--   Survey list   -->
       <ng-container *ngIf="surveyList?.length">
         <ion-item class="task-item mb-3" lines="none" *ngFor="let item of surveyList">
@@ -132,7 +123,8 @@
                 <span>+{{ task.rank_point || 0 }}</span>
               </div>
             </div>
-            <ion-button class="task-button ml-2 h-9" fill="outline" (click)="onClickExecuteTask(task)">
+            <ion-button class="task-button ml-2 h-9" fill="outline"
+                        routerLink="/{{PageRoutes.TASK_EXECUTING}}/{{task.id}}">
               {{ TranslateKeys.BUTTON_EXECUTE | translate }}
             </ion-button>
           </div>
@@ -146,5 +138,8 @@
     </ion-infinite-scroll>
   </div>
 </ion-content>
+
+<app-alert-emotion-checkin *ngIf="isShowAlertEmotionCheckIn"
+                           (closeEvent)="isShowAlertEmotionCheckIn = false"></app-alert-emotion-checkin>
 
 <app-footer></app-footer>

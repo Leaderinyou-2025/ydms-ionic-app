@@ -10,14 +10,17 @@
         <!--    Student    -->
         <ion-label *ngIf="authData.is_teenager">
           <ng-container *ngIf="authData.nickname">{{ authData.nickname }}<br></ng-container>
-          <ng-container *ngIf="!authData.nickname">{{ TranslateKeys.TITLE_NOT_SET_NICKNAME | translate }}<br></ng-container>
-          <span class="text-sm text-gray-500 italic dark:text-gray-400">{{ TranslateKeys.TITLE_VIEW_PROFILE_PAGE | translate }}</span>
+          <ng-container *ngIf="!authData.nickname">{{ TranslateKeys.TITLE_NOT_SET_NICKNAME | translate }}<br>
+          </ng-container>
+          <span
+            class="text-sm text-gray-500 italic dark:text-gray-400">{{ TranslateKeys.TITLE_VIEW_PROFILE_PAGE | translate }}</span>
         </ion-label>
 
         <!--    Parent / Teacher    -->
         <ion-label *ngIf="!authData.is_teenager">
           <ng-container>{{ authData.name }}<br></ng-container>
-          <span class="text-sm text-gray-500 italic dark:text-gray-400">{{ TranslateKeys.TITLE_VIEW_PROFILE_PAGE | translate }}</span>
+          <span
+            class="text-sm text-gray-500 italic dark:text-gray-400">{{ TranslateKeys.TITLE_VIEW_PROFILE_PAGE | translate }}</span>
         </ion-label>
 
         <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>
@@ -26,7 +29,7 @@
 
     <!--  Bộ sưu tập huy chương, trang gia đình, nhóm lớp  -->
     <ion-list class="mb-2">
-      <ion-item detail="false" routerLink="/{{PageRoutes.NOTIFICATIONS}}">
+      <ion-item detail="false" lines="none" routerLink="/{{PageRoutes.NOTIFICATIONS}}">
         <ion-icon name="mail-unread" slot="start" color="primary" class="text-xl"></ion-icon>
         <ion-label class="py-2 text-gray-500">{{ TranslateKeys.NOTIFICATIONS_TITLE | translate }}</ion-label>
         <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>
@@ -41,11 +44,11 @@
       <!--        <ion-label class="py-2 text-gray-500">{{ TranslateKeys.TITLE_FAMILY_PAGE | translate }}</ion-label>-->
       <!--        <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>-->
       <!--      </ion-item>-->
-      <ion-item lines="none" detail="false" routerLink="/{{PageRoutes.CLASS_GROUP}}">
-        <ion-icon name="easel" slot="start" color="primary" class="text-xl"></ion-icon>
-        <ion-label class="py-2 text-gray-500">{{ TranslateKeys.TITLE_CLASS_GROUP | translate }} {{authData.classroom_id?.name}}</ion-label>
-        <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>
-      </ion-item>
+      <!--      <ion-item lines="none" detail="false" routerLink="/{{PageRoutes.CLASS_GROUP}}">-->
+      <!--        <ion-icon name="easel" slot="start" color="primary" class="text-xl"></ion-icon>-->
+      <!--        <ion-label class="py-2 text-gray-500">{{ TranslateKeys.TITLE_CLASS_GROUP | translate }} {{authData.classroom_id?.name}}</ion-label>-->
+      <!--        <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>-->
+      <!--      </ion-item>-->
       <!--      <ion-item lines="none" detail="false" routerLink="/{{PageRoutes.SCHOOL_GROUP}}">-->
       <!--        <ion-icon name="business" slot="start" color="primary" class="text-xl"></ion-icon>-->
       <!--        <ion-label class="py-2 text-gray-500"> {{ TranslateKeys.TITLE_SCHOOL_GROUP | translate }}</ion-label>-->
@@ -69,8 +72,10 @@
         <ion-icon name="globe-outline" slot="start" color="primary" class="text-xl"></ion-icon>
         <ion-label class="py-2">
           {{ TranslateKeys.TITLE_LANGUAGE | translate }}<br>
-          <span class="text-sm text-gray-500 italic dark:text-gray-400" *ngIf="currentLang === LanguageKeys.VN">{{ TranslateKeys.COMMON_VIETNAMESE | translate }}</span>
-          <span class="text-sm text-gray-500 italic dark:text-gray-400" *ngIf="currentLang === LanguageKeys.EN">{{ TranslateKeys.COMMON_ENGLISH | translate }}</span>
+          <span class="text-sm text-gray-500 italic dark:text-gray-400"
+                *ngIf="currentLang === LanguageKeys.VN">{{ TranslateKeys.COMMON_VIETNAMESE | translate }}</span>
+          <span class="text-sm text-gray-500 italic dark:text-gray-400"
+                *ngIf="currentLang === LanguageKeys.EN">{{ TranslateKeys.COMMON_ENGLISH | translate }}</span>
         </ion-label>
         <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>
       </ion-item>
@@ -101,7 +106,8 @@
         <ion-icon name="cog" slot="start" color="primary" class="text-xl"></ion-icon>
         <ion-label class="py-2">
           {{ TranslateKeys.TITLE_APP_UPDATE | translate }}<br>
-          <span class="text-sm text-gray-500 italic dark:text-gray-400">{{ TranslateKeys.TITLE_VERSION | translate }}: {{ currentAppVersion }}</span>
+          <span class="text-sm text-gray-500 italic dark:text-gray-400">{{ TranslateKeys.TITLE_VERSION | translate }}
+            : {{ currentAppVersion }}</span>
         </ion-label>
         <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>
       </ion-item>

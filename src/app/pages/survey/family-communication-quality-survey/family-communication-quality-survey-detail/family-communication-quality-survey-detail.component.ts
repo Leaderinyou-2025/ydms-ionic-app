@@ -85,7 +85,8 @@ export class FamilyCommunicationQualitySurveyDetailComponent implements OnInit {
           this.translate.instant(TranslateKeys.TOAST_UPDATE_SUCCESS),
           IonicColors.SUCCESS
         );
-        await this.router.navigateByUrl(PageRoutes.FAMILY_COMMUNICATION_QUALITY_SURVEY);
+        history.back();
+        // await this.router.navigateByUrl(PageRoutes.FAMILY_COMMUNICATION_QUALITY_SURVEY);
       } else {
         this.showToast(
           this.translate.instant(TranslateKeys.TOAST_UPDATE_FAILED),
