@@ -350,7 +350,19 @@
     "send_request": "Bạn đã gửi một lời mời kết bạn",
     "request_to_you": "Yêu cầu kết bạn",
     "no_result_found": "Không tìm thấy kết quả phù hợp",
-    "checkin_emotion_now": "Hãy Check-In cảm xúc hôm nay để nhận thưởng nhé!"
+    "checkin_emotion_now": "Hãy Check-In cảm xúc hôm nay để nhận thưởng nhé!",
+    "sel_discovery_progress": "Hành trình phát triển bản thân",
+    "no_data": "Không có dữ liêu",
+    "completed": "Đã hoàn thành",
+    "in_progress": "Đang diễn ra",
+    "pending": "Chờ thực hiện",
+    "ignore": "Không thực hiện",
+    "progress_updating": "Cập nhật tiến độ thực hiện",
+    "result": "Kết quả thực hiện",
+    "progress_result": "Tiến độ hoàn thành",
+    "result_description": "Mô tả kết quả tiến độ",
+    "capture": "chụp ảnh",
+    "gallery": "thư viện"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",
@@ -375,7 +387,9 @@
     "access_permission_gallery_alert": "Vui lòng cho phép ứng dụng truy cập thư viện ảnh và sử dụng máy ảnh của bạn.",
     "confirm_delete_alert": "Bạn có chắc chắn muốn xóa?",
     "confirm_unfriend_alert": "Bạn có chắc chắn muốn hủy kết bạn?",
-    "confirm_un_public_alert": "Bạn có chắc chắn muốn tắt chia sẻ?"
+    "confirm_un_public_alert": "Bạn có chắc chắn muốn tắt chia sẻ?",
+    "confirm_end_task": "Bạn chắc chắn muốn kết thúc nhiệm vụ này? Việc kết thúc nhiệm vụ đồng nghĩa bạn đã không hoàn thành nó.",
+    "feature_developing": "Tính năng này hiện đang được phát triển. Vui lòng quay lại sau nhé!"
   },
   "BUTTON_TITLES": {
     "confirm": "Xác nhận",
@@ -396,7 +410,11 @@
     "share": "Chia sẻ",
     "checkin_emotion": "Check-In",
     "accept": "Đồng ý",
-    "send_request": "Gửi yêu cầu"
+    "send_request": "Gửi yêu cầu",
+    "executing": "Tham gia",
+    "no_execution": "Không tham gia",
+    "ignore": "Bỏ qua",
+    "end": "Kết thúc"
   },
   "TOAST": {
     "error_header": "Lỗi",

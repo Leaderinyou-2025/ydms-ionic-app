@@ -1,6 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { AlertButton, AlertController, AlertInput, InfiniteScrollCustomEvent, Platform, RefresherCustomEvent, ToastButton, ToastController, ToastOptions } from '@ionic/angular';
+import {
+  AlertButton,
+  AlertController,
+  AlertInput,
+  InfiniteScrollCustomEvent,
+  Platform,
+  RefresherCustomEvent,
+  ToastButton,
+  ToastController,
+  ToastOptions
+} from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { AnimationOptions } from 'ngx-lottie';
 
@@ -10,6 +20,7 @@ import { SoundService } from '../../../services/sound/sound.service';
 import { LiyYdmsAvatarService } from '../../../services/models/liy.ydms.avatar.service';
 import { RankService } from '../../../services/rank/rank.service';
 import { SurveyService } from '../../../services/survey/survey.service';
+import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import { TranslateKeys } from '../../../shared/enums/translate-keys';
 import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
 import { BtnRoles } from '../../../shared/enums/btn-roles';
@@ -22,7 +33,8 @@ import { PageRoutes } from '../../../shared/enums/page-routes';
 import { ILiyYdmsTask } from '../../../shared/interfaces/models/liy.ydms.task';
 import { CommonConstants } from '../../../shared/classes/common-constants';
 import { ILiyYdmsAssessmentResult } from '../../../shared/interfaces/models/liy.ydms.assessment.result';
-import { ILiyYdmsEmotionalDiary } from '../../../shared/interfaces/models/liy.ydms.emotional.diary';
+import { StorageKey } from '../../../shared/enums/storage-key';
+import { AreaOfExpertise } from '../../../shared/enums/area-of-expertise';
 
 @Component({
   selector: 'app-home',
@@ -47,15 +59,14 @@ export class HomePage implements OnInit {
   ranking!: number;
   totalTask!: number;
   totalFriendly!: number;
+  taskCompleted: number = 0;
 
-  // Task list and progress
+  // Check show alert emotion checkin task
+  isShowAlertEmotionCheckIn!: boolean;
+
+  // Task list
   tasks!: Array<ILiyYdmsTask>;
-  emotionDiaryList!: Array<ILiyYdmsEmotionalDiary>;
   surveyList!: Array<ILiyYdmsAssessmentResult>;
-  progress = {
-    completed: 0,
-    total: 0
-  };
   isLoading!: boolean;
   isLoadMore!: boolean;
   private paged: number = 1;
@@ -77,6 +88,7 @@ export class HomePage implements OnInit {
     private soundService: SoundService,
     private rankService: RankService,
     private surveyService: SurveyService,
+    private localStorageService: LocalStorageService,
   ) {
   }
 
@@ -91,6 +103,7 @@ export class HomePage implements OnInit {
       this.handleRefresh();
     } else {
       await this.loadHomeData();
+      this.checkShowAlertEmotionCheckIn();
     }
   }
 
@@ -138,27 +151,31 @@ export class HomePage implements OnInit {
   }
 
   /**
-   * Execute the selected task
-   * @param task Data of the task to execute
-   */
-  public onClickExecuteTask(task: ILiyYdmsTask): void {
-
-  }
-
-  /**
-   * Execute the selected emotion diary
-   * @param emotionDiary
-   */
-  public onClickExecuteEmotionDiary(emotionDiary: ILiyYdmsEmotionalDiary): void {
-
-  }
-
-  /**
    * Execute the selected survey
    * @param survey
    */
   public onClickExecuteSurvey(survey: ILiyYdmsAssessmentResult): void {
+    if (!survey.id) return;
 
+    if (survey.area_of_expertise === AreaOfExpertise.EMOTION) {
+      this.router.navigateByUrl(`/${PageRoutes.EMOTIONAL_SURVEY}/${survey.id}`);
+      return;
+    }
+
+    if (survey.area_of_expertise === AreaOfExpertise.CONFLICT) {
+      this.router.navigateByUrl(`/${PageRoutes.FAMILY_CONFLICT_SURVEY}/${survey.id}`);
+      return;
+    }
+
+    if (survey.area_of_expertise === AreaOfExpertise.COMMUNICATION) {
+      this.router.navigateByUrl(`/${PageRoutes.FAMILY_COMMUNICATION_QUALITY_SURVEY}/${survey.id}`);
+      return;
+    }
+
+    if (survey.area_of_expertise === AreaOfExpertise.DISCOVERY) {
+      this.router.navigateByUrl(`/${PageRoutes.SELF_DISCOVERY_SURVEY}/${survey.id}`);
+      return;
+    }
   }
 
   /**
@@ -186,7 +203,8 @@ export class HomePage implements OnInit {
     this.isLoading = false;
     this.paged = 1;
     this.tasks = new Array<ILiyYdmsTask>();
-    this.progress = {completed: 0, total: 0}
+    this.totalTask = 0;
+    this.taskCompleted = 0;
   }
 
   /**
@@ -200,9 +218,8 @@ export class HomePage implements OnInit {
     this.loadConfigAvatarAndBackground();
 
     // Get task list and task progress
-    this.getProgressTasks();
     this.initTaskDataPaging();
-    this.getEmotionDiaryPendingList();
+    this.getProgressCompletedTasks();
     this.getSurveyPendingList();
     await this.getTaskList();
 
@@ -240,37 +257,51 @@ export class HomePage implements OnInit {
     if (this.authData) {
       // Get count user badges
       this.rankService.getCountUserAchievement(this.authData.id).then(totalAchievement => this.totalBadges = totalAchievement);
+
       // Get user ranking
       this.rankService.getLeaderboardByTeenagerId(this.authData.id).then(leaderboard => this.ranking = leaderboard?.ranking || 0);
+
       // Total task
-      this.totalTask = 0;
       this.taskService.getCountAllTasksByAssigneeId(this.authData.id).then(countTask => this.totalTask += countTask);
-      // Count emotion diary
-      this.taskService.getCountEmotionDiaryPending(this.authData?.id || 0).then(countEmotion => {
-        this.totalTask += countEmotion;
-        this.progress.total += countEmotion;
-      });
-      // Count survey
-      this.surveyService.getCountSurveyPending(this.authData?.id || 0).then(countSurvey => {
-        this.totalTask += countSurvey;
-        this.progress.total += countSurvey;
-      });
-      // TODO: Get friendly points
+
+      // Emotion diary task
+      const lastEmotionCheckin = this.localStorageService.get<string>(StorageKey.LAST_EMOTION_CHECKIN);
+      if (lastEmotionCheckin !== CommonConstants.getCurrentDateFormated()) {
+        this.totalTask += 1;
+      } else {
+        this.taskCompleted += 1;
+      }
+
+      // Count survey task
+      this.surveyService.getCountSurveyInMonth(this.authData?.id || 0).then(countSurvey => this.totalTask += countSurvey);
+
+      // Friendly points
+      this.totalFriendly = this.authData.total_friendly_points || 0;
     }
+  }
+
+  /**
+   * Check and show alert emotion checkin for first time
+   * @private
+   */
+  private checkShowAlertEmotionCheckIn(): void {
+    setTimeout(() => {
+      const lastEmotionCheckin = this.localStorageService.get<string>(StorageKey.LAST_EMOTION_CHECKIN);
+      this.isShowAlertEmotionCheckIn = lastEmotionCheckin !== CommonConstants.getCurrentDateFormated();
+    }, 2000);
   }
 
   /**
    * Load progress task
    * @private
    */
-  private getProgressTasks(): void {
+  private getProgressCompletedTasks(): void {
     if (!this.authData) return;
     Promise.all([
-      this.taskService.getCountActivatingTaskByAssigneeId(this.authData.id),
-      this.taskService.getCountCompletedTaskByAssigneeId(this.authData.id)
-    ]).then(([totalTask, completedTask]) => {
-      this.progress.completed = completedTask;
-      this.progress.total += totalTask;
+      this.taskService.getCountCompletedTaskByAssigneeId(this.authData.id),
+      this.surveyService.getCountSurveyCompleteInMonth(this.authData.id),
+    ]).then(([completedTask, completeSurvey]) => {
+      this.taskCompleted += (completedTask + completeSurvey);
     });
   }
 
@@ -289,23 +320,12 @@ export class HomePage implements OnInit {
   }
 
   /**
-   * Get emotion diary pending list
-   * @private
-   */
-  private getEmotionDiaryPendingList(): void {
-    if (!this.authData) return;
-    this.taskService.getEmotionDiaryPending(this.authData.id).then(
-      emotionDiaryList => this.emotionDiaryList = emotionDiaryList
-    );
-  }
-
-  /**
    * Get Survey Pending List
    * @private
    */
   private getSurveyPendingList(): void {
     if (!this.authData) return;
-    this.surveyService.getSurveyPendingList(this.authData.id).then(
+    this.surveyService.getSurveyPendingListInMonth(this.authData.id).then(
       surveyList => this.surveyList = surveyList
     );
   }
@@ -341,7 +361,7 @@ export class HomePage implements OnInit {
         icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
         side: Position.END,
         role: BtnRoles.CANCEL,
-      }
+      };
       const toastOption: ToastOptions = {
         header: isWarning ? this.translate.instant(TranslateKeys.TOAST_WARNING_HEADER) : this.translate.instant(TranslateKeys.TOAST_SUCCESS_HEADER),
         message: msg,
@@ -353,13 +373,13 @@ export class HomePage implements OnInit {
         icon: isWarning ? IonicIcons.WARNING_OUTLINE : IonicIcons.CHECKMARK_CIRCLE_OUTLINE,
         color: isWarning ? IonicColors.WARNING : IonicColors.SUCCESS,
         keyboardClose: false
-      }
+      };
 
       if (!popover) {
         this.toastController.create(toastOption).then(toast => toast.present());
       } else {
         // Close current toast before show new toast
-        this.toastController.dismiss().then(() => this.toastController.create(toastOption).then(toast => toast.present()))
+        this.toastController.dismiss().then(() => this.toastController.create(toastOption).then(toast => toast.present()));
       }
     });
   }

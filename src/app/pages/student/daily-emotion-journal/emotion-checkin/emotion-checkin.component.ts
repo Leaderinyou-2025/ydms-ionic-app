@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { LoadingController, NavController, ToastButton, ToastController, ToastOptions } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../../../../services/auth/auth.service';
 import { LiyYdmsEmotionalDiaryService } from '../../../../services/models/liy.ydms.emotional.diary.service';
-import { LiyYdmsEmotionalQuestionService } from '../../../../services/models/liy.ydms.emotional.question.service';
-import { LiyYdmsEmotionalAnswerOptionService } from '../../../../services/models/liy.ydms.emotional.answer.option.service';
 import { LocalStorageService } from '../../../../services/local-storage/local-storage.service';
+import { TaskService } from '../../../../services/task/task.service';
 import { TranslateKeys } from '../../../../shared/enums/translate-keys';
 import { PageRoutes } from '../../../../shared/enums/page-routes';
 import { IHeaderAnimeImage } from '../../../../shared/interfaces/header/header';
 import { IAuthData } from '../../../../shared/interfaces/auth/auth-data';
 import { CommonConstants } from '../../../../shared/classes/common-constants';
 import { NativePlatform } from '../../../../shared/enums/native-platform';
-import { ILiyYdmsEmotionalQuestion } from '../../../../shared/interfaces/models/liy.ydms.emotional.question';
 import { ILiyYdmsEmotionalAnswerOption } from '../../../../shared/interfaces/models/liy.ydms.emotional.answer.option';
 import { IEmotionJournal } from '../../../../shared/interfaces/function-data/emtion-journal';
 import { IonicColors } from '../../../../shared/enums/ionic-colors';
@@ -22,6 +21,7 @@ import { Position } from '../../../../shared/enums/position';
 import { BtnRoles } from '../../../../shared/enums/btn-roles';
 import { StyleClass } from '../../../../shared/enums/style-class';
 import { StorageKey } from '../../../../shared/enums/storage-key';
+import { IEmotionQuestion } from '../../../../shared/interfaces/function-data/emotion-question';
 
 @Component({
   selector: 'app-emotion-checkin',
@@ -31,11 +31,10 @@ import { StorageKey } from '../../../../shared/enums/storage-key';
 })
 export class EmotionCheckinComponent implements OnInit {
 
+  emotionQuestion?: IEmotionQuestion;
   animeImage!: IHeaderAnimeImage;
   authData?: IAuthData;
   isLoading!: boolean;
-  emotionalQuestion!: ILiyYdmsEmotionalQuestion;
-  emotionalAnswerOptions!: ILiyYdmsEmotionalAnswerOption[];
   selectedAnswer!: ILiyYdmsEmotionalAnswerOption;
   emotionJournal!: IEmotionJournal;
 
@@ -43,11 +42,11 @@ export class EmotionCheckinComponent implements OnInit {
   protected readonly PageRoutes = PageRoutes;
 
   constructor(
+    private location: Location,
     private navCtrl: NavController,
     private authService: AuthService,
-    private liyYdmsEmotionalQuestionService: LiyYdmsEmotionalQuestionService,
-    private liyYdmsEmotionalAnswerOptionService: LiyYdmsEmotionalAnswerOptionService,
     private liyYdmsEmotionalDiaryService: LiyYdmsEmotionalDiaryService,
+    private taskService: TaskService,
     private loadingController: LoadingController,
     private toastController: ToastController,
     private translate: TranslateService,
@@ -58,17 +57,22 @@ export class EmotionCheckinComponent implements OnInit {
   async ngOnInit() {
     this.initHeader();
     this.authData = await this.authService.getAuthData();
-    await this.getRandomEmotionalQuestion();
+    const state = this.location.getState() as { question?: IEmotionQuestion };
+    if (!state?.question) {
+      await this.getRandomEmotionalQuestion();
+    } else {
+      this.emotionQuestion = state.question;
+    }
   }
 
   /**
    * On click submit emotion checkin
    */
   public onClickSubmit(): void {
-    if (!this.authData || !this.selectedAnswer || !this.emotionalQuestion) return;
+    if (!this.authData || !this.selectedAnswer || !this.emotionQuestion) return;
     const body: Partial<IEmotionJournal> = {
       ...this.emotionJournal,
-      question_id: this.emotionalQuestion.id,
+      question_id: this.emotionQuestion.id,
       answer_id: this.selectedAnswer.id,
       teenager_id: this.authData.id
     }
@@ -97,22 +101,8 @@ export class EmotionCheckinComponent implements OnInit {
     const loading = await this.loadingController.create({mode: NativePlatform.IOS});
     await loading.present();
     try {
-      const countQuestions = await this.liyYdmsEmotionalQuestionService.getCountQuestions();
-      if (countQuestions === 0) {
-        await this.navCtrl.navigateRoot(`/${PageRoutes.DAILY_EMOTION_JOURNAL}`);
-        return;
-      }
-
-      const randomOffset = CommonConstants.randomInt(countQuestions);
-      const randomQuestions = await this.liyYdmsEmotionalQuestionService.getQuestionList([], randomOffset, 1);
-      this.emotionalQuestion = randomQuestions?.[0];
-
-      if (!this.emotionalQuestion) {
-        await this.navCtrl.navigateRoot(`/${PageRoutes.DAILY_EMOTION_JOURNAL}`);
-        return;
-      }
-
-      this.emotionalAnswerOptions = await this.liyYdmsEmotionalAnswerOptionService.getAnswerOptionsByQuestionId(this.emotionalQuestion.id);
+      this.emotionQuestion = await this.taskService.getRandomEmotionQuestion();
+      if (!this.emotionQuestion) await this.navCtrl.navigateRoot(`/${PageRoutes.DAILY_EMOTION_JOURNAL}`);
     } catch (e) {
       console.error(e);
     } finally {

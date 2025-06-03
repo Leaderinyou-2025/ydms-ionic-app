@@ -2,110 +2,127 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './core/guards/auth.guard';
+import { PageRoutes } from './shared/enums/page-routes';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: PageRoutes.LOGIN,
     pathMatch: 'full'
   },
   {
-    path: 'login',
+    path: PageRoutes.LOGIN,
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
   {
-    path: 'home',
+    path: PageRoutes.HOME,
     loadChildren: () => import('./pages/student/home/home.module').then(m => m.HomePageModule),
     canActivate: [AuthGuard],
   },
   {
-    path: 'profile',
+    path: PageRoutes.PROFILE,
     loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule),
     canActivate: [AuthGuard],
   },
   {
-    path: 'parent-dashboard',
+    path: PageRoutes.PARENT_DASHBOARD,
     loadChildren: () => import('./pages/parent/parent-dashboard/parent-dashboard.module').then(m => m.ParentDashboardPageModule),
     canActivate: [AuthGuard],
   },
   {
-    path: 'teacher-dashboard',
+    path: PageRoutes.TEACHER_DASHBOARD,
     loadChildren: () => import('./pages/teacher/teacher-dashboard/teacher-dashboard.module').then(m => m.TeacherDashboardPageModule),
     canActivate: [AuthGuard],
   },
   {
-    path: 'family-group',
+    path: PageRoutes.FAMILY_GROUP,
     loadChildren: () => import('./pages/social-network/family-group/family-group.module').then(m => m.FamilyGroupPageModule)
   },
   {
-    path: 'class-group',
-    loadChildren: () => import('./pages/social-network/class-group/class-group.module').then(m => m.ClassGroupPageModule)
+    path: PageRoutes.CLASS_GROUP,
+    loadChildren: () => import('./pages/social-network/class-group/class-group.module').then(m => m.ClassGroupPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'school-group',
-    loadChildren: () => import('./pages/social-network/school-group/school-group.module').then(m => m.SchoolGroupPageModule)
+    path: PageRoutes.SCHOOL_GROUP,
+    loadChildren: () => import('./pages/social-network/school-group/school-group.module').then(m => m.SchoolGroupPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'personal-diary',
-    loadChildren: () => import('./pages/student/personal-diary/personal-diary.module').then(m => m.PersonalDiaryPageModule)
+    path: PageRoutes.PERSONAL_DIARY,
+    loadChildren: () => import('./pages/student/personal-diary/personal-diary.module').then(m => m.PersonalDiaryPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'friends',
-    loadChildren: () => import('./pages/student/friends/friends.module').then(m => m.FriendsPageModule)
+    path: PageRoutes.FRIENDS,
+    loadChildren: () => import('./pages/student/friends/friends.module').then(m => m.FriendsPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'chatbot',
-    loadChildren: () => import('./pages/chatbot/chatbot.module').then(m => m.ChatbotPageModule)
+    path: PageRoutes.CHATBOT,
+    loadChildren: () => import('./pages/chatbot/chatbot.module').then(m => m.ChatbotPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'rank',
-    loadChildren: () => import('./pages/student/rank/rank.module').then(m => m.RankPageModule)
+    path: PageRoutes.RANK,
+    loadChildren: () => import('./pages/student/rank/rank.module').then(m => m.RankPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'notifications',
+    path: PageRoutes.NOTIFICATIONS,
     loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsPageModule),
     canActivate: [AuthGuard],
   },
   {
-    path: 'friends',
-    loadChildren: () => import('./pages/student/friends/friends.module').then(m => m.FriendsPageModule)
+    path: PageRoutes.LIBRARY,
+    loadChildren: () => import('./pages/student/library/library.module').then(m => m.LibraryPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'library',
-    loadChildren: () => import('./pages/student/library/library.module').then(m => m.LibraryPageModule)
+    path: PageRoutes.FAMILY_ACTIONS,
+    loadChildren: () => import('./pages/parent/family-actions/family-actions.module').then(m => m.FamilyActionsPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'family-actions',
-    loadChildren: () => import('./pages/parent/family-actions/family-actions.module').then(m => m.FamilyActionsPageModule)
+    path: PageRoutes.EXPERT_GUIDE,
+    loadChildren: () => import('./pages/teacher/expert-guide/expert-guide.module').then(m => m.ExpertGuidePageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'expert-guide',
-    loadChildren: () => import('./pages/teacher/expert-guide/expert-guide.module').then(m => m.ExpertGuidePageModule)
+    path: PageRoutes.TASK,
+    loadChildren: () => import('./pages/student/task/task.module').then(m => m.TaskPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'task',
-    loadChildren: () => import('./pages/student/task/task.module').then(m => m.TaskPageModule)
+    path: PageRoutes.DAILY_EMOTION_JOURNAL,
+    loadChildren: () => import('./pages/student/daily-emotion-journal/daily-emotion-journal.module').then(m => m.DailyEmotionJournalPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'daily-emotion-journal',
-    loadChildren: () => import('./pages/student/daily-emotion-journal/daily-emotion-journal.module').then(m => m.DailyEmotionJournalPageModule)
+    path: PageRoutes.FAMILY_CONFLICT_SURVEY,
+    loadChildren: () => import('./pages/survey/family-conflict-survey/family-conflict-survey.module').then(m => m.FamilyConflictSurveyPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'family-conflict-survey',
-    loadChildren: () => import('./pages/survey/family-conflict-survey/family-conflict-survey.module').then(m => m.FamilyConflictSurveyPageModule)
+    path: PageRoutes.FAMILY_COMMUNICATION_QUALITY_SURVEY,
+    loadChildren: () => import('./pages/survey/family-communication-quality-survey/family-communication-quality-survey.module').then(m => m.FamilyCommunicationQualitySurveyPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'family-communication-quality-survey',
-    loadChildren: () => import('./pages/survey/family-communication-quality-survey/family-communication-quality-survey.module').then(m => m.FamilyCommunicationQualitySurveyPageModule)
+    path: PageRoutes.EMOTIONAL_SURVEY,
+    loadChildren: () => import('./pages/survey/emotional-survey/emotional-survey.module').then(m => m.EmotionalSurveyPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'emotional-survey',
-    loadChildren: () => import('./pages/survey/emotional-survey/emotional-survey.module').then(m => m.EmotionalSurveyPageModule)
+    path: PageRoutes.SELF_DISCOVERY_SURVEY,
+    loadChildren: () => import('./pages/survey/self-discovery-survey/self-discovery-survey.module').then(m => m.SelfDiscoverySurveyPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'self-discovery-survey',
-    loadChildren: () => import('./pages/survey/self-discovery-survey/self-discovery-survey.module').then(m => m.SelfDiscoverySurveyPageModule)
-  }
+    path: PageRoutes.TASK_EXECUTING,
+    loadChildren: () => import('./pages/task-executing/task-executing.module').then(m => m.TaskExecutingPageModule),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

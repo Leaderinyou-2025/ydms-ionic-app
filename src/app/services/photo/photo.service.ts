@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { AlertController, AlertOptions } from '@ionic/angular';
-import { Camera, CameraDirection, CameraResultType, CameraSource, ImageOptions } from '@capacitor/camera';
-import { AndroidSettings, IOSSettings, NativeSettings } from 'capacitor-native-settings';
-import { TranslateService } from '@ngx-translate/core';
+import {Injectable} from '@angular/core';
+import {AlertController, AlertOptions} from '@ionic/angular';
+import {Camera, CameraDirection, CameraResultType, CameraSource, ImageOptions} from '@capacitor/camera';
+import {AndroidSettings, IOSSettings, NativeSettings} from 'capacitor-native-settings';
+import {TranslateService} from '@ngx-translate/core';
 
-import { TranslateKeys } from '../../shared/enums/translate-keys';
-import { StyleClass } from '../../shared/enums/style-class';
-import { NativePlatform } from '../../shared/enums/native-platform';
+import {TranslateKeys} from '../../shared/enums/translate-keys';
+import {StyleClass} from '../../shared/enums/style-class';
+import {NativePlatform} from '../../shared/enums/native-platform';
 
 
 @Injectable({
@@ -30,8 +30,8 @@ export class PhotoService {
    * @param targetHeight
    */
   public async pickImage(
-    sourceType = 0,
-    cameraDirection = 0,
+    sourceType: CameraSource = CameraSource.Camera,
+    cameraDirection: CameraDirection = CameraDirection.Rear,
     saveToGallery = false,
     targetWidth = 768,
     targetHeight = 1366
@@ -48,9 +48,9 @@ export class PhotoService {
       width: targetWidth,
       height: targetHeight,
       correctOrientation: true,
-      source: sourceType !== 0 ? CameraSource.Camera : CameraSource.Photos,
+      source: sourceType,
       saveToGallery: saveToGallery,
-      direction: cameraDirection === 0 ? CameraDirection.Rear : CameraDirection.Front
+      direction: cameraDirection
     };
     const imageData = await Camera.getPhoto(options);
     this.croppedImagePath = imageData?.base64String || '';

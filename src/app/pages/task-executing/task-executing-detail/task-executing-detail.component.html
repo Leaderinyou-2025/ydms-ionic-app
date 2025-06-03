@@ -1,0 +1,168 @@
+<ng-container *ngIf="task">
+  <app-header
+    [pageTitle]="pageTitle"
+    defaultBackHref="/{{PageRoutes.TASK}}"
+    backgroundImageUrl="/assets/images/banner.svg"
+    [animeImage]="animeImage"
+    [caption]="TranslateKeys.HOME_WELCOME_SUBTITLE"
+    [animation]="animation">
+  </app-header>
+
+  <ion-content [fullscreen]="true" class="custom-page-bg-light ion-padding">
+    <!--  Guide detail  -->
+    <div class="p-5 mb-4 rounded-xl bg-gray-50 dark:bg-gray-800">
+      <!--   Task name and description   -->
+      <h2 class="text-2xl text-center text-sky-500 font-bold">{{ task.guide_id.name }}</h2>
+      <p *ngIf="task.guide.desciption" class="italic text-sm text-gray-400 text-center">
+        {{ task.guide.desciption }}
+      </p>
+
+      <!--   Task content   -->
+      <div class="my-3 text-justify text-base" *ngIf="task.guide.guide_content">
+        <app-safe-html-viewer [htmlData]="task.guide.guide_content"></app-safe-html-viewer>
+      </div>
+
+      <!--   Task rank points   -->
+      <div class="flex items-center justify-center text-base">
+        <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-8 h-8 object-contain"
+                 [class.intense-shake-zoom]="task.status === TaskStatus.IN_PROGRESS || task.status === TaskStatus.PENDING">
+        </ion-img>
+        <span class="text-2xl font-bold  text-orange-500 dark:text-white">+{{ task.rank_point || 0 }}</span>
+      </div>
+
+      <!--   Task status   -->
+      <div class="flex items-center justify-between py-2">
+        <!--  Status badge    -->
+        <ion-badge class="bg-green-400 text-gray-700" *ngIf="task.status === TaskStatus.COMPLETED">
+          {{ TranslateKeys.TITLE_COMPLETED | translate }}
+        </ion-badge>
+        <ion-badge class="bg-yellow-300 text-gray-700" *ngIf="task.status === TaskStatus.IN_PROGRESS">
+          {{ TranslateKeys.TITLE_IN_PROGRESS | translate }}
+        </ion-badge>
+        <ion-badge class="bg-yellow-300 text-gray-700" *ngIf="task.status === TaskStatus.PENDING">
+          {{ TranslateKeys.TITLE_PENDING | translate }}
+        </ion-badge>
+        <ion-badge class="bg-gray-300 text-gray-700" *ngIf="task.status === TaskStatus.IGNORE">
+          {{ TranslateKeys.TITLE_IGNORE| translate }}
+        </ion-badge>
+
+        <!--   Datetime     -->
+        <p class="italic text-sm text-gray-400">
+          {{ task['create_time'] }} {{ task.create_date | date: DateFormat.DATE_ONLY }}
+        </p>
+      </div>
+
+      <!--   Confirm execute task   -->
+      <div class="flex items-center justify-between pt-4"
+           *ngIf="task.status === TaskStatus.PENDING && task.guide_type !== GuideType.INSTRUCTION">
+        <ion-button color="primary" class="ion-no-padding w-40" (click)="onCLickExecuting(TaskStatus.IN_PROGRESS)">
+          {{ TranslateKeys.BUTTON_EXECUTING | translate }}
+        </ion-button>
+        <ion-button color="dark" class="ion-no-padding w-40" (click)="onCLickExecuting(TaskStatus.IGNORE)">
+          {{ TranslateKeys.BUTTON_NO_EXECUTION | translate }}
+        </ion-button>
+      </div>
+
+      <!--   Xác nhận hoàn thành/bỏ qua hướng dẫn   -->
+      <div class="flex items-center justify-between pt-4"
+           *ngIf="task.status === TaskStatus.PENDING && task.guide_type === GuideType.INSTRUCTION">
+        <ion-button color="primary" class="ion-no-padding w-40" (click)="onCLickExecuting(TaskStatus.COMPLETED)">
+          {{ TranslateKeys.BUTTON_COMPLETE | translate }}
+        </ion-button>
+        <ion-button color="dark" class="ion-no-padding w-40" (click)="onCLickExecuting(TaskStatus.IGNORE)">
+          {{ TranslateKeys.BUTTON_IGNORE | translate }}
+        </ion-button>
+      </div>
+    </div>
+
+    <!--  Task progress  -->
+    <div class="p-5 mb-4 rounded-xl bg-gray-50 dark:bg-gray-800" *ngIf="taskProgressUpdate">
+      <!--   Label task progress   -->
+      <h2 class="text-xl mb-3">{{ TranslateKeys.TITLE_PROGRESS_UPDATING | translate }}</h2>
+      <ion-row>
+        <ion-col size="12" class="py-2">
+          <ion-label>{{ TranslateKeys.TITLE_PROGRESS_RESULT | translate }}
+            ({{ (taskProgressUpdate.task_percentage_result || 0) * 100 }}%)
+          </ion-label>
+          <ion-range [(ngModel)]="taskProgressUpdate.task_percentage_result"
+                     [ticks]="true" [snaps]="true" [min]="0" [max]="1" [step]="0.1"></ion-range>
+        </ion-col>
+
+        <ion-col size="12" class="py-2">
+          <ion-label>{{ TranslateKeys.TITLE_RESULT_DESCRIPTION | translate }}</ion-label>
+          <quill-editor [(ngModel)]="taskProgressUpdate.task_text_result" placeholder=""
+                        class="h-52" format="html" theme="snow"></quill-editor>
+        </ion-col>
+
+        <ion-col size="12" class="pt-5">
+          <div class="flex items-center justify-center gap-3 mt-4">
+            <ion-button shape="round" fill="outline" color="dark" class="min-h-0"
+                        (click)="onClickAddImage(CameraSource.Photos)">
+              <ion-icon class="text-lg py-1" name="images"></ion-icon>
+              <span class="text-sm pl-3">{{ TranslateKeys.TITLE_GALLERY | translate }}</span>
+            </ion-button>
+            <ion-button shape="round" fill="outline" color="dark" class="min-h-0"
+                        (click)="onClickAddImage(CameraSource.Camera)">
+              <ion-icon class="text-lg py-1" name="camera"></ion-icon>
+              <span class="text-sm pl-3">{{ TranslateKeys.TITLE_CAPTURE | translate }}</span>
+            </ion-button>
+          </div>
+          <div class="mt-5 relative w-full border rounded-xl overflow-hidden group"
+               *ngIf="taskProgressUpdate.task_image_result">
+            <ion-icon
+              class="absolute top-2 right-2 text-2xl text-red-500 opacity-0 group-hover:opacity-100 transition duration-200 cursor-pointer"
+              name="close-circle"
+              (click)="taskProgressUpdate.task_image_result = undefined">
+            </ion-icon>
+
+            <ion-img [src]="CommonConstants.formatBase64ImageUrl(taskProgressUpdate.task_image_result)"
+                     class="w-full h-auto">
+            </ion-img>
+          </div>
+        </ion-col>
+
+        <ion-col size="12" class="pt-4 pb-2 ion-text-center">
+          <div class="flex items-center justify-between pt-4">
+            <ion-button class="ion-no-padding w-40" (click)="onClickUpdateTaskProgress()">
+              {{ TranslateKeys.BUTTON_UPDATE | translate }}
+            </ion-button>
+            <ion-button class="ion-no-padding w-40" color="dark" (click)="onCLickEndTask()">
+              {{ TranslateKeys.BUTTON_END | translate }}
+            </ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <!--  Task result  -->
+    <div class="p-5 mb-4 rounded-xl bg-gray-50 dark:bg-gray-800"
+         *ngIf="(task.status === TaskStatus.COMPLETED || task.status === TaskStatus.IGNORE)
+         && task.guide_type === GuideType.EXERCISE
+         && (task.task_percentage_result || task.task_text_result || task.task_image_result)">
+      <!--   Label task result   -->
+      <h2 class="text-xl mb-3">{{ TranslateKeys.TITLE_RESULT | translate }}</h2>
+
+      <ion-row>
+        <ion-col size="12" class="py-2">
+          <ion-label>{{ TranslateKeys.TITLE_PROGRESS_RESULT | translate }}
+            ({{ task.task_percentage_result || 0 }}%)
+          </ion-label>
+        </ion-col>
+
+        <ion-col size="12" class="py-2" *ngIf="task.task_text_result?.length">
+          <ion-label>{{ TranslateKeys.TITLE_RESULT_DESCRIPTION | translate }}</ion-label>
+          <div class="p-4 rounded-xl border-2" [innerHTML]="task.task_text_result"></div>
+        </ion-col>
+
+        <ion-col size="12" class="pt-5" *ngIf="task.task_image_result">
+          <div class="relative w-full border rounded-xl overflow-hidden group">
+            <ion-img [src]="CommonConstants.formatBase64ImageUrl(task.task_image_result)"
+                     class="w-full h-auto">
+            </ion-img>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+
+  </ion-content>
+</ng-container>

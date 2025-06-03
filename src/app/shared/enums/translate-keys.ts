@@ -292,7 +292,7 @@ export enum TranslateKeys {
   TITLE_FAILED_SOUND = 'TITLE.failed_sound',
   TITLE_MUSIC = 'TITLE.music',
   TITLE_NOTIFICATION = 'TITLE.notification',
-  EXPERT_GUIDE = 'TITLE.expert_guide',
+  TITLE_EXPERT_GUIDE = 'TITLE.expert_guide',
   TITLE_SHARE = 'TITLE.share',
   TITLE_ON = 'TITLE.on',
   TITLE_OFF = 'TITLE.off',
@@ -357,6 +357,18 @@ export enum TranslateKeys {
   TITLE_SEND_REQUEST = 'TITLE.send_request',
   TITLE_REQUEST_TO_YOU = 'TITLE.request_to_you',
   TITLE_NO_RESULT_FOUND = 'TITLE.no_result_found',
+  TITLE_SELF_DISCOVERY_PROGRESS = 'TITLE.sel_discovery_progress',
+  TITLE_NO_DATA = 'TITLE.no_data',
+  TITLE_COMPLETED = 'TITLE.completed',
+  TITLE_IN_PROGRESS = 'TITLE.in_progress',
+  TITLE_PENDING = 'TITLE.pending',
+  TITLE_IGNORE = 'TITLE.ignore',
+  TITLE_PROGRESS_UPDATING = "TITLE.progress_updating",
+  TITLE_RESULT = "TITLE.result",
+  TITLE_PROGRESS_RESULT = "TITLE.progress_result",
+  TITLE_RESULT_DESCRIPTION = "TITLE.result_description",
+  TITLE_CAPTURE = "TITLE.capture",
+  TITLE_GALLERY = "TITLE.gallery",
 
   // VALIDATE
   VALIDATE_PHONE_REQUIRED = 'VALIDATE.phone_required',
@@ -382,6 +394,8 @@ export enum TranslateKeys {
   ALERT_CONFIRM_UNFRIEND = 'ALERT.confirm_unfriend_alert',
   ALERT_APP_UPDATE_SUCCESSFUL = 'ALERT.app_update_successful',
   ALERT_CONFIRM_UN_PUBLIC = 'ALERT.confirm_un_public_alert',
+  ALERT_CONFIRM_END_TASK = 'ALERT.confirm_end_task',
+  ALERT_FEATURE_DEVELOPING = 'ALERT.feature_developing',
 
   // BUTTON TITLES
   BUTTON_CONFIRM = 'BUTTON_TITLES.confirm',
@@ -393,6 +407,7 @@ export enum TranslateKeys {
   BUTTON_CURRENT = 'BUTTON_TITLES.current',
   BUTTON_SET_AS_CURRENT = 'BUTTON_TITLES.set_as_current',
   BUTTON_UPDATE = 'BUTTON_TITLES.update',
+  BUTTON_END = 'BUTTON_TITLES.end',
   BUTTON_EXECUTE = 'BUTTON_TITLES.execute',
   BUTTON_COMPLETE = 'BUTTON_TITLES.complete',
   BUTTON_CREATE_NEW_SURVEY = 'BUTTON_TITLES.create_new_survey',
@@ -402,6 +417,9 @@ export enum TranslateKeys {
   BUTTON_CHECKIN_EMOTION = 'BUTTON_TITLES.checkin_emotion',
   BUTTON_ACCEPT = 'BUTTON_TITLES.accept',
   BUTTON_SEND_REQUEST = 'BUTTON_TITLES.send_request',
+  BUTTON_EXECUTING = 'BUTTON_TITLES.executing',
+  BUTTON_NO_EXECUTION = 'BUTTON_TITLES.no_execution',
+  BUTTON_IGNORE = 'BUTTON_TITLES.ignore',
 
   // TOAST
   TOAST_ERROR_HEADER = 'TOAST.error_header',

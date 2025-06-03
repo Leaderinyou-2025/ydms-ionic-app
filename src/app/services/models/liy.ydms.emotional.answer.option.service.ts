@@ -67,6 +67,17 @@ export class LiyYdmsEmotionalAnswerOptionService {
   }
 
   /**
+   * Get answer option by id
+   * @param ids Answer option IDs
+   * @returns Promise<ILiyYdmsEmotionalAnswerOption | null>
+   */
+  public async getAnswerOptionByIds(ids: Array<number>): Promise<ILiyYdmsEmotionalAnswerOption[]> {
+    return this.getAnswerOptionList(
+      [['id', OdooDomainOperator.IN, ids]], 0, 0
+    );
+  }
+
+  /**
    * Get answer options by question id
    * @param questionId Question ID
    * @returns Promise<ILiyYdmsEmotionalAnswerOption[]>

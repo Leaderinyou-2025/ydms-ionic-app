@@ -1,28 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActionSheetController, LoadingController, SelectCustomEvent, ToastButton, ToastController, ToastOptions } from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
-import { NavigationExtras, Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {
+  ActionSheetController,
+  LoadingController,
+  SelectCustomEvent,
+  ToastButton,
+  ToastController,
+  ToastOptions
+} from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
+import {NavigationExtras, Router} from '@angular/router';
 
-import { IAuthData } from '../../../../shared/interfaces/auth/auth-data';
-import { AuthService } from '../../../../services/auth/auth.service';
-import { PhotoService } from '../../../../services/photo/photo.service';
-import { LiyYdmsAvatarService } from '../../../../services/models/liy.ydms.avatar.service';
-import { AddressService } from '../../../../services/address/address.service';
-import { PageRoutes } from '../../../../shared/enums/page-routes';
-import { TranslateKeys } from '../../../../shared/enums/translate-keys';
-import { ILiyYdmsAvatar } from '../../../../shared/interfaces/models/liy.ydms.avatar';
-import { CommonConstants } from '../../../../shared/classes/common-constants';
-import { IResCountryState } from '../../../../shared/interfaces/models/res.country.state';
-import { ILiyYdmsDistrict } from '../../../../shared/interfaces/models/liy.ydms.district';
-import { ILiyYdmsPrecint } from '../../../../shared/interfaces/models/liy.ydms.precint';
-import { NativePlatform } from '../../../../shared/enums/native-platform';
-import { IonicIcons } from '../../../../shared/enums/ionic-icons';
-import { Position } from '../../../../shared/enums/position';
-import { BtnRoles } from '../../../../shared/enums/btn-roles';
-import { StyleClass } from '../../../../shared/enums/style-class';
-import { IonicColors } from '../../../../shared/enums/ionic-colors';
-import { IAssetsResource } from '../../../../shared/interfaces/settings/assets-resource';
+import {IAuthData} from '../../../../shared/interfaces/auth/auth-data';
+import {AuthService} from '../../../../services/auth/auth.service';
+import {PhotoService} from '../../../../services/photo/photo.service';
+import {LiyYdmsAvatarService} from '../../../../services/models/liy.ydms.avatar.service';
+import {AddressService} from '../../../../services/address/address.service';
+import {PageRoutes} from '../../../../shared/enums/page-routes';
+import {TranslateKeys} from '../../../../shared/enums/translate-keys';
+import {ILiyYdmsAvatar} from '../../../../shared/interfaces/models/liy.ydms.avatar';
+import {CommonConstants} from '../../../../shared/classes/common-constants';
+import {IResCountryState} from '../../../../shared/interfaces/models/res.country.state';
+import {ILiyYdmsDistrict} from '../../../../shared/interfaces/models/liy.ydms.district';
+import {ILiyYdmsPrecint} from '../../../../shared/interfaces/models/liy.ydms.precint';
+import {NativePlatform} from '../../../../shared/enums/native-platform';
+import {IonicIcons} from '../../../../shared/enums/ionic-icons';
+import {Position} from '../../../../shared/enums/position';
+import {BtnRoles} from '../../../../shared/enums/btn-roles';
+import {StyleClass} from '../../../../shared/enums/style-class';
+import {IonicColors} from '../../../../shared/enums/ionic-colors';
+import {IAssetsResource} from '../../../../shared/interfaces/settings/assets-resource';
+import {CameraSource} from "@capacitor/camera";
 
 @Component({
   selector: 'app-personal-info',
@@ -162,7 +170,7 @@ export class PersonalInfoComponent implements OnInit {
         {
           text: this.translate.instant(TranslateKeys.TITLE_TAKE_NEW_IMAGE),
           handler: () => {
-            this.photoService.pickImage(1, 0, false).then(() => {
+            this.photoService.pickImage(CameraSource.Camera).then(() => {
               const image = this.photoService.getImageResourceBase64();
               if (image) this.updateUserImage(image);
             });
@@ -171,7 +179,7 @@ export class PersonalInfoComponent implements OnInit {
         {
           text: this.translate.instant(TranslateKeys.TITLE_SELECT_GALLERY),
           handler: () => {
-            this.photoService.pickImage(0, 0, false).then(() => {
+            this.photoService.pickImage(CameraSource.Photos).then(() => {
               const image = this.photoService.getImageResourceBase64();
               if (image) this.updateUserImage(image);
             });

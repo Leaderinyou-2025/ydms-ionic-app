@@ -65,7 +65,8 @@ export class FamilyConflictSurveyDetailComponent implements OnInit {
           this.translate.instant(TranslateKeys.TOAST_UPDATE_SUCCESS),
           IonicColors.SUCCESS
         );
-        await this.router.navigateByUrl(PageRoutes.FAMILY_CONFLICT_SURVEY);
+        history.back();
+        // await this.router.navigateByUrl(PageRoutes.FAMILY_CONFLICT_SURVEY);
       } else {
         this.showToast(
           this.translate.instant(TranslateKeys.TOAST_UPDATE_FAILED),

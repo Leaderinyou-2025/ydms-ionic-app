@@ -74,3 +74,6 @@ ion-select::part(icon) {
   margin-inline-start: 0;
 }
 
+.ql-toolbar {
+  background: #f4f5f8;
+}

@@ -12,10 +12,10 @@
     <ion-skeleton-text animated class="w-full h-80 rounded-lg mb-3"></ion-skeleton-text>
   </div>
 
-  <ng-container *ngIf="emotionalQuestion && emotionalAnswerOptions">
+  <ng-container *ngIf="emotionQuestion">
     <app-emotion-icon-selector
-      [questionText]="emotionalQuestion.name || ''"
-      [emotionAnswerOptions]="emotionalAnswerOptions"
+      [questionText]="emotionQuestion.name || ''"
+      [emotionAnswerOptions]="emotionQuestion.answers"
       (emotionSelected)="selectedAnswer = $event">
     </app-emotion-icon-selector>
 

@@ -109,17 +109,72 @@ export class LiyYdmsAssessmentResultService {
   }
 
   /**
+   * Đếm số lượng bài khảo sát đang chờ trả lời trong tháng
+   * @param assigneeId
+   * @param areaOfExpertise
+   * @param month
+   * @param year
+   */
+  public async getCountAssessmentResultPendingInMonth(
+    assigneeId: number,
+    areaOfExpertise?: string,
+    month?: number,
+    year?: number,
+  ): Promise<number> {
+    const rangeDateMonth = CommonConstants.getFirstAndLastDateInMonth(month, year);
+    const searchDomain: SearchDomain = [
+      ['assignee_id', OdooDomainOperator.EQUAL, assigneeId],
+      ['is_posted', OdooDomainOperator.EQUAL, false],
+      ['create_date', OdooDomainOperator.GREATER_EQUAL, rangeDateMonth.firstDate],
+      ['create_date', OdooDomainOperator.LESS_EQUAL, rangeDateMonth.lastDate],
+    ];
+    if (areaOfExpertise) searchDomain.push(['area_of_expertise', OdooDomainOperator.EQUAL, areaOfExpertise]);
+    return this.getCountAssessmentResult(searchDomain);
+  }
+
+  /**
+   * Đếm số lượng bài khảo sát đã hoàn thành trong tháng
+   * @param assigneeId
+   * @param areaOfExpertise
+   * @param month
+   * @param year
+   */
+  public async getCountAssessmentResultCompleteInMonth(
+    assigneeId: number,
+    areaOfExpertise?: string,
+    month?: number,
+    year?: number,
+  ): Promise<number> {
+    const rangeDateMonth = CommonConstants.getFirstAndLastDateInMonth(month, year);
+    const searchDomain: SearchDomain = [
+      ['assignee_id', OdooDomainOperator.EQUAL, assigneeId],
+      ['is_posted', OdooDomainOperator.EQUAL, true],
+      ['create_date', OdooDomainOperator.GREATER_EQUAL, rangeDateMonth.firstDate],
+      ['create_date', OdooDomainOperator.LESS_EQUAL, rangeDateMonth.lastDate],
+    ];
+    if (areaOfExpertise) searchDomain.push(['area_of_expertise', OdooDomainOperator.EQUAL, areaOfExpertise]);
+    return this.getCountAssessmentResult(searchDomain);
+  }
+
+  /**
    * Lấy danh sách bài khảo sát đang chờ trả lời
    * @param assigneeId
    * @param areaOfExpertise
+   * @param month
+   * @param year
    */
-  public async getAssessmentResultPending(
+  public async getAssessmentResultPendingInMonth(
     assigneeId: number,
     areaOfExpertise?: string,
+    month?: number,
+    year?: number
   ): Promise<ILiyYdmsAssessmentResult[]> {
+    const rangeDateMonth = CommonConstants.getFirstAndLastDateInMonth(month, year);
     const searchDomain: SearchDomain = [
       ['assignee_id', OdooDomainOperator.EQUAL, assigneeId],
-      ['is_posted', OdooDomainOperator.EQUAL, false] // Chưa trả lời
+      ['is_posted', OdooDomainOperator.EQUAL, false],
+      ['create_date', OdooDomainOperator.GREATER_EQUAL, rangeDateMonth.firstDate],
+      ['create_date', OdooDomainOperator.LESS_EQUAL, rangeDateMonth.lastDate],
     ];
     if (areaOfExpertise) searchDomain.push(['area_of_expertise', OdooDomainOperator.EQUAL, areaOfExpertise]);
     return this.getAssessmentResultList(searchDomain, 0, 0);
@@ -134,7 +189,7 @@ export class LiyYdmsAssessmentResultService {
       ModelName.ASSESSMENT_RESULT,
       [id],
       this.fields,
-    )
+    );
     if (!results || !results?.length) return;
     results = CommonConstants.convertArr2ListItem(results);
     return results[0];
@@ -161,5 +216,28 @@ export class LiyYdmsAssessmentResultService {
     ];
     if (areaOfExpertise) searchDomain.push(['area_of_expertise', OdooDomainOperator.EQUAL, areaOfExpertise]);
     return this.getAssessmentResultList(searchDomain, 0, 0);
+  }
+
+  /**
+   * getAssessmentResultInMonth
+   * @param assigneeId
+   * @param month
+   * @param year
+   * @param areaOfExpertise
+   */
+  public async getCountAssessmentResultInMonth(
+    assigneeId: number,
+    month?: number,
+    year?: number,
+    areaOfExpertise?: string,
+  ): Promise<number> {
+    const rangeDateMonth = CommonConstants.getFirstAndLastDateInMonth(month, year);
+    const searchDomain: SearchDomain = [
+      ['assignee_id', OdooDomainOperator.EQUAL, assigneeId],
+      ['create_date', OdooDomainOperator.GREATER_EQUAL, rangeDateMonth.firstDate],
+      ['create_date', OdooDomainOperator.LESS_EQUAL, rangeDateMonth.lastDate],
+    ];
+    if (areaOfExpertise) searchDomain.push(['area_of_expertise', OdooDomainOperator.EQUAL, areaOfExpertise]);
+    return this.getCountAssessmentResult(searchDomain);
   }
 }

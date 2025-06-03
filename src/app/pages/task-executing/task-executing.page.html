@@ -1,0 +1,86 @@
+<app-header
+  [pageTitle]="pageTitle"
+  defaultBackHref="/{{PageRoutes.TASK}}"
+  backgroundImageUrl="/assets/images/banner.svg"
+  [animeImage]="animeImage"
+  [caption]="TranslateKeys.HOME_WELCOME_SUBTITLE"
+  [animation]="animation">
+</app-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Refresh -->
+  <ion-refresher slot="fixed" mode="md" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Loading skeleton -->
+  <div *ngIf="isLoading">
+    <ion-skeleton-text animated class="w-full h-32 rounded-lg mb-4" *ngFor="let i of Array(10)"></ion-skeleton-text>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="isLoading === false && taskList.length === 0" class="flex flex-col items-center justify-center py-10">
+    <ion-icon name="document-text-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+    <p class="text-center text-gray-500">{{ TranslateKeys.TITLE_NO_DATA | translate }}</p>
+  </div>
+
+  <!--  Task list -->
+  <ng-container *ngIf="taskList?.length">
+    <div class="relative p-4 mb-4 bg-purple-500 text-white rounded-xl" *ngFor="let task of taskList"
+         routerLink="{{task.id}}">
+      <ion-icon name="checkmark-circle" class="absolute right-2 top-2 text-3xl text-sky-200"
+                *ngIf="task.status === TaskStatus.COMPLETED"></ion-icon>
+      <ion-icon name="warning" class="absolute right-2 top-2 text-3xl text-yellow-300 intense-shake-zoom"
+                *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS"></ion-icon>
+      <ion-icon name="ban" class="absolute right-2 top-2 text-3xl text-white"
+                *ngIf="task.status === TaskStatus.IGNORE"></ion-icon>
+      <!--   Task name   -->
+      <p class="mb-1 pr-2 text-lg font-bold">{{ task.name }}</p>
+
+      <!--   Task rank points   -->
+      <div class="flex items-center text-base">
+        <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon" class="w-7 h-7 object-contain"
+                 [class.intense-shake-zoom]="task.status === TaskStatus.IN_PROGRESS || task.status === TaskStatus.PENDING">
+        </ion-img>
+        <span class="text-xl font-bold text-white">+{{ task.rank_point || 0 }}</span>
+      </div>
+
+      <!--   Task progress   -->
+      <div class="relative mt-0"
+           *ngIf="task.guide_type === GuideType.EXERCISE && task.task_percentage_result !== 1 && task.status === TaskStatus.IN_PROGRESS">
+        <p class="pb-1 pr-1 text-sm italic text-gray-100 font-medium text-right">
+          {{ task.task_percentage_result || 0 }}%
+        </p>
+        <ion-progress-bar color="success" class="h-3 mb-4" type="determinate"
+                          [value]="(task.task_percentage_result || 0) / 100"></ion-progress-bar>
+      </div>
+
+      <!--   Task status and create date   -->
+      <div class="flex items-center justify-between mt-1">
+        <!--  Status badge    -->
+        <ion-badge class="bg-green-400 text-gray-700" *ngIf="task.status === TaskStatus.COMPLETED">
+          {{ TranslateKeys.TITLE_COMPLETED | translate }}
+        </ion-badge>
+        <ion-badge class="bg-yellow-300 text-gray-700" *ngIf="task.status === TaskStatus.IN_PROGRESS">
+          {{ TranslateKeys.TITLE_IN_PROGRESS | translate }}
+        </ion-badge>
+        <ion-badge class="bg-yellow-300 text-gray-700" *ngIf="task.status === TaskStatus.PENDING">
+          {{ TranslateKeys.TITLE_PENDING | translate }}
+        </ion-badge>
+        <ion-badge class="bg-gray-300 text-gray-700" *ngIf="task.status === TaskStatus.IGNORE">
+          {{ TranslateKeys.TITLE_IGNORE| translate }}
+        </ion-badge>
+
+        <!--   Datetime     -->
+        <p class="italic text-gray-200">
+          {{ task['create_time'] }} {{ task.create_date | date: DateFormat.DATE_ONLY }}
+        </p>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Infinite scroll -->
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

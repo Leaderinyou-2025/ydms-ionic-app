@@ -22,6 +22,7 @@ import { EmotionShareComponent } from './components/emotion-share/emotion-share.
 import { FormAssessmentComponent } from './components/form-assessment/form-assessment.component';
 import { AlertEmotionCheckinComponent } from './components/alert-emotion-checkin/alert-emotion-checkin.component';
 import { SelectFriendComponent } from './components/select-friend/select-friend.component';
+import { SafeHtmlViewerComponent } from './components/safe-html-viewer/safe-html-viewer.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { SelectFriendComponent } from './components/select-friend/select-friend.
     EmotionIconSelectorComponent,
     EmotionShareComponent,
     SelectFriendComponent,
+    SafeHtmlViewerComponent,
   ],
   imports: [
     CommonModule,
@@ -67,6 +69,7 @@ import { SelectFriendComponent } from './components/select-friend/select-friend.
     EmotionIconSelectorComponent,
     EmotionShareComponent,
     SelectFriendComponent,
+    SafeHtmlViewerComponent,
   ]
 })
 export class SharedModule {
