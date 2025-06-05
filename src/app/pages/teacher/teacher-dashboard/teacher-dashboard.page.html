@@ -1,15 +1,78 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>teacher-dashboard</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header
+  [pageTitle]="'TITLE.teacher_dashboard' | translate"
+  backgroundColor="linear-gradient(to bottom, #3b82f6, #1e40af)">
+</app-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">teacher-dashboard</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="bg-white">
+  <div class="p-4 h-full overflow-auto">
+    <!-- Welcome Section -->
+    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-6 mb-6">
+      <h1 class="text-2xl font-bold mb-2">Chào mừng Giáo viên!</h1>
+      <p class="text-blue-100">Quản lý lớp học và theo dõi tiến độ học sinh của bạn</p>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <!-- Class Management -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 cursor-pointer hover:shadow-lg transition-shadow"
+        (click)="navigateToClassManagement()">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="bg-blue-100 p-3 rounded-full mr-4">
+              <ion-icon name="school" class="text-2xl text-blue-600"></ion-icon>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800">{{ 'CLASS_MANAGEMENT.title' | translate }}</h3>
+              <p class="text-sm text-gray-500">Quản lý lớp học và học sinh</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward" class="text-gray-400"></ion-icon>
+        </div>
+      </div>
+
+      <!-- Expert Guide -->
+      <div
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 cursor-pointer hover:shadow-lg transition-shadow"
+        (click)="navigateToExpertGuide()">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="bg-green-100 p-3 rounded-full mr-4">
+              <ion-icon name="book" class="text-2xl text-green-600"></ion-icon>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800">Hướng dẫn chuyên môn</h3>
+              <p class="text-sm text-gray-500">Tài liệu và hướng dẫn giảng dạy</p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward" class="text-gray-400"></ion-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Thống kê tổng quan</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="text-center">
+          <div class="text-2xl font-bold text-blue-600">{{ totalClasses }}</div>
+          <div class="text-sm text-gray-500">Lớp học</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-green-600">{{ totalStudents }}</div>
+          <div class="text-sm text-gray-500">Học sinh</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-orange-600">{{ totalTasks }}</div>
+          <div class="text-sm text-gray-500">Nhiệm vụ</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-purple-600">{{ totalNotifications }}</div>
+          <div class="text-sm text-gray-500">Thông báo</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>
 
 <app-footer></app-footer>

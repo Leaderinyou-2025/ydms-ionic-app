@@ -123,6 +123,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/task-executing/task-executing.module').then(m => m.TaskExecutingPageModule),
     canActivate: [AuthGuard],
   },
+    {
+    path: 'class-management',
+    loadChildren: () => import('./pages/teacher/class-management/class-management.module').then(m => m.ClassManagementPageModule),
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

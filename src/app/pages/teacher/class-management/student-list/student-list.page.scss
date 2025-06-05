@@ -1,0 +1,49 @@
+ion-content {
+  --background: #f8fafc;
+}
+
+.custom-searchbar {
+  --background: white;
+  --border-radius: 12px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.student-card {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.student-avatar {
+  border: 2px solid #e2e8f0;
+  transition: border-color 0.3s ease;
+  
+  &:hover {
+    border-color: #3b82f6;
+  }
+}
+
+.student-stats {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-top: 12px;
+}
+
+.class-header-gradient {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .student-card {
+    margin-bottom: 16px;
+  }
+}
