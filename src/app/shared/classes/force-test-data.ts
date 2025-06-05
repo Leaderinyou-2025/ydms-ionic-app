@@ -1,5 +1,7 @@
 import { IAuthData } from '../interfaces/auth/auth-data';
 import { ILiyYdmsNotification } from '../interfaces/models/liy.ydms.notification';
+import { ILiyYdmsClass } from '../interfaces/models/liy.ydms.class';
+import { ILiyYdmsStudent } from '../interfaces/models/liy.ydms.student';
 
 import { IFamilyDialogueSessionDetail, IFamilyDialogueSessionHistory, IFamilyDialogueSessionQuestion } from '../interfaces/family-dialogue-session/family-dialogue-session.interfaces';
 import { EmotionType } from '../enums/personal-diary/personal-diary.enum';
@@ -610,6 +612,150 @@ export class ForceTestData {
       viewCount: 310,
       createdDate: '2023-03-30',
     },
+  ];
+
+  /**
+   * Classes data for teacher
+   */
+  static classes: ILiyYdmsClass[] = [
+    {
+      id: 1,
+      name: 'Lớp 6A',
+      code: '6A-2024',
+      teacher_id: { id: 1, name: 'Nguyễn Thị Lan' },
+      grade: 'Khối 6',
+      academic_year: '2024-2025',
+      student_count: 25,
+      student_ids: [1, 2, 3, 4, 5],
+      description: 'Lớp học chính khóa 6A năm học 2024-2025',
+      active: true,
+      create_date: '2024-09-01 08:00:00',
+      write_date: '2024-09-01 08:00:00'
+    },
+    {
+      id: 2,
+      name: 'Lớp 6B',
+      code: '6B-2024',
+      teacher_id: { id: 1, name: 'Nguyễn Thị Lan' },
+      grade: 'Khối 6',
+      academic_year: '2024-2025',
+      student_count: 28,
+      student_ids: [6, 7, 8, 9, 10],
+      description: 'Lớp học chính khóa 6B năm học 2024-2025',
+      active: true,
+      create_date: '2024-09-01 08:00:00',
+      write_date: '2024-09-01 08:00:00'
+    },
+    {
+      id: 3,
+      name: 'Lớp 7A',
+      code: '7A-2024',
+      teacher_id: { id: 1, name: 'Nguyễn Thị Lan' },
+      grade: 'Khối 7',
+      academic_year: '2024-2025',
+      student_count: 30,
+      student_ids: [11, 12, 13, 14, 15],
+      description: 'Lớp học chính khóa 7A năm học 2024-2025',
+      active: true,
+      create_date: '2024-09-01 08:00:00',
+      write_date: '2024-09-01 08:00:00'
+    }
+  ];
+
+  /**
+   * Students data
+   */
+  static students: ILiyYdmsStudent[] = [
+    {
+      id: 1,
+      user_id: { id: 101, name: 'Nguyễn Văn An' },
+      name: 'Nguyễn Văn An',
+      avatar: '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=',
+      nickname: 'An',
+      email: 'an.nguyen@email.com',
+      phone: '0123456789',
+      class_id: { id: 1, name: 'Lớp 6A' },
+      student_code: 'HS001',
+      dob: '2012-03-15',
+      gender: 'male',
+      total_score: 85,
+      class_rank: 3,
+      active: true,
+      create_date: '2024-09-01 08:00:00',
+      write_date: '2024-09-01 08:00:00'
+    },
+    {
+      id: 2,
+      user_id: { id: 102, name: 'Trần Thị Bình' },
+      name: 'Trần Thị Bình',
+      avatar: '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=',
+      nickname: 'Bình',
+      email: 'binh.tran@email.com',
+      phone: '0123456790',
+      class_id: { id: 1, name: 'Lớp 6A' },
+      student_code: 'HS002',
+      dob: '2012-05-20',
+      gender: 'female',
+      total_score: 92,
+      class_rank: 1,
+      active: true,
+      create_date: '2024-09-01 08:00:00',
+      write_date: '2024-09-01 08:00:00'
+    },
+    {
+      id: 3,
+      user_id: { id: 103, name: 'Lê Văn Cường' },
+      name: 'Lê Văn Cường',
+      avatar: '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=',
+      nickname: 'Cường',
+      email: 'cuong.le@email.com',
+      phone: '0123456791',
+      class_id: { id: 1, name: 'Lớp 6A' },
+      student_code: 'HS003',
+      dob: '2012-01-10',
+      gender: 'male',
+      total_score: 78,
+      class_rank: 5,
+      active: true,
+      create_date: '2024-09-01 08:00:00',
+      write_date: '2024-09-01 08:00:00'
+    },
+    {
+      id: 4,
+      user_id: { id: 104, name: 'Phạm Thị Dung' },
+      name: 'Phạm Thị Dung',
+      avatar: '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=',
+      nickname: 'Dung',
+      email: 'dung.pham@email.com',
+      phone: '0123456792',
+      class_id: { id: 1, name: 'Lớp 6A' },
+      student_code: 'HS004',
+      dob: '2012-07-25',
+      gender: 'female',
+      total_score: 88,
+      class_rank: 2,
+      active: true,
+      create_date: '2024-09-01 08:00:00',
+      write_date: '2024-09-01 08:00:00'
+    },
+    {
+      id: 5,
+      user_id: { id: 105, name: 'Hoàng Văn Em' },
+      name: 'Hoàng Văn Em',
+      avatar: '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=',
+      nickname: 'Em',
+      email: 'em.hoang@email.com',
+      phone: '0123456793',
+      class_id: { id: 1, name: 'Lớp 6A' },
+      student_code: 'HS005',
+      dob: '2012-11-30',
+      gender: 'male',
+      total_score: 82,
+      class_rank: 4,
+      active: true,
+      create_date: '2024-09-01 08:00:00',
+      write_date: '2024-09-01 08:00:00'
+    }
   ];
 
 }

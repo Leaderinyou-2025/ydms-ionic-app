@@ -1,0 +1,121 @@
+<app-header
+  [pageTitle]="classInfo?.name || ('CLASS_MANAGEMENT.student_list' | translate)"
+  backgroundColor="linear-gradient(to bottom, #3b82f6, #1e40af)"
+  defaultBackHref="/class-management">
+</app-header>
+
+<ion-content [fullscreen]="true" class="bg-white">
+  <!-- Refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      [pullingText]="'LOADING.pull_to_refresh' | translate"
+      [refreshingText]="'LOADING.refreshing' | translate">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Class Info Header -->
+  <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 " *ngIf="classInfo">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-xl font-semibold">{{ classInfo.name }}</h2>
+        <div class="flex items-center mt-1 text-blue-100">
+          <ion-icon name="people-outline" class="mr-1"></ion-icon>
+          <span class="text-sm">{{ students.length }} {{ 'CLASS_MANAGEMENT.students' | translate }}</span>
+        </div>
+      </div>
+      <div class="text-right text-sm text-blue-100">
+        <div *ngIf="classInfo.grade">{{ 'CLASS_MANAGEMENT.grade' | translate }}: {{ classInfo.grade }}</div>
+        <div *ngIf="classInfo.academic_year">{{ classInfo.academic_year }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="p-4 bg-gray-50 border-b">
+    <ion-searchbar
+      [(ngModel)]="searchText"
+      [placeholder]="'CLASS_MANAGEMENT.search_students' | translate"
+      (ionInput)="onSearchChange($event)"
+      (ionClear)="clearSearch()"
+      show-clear-button="focus"
+      class="custom-searchbar">
+    </ion-searchbar>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="flex justify-center items-center h-32">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <span class="ml-2 text-gray-600">{{ 'CLASS_MANAGEMENT.loading_students' | translate }}</span>
+  </div>
+
+  <!-- Student List -->
+  <div class="p-4 h-[calc(100vh-300px)] overflow-auto" *ngIf="!isLoading">
+    <!-- No students message -->
+    <div *ngIf="filteredStudents.length === 0 && searchText === ''" class="text-center py-8">
+      <ion-icon name="people-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+      <p class="text-gray-500 text-lg">{{ 'CLASS_MANAGEMENT.no_students' | translate }}</p>
+    </div>
+
+    <!-- No search results -->
+    <div *ngIf="filteredStudents.length === 0 && searchText !== ''" class="text-center py-8">
+      <ion-icon name="search-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+      <p class="text-gray-500 text-lg">Không tìm thấy học sinh phù hợp</p>
+    </div>
+
+    <!-- Students grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 " *ngIf="filteredStudents.length > 0 ">
+      <div
+        *ngFor="let student of filteredStudents"
+        class="bg-white rounded-xl shadow-md border border-gray-200 p-4 hover:shadow-lg transition-shadow cursor-pointer"
+        (click)="viewStudentDetail(student)">
+
+        <!-- Student header with avatar -->
+        <div class="flex items-center mb-3">
+          <!-- Avatar -->
+          <div class="flex-shrink-0 mr-3">
+            <ion-avatar class="w-12 h-12">
+              <ion-img [src]="getAvatarUrl(student)" [alt]="student.name"></ion-img>
+            </ion-avatar>
+          </div>
+
+          <!-- Student Info -->
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold text-gray-800">{{ student.name }}</h3>
+            <p class="text-sm text-gray-500" *ngIf="student.nickname">{{ student.nickname }}</p>
+          </div>
+        </div>
+
+        <!-- Student details -->
+        <div class="space-y-2 text-sm">
+          <div class="flex items-center text-gray-600" *ngIf="student.edu_id">
+            <ion-icon name="card-outline" class="mr-2 text-blue-500"></ion-icon>
+            <span>{{ student.edu_id }}</span>
+          </div>
+          <div class="flex items-center text-gray-600" *ngIf="student.phone">
+            <ion-icon name="call-outline" class="mr-2 text-orange-500"></ion-icon>
+            <span>{{ student.phone }}</span>
+          </div>
+
+          <div class="flex items-center text-gray-600" *ngIf="student.gender">
+            <ion-icon name="person-outline" class="mr-2 text-purple-500"></ion-icon>
+            <span>{{ getGenderKey(student.gender) | translate }}</span>
+          </div>
+
+          <div class="flex items-center text-gray-600" *ngIf="student.dob">
+            <ion-icon name="calendar-outline" class="mr-2 text-indigo-500"></ion-icon>
+            <span>{{ student.dob | date:'dd/MM/yyyy' }}</span>
+          </div>
+
+          <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+            <div class="flex items-center text-blue-600" *ngIf="student.total_friendly_points !== undefined">
+              <ion-icon name="heart-outline" class="mr-1"></ion-icon>
+              <span class="font-medium">{{ student.total_friendly_points }} điểm thân thiện</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<app-footer></app-footer>

@@ -18,6 +18,8 @@ export enum ModelName {
   ASSESSMENT_RESULT = 'liy.ydms.assessment.result',
   ASSESSMENT_ANSWER_RESULT = 'liy.ydms.assessment.answer.result',
   EMOTIONAL_DIARY = 'liy.ydms.emotional.diary',
+  CLASS = 'liy.ydms.classroom',
+  STUDENT = 'liy.ydms.student',
   EMOTIONAL_QUESTION = 'liy.ydms.emotional.question',
   EMOTIONAL_ANSWER_OPTION = 'liy.ydms.emotional.answer.option',
   GUIDE = 'liy.ydms.guide',
