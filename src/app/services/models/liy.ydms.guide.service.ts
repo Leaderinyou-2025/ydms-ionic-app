@@ -67,4 +67,22 @@ export class LiyYdmsGuideService {
     const results = await this.getGuideList([['id', OdooDomainOperator.EQUAL, id]], 0, 1,);
     return results?.[0];
   }
+
+  /**
+   * Get guide list by guide_type
+   * @param guideType
+   * @param offset
+   * @param limit
+   * @param order
+   */
+  public async getGuideListByGuideType(
+    guideType: string,
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.CREATE_AT_DESC,
+  ): Promise<ILiyYdmsGuide[]> {
+    return this.getGuideList(
+      [['guide_type', OdooDomainOperator.EQUAL, guideType]], offset, limit, order,
+    );
+  }
 }
