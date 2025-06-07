@@ -31,8 +31,12 @@ export class CommonConstants {
   /**
    * Background image gallery
    */
-  static background_images: Array<IAssetsResource> = [
-    {id: 1, resource_url: 'assets/images/background/pexels-eugene-golovesov-1810803-30980499.jpg', name: 'Nụ thường xuân'},
+  public static background_images: Array<IAssetsResource> = [
+    {
+      id: 1,
+      resource_url: 'assets/images/background/pexels-eugene-golovesov-1810803-30980499.jpg',
+      name: 'Nụ thường xuân'
+    },
     {id: 2, resource_url: 'assets/images/background/beach-5234306_1920.jpg', name: 'Biển Đông'},
     {id: 3, resource_url: 'assets/images/background/bananas-7840213_1920.jpg', name: 'Chuối vườn nhà'},
     {id: 4, resource_url: 'assets/images/background/santa-claus-6845491_1920.jpg', name: 'Ông già Noel'},
@@ -43,18 +47,81 @@ export class CommonConstants {
   /**
    * Background sound gallery
    */
-  static sound_gallery: Array<IAssetsResource> = [
-    {id: 1, resource_url: 'assets/sounds/touch.mp3', name: 'touch', category: AssetResourceCategory.EFFECT, key: SoundKeys.TOUCH},
-    {id: 2, resource_url: 'assets/sounds/reload.mp3', name: 'reload', category: AssetResourceCategory.EFFECT, key: SoundKeys.RELOAD},
-    {id: 3, resource_url: 'assets/sounds/loading.mp3', name: 'loading', category: AssetResourceCategory.EFFECT, key: SoundKeys.LOADING},
-    {id: 4, resource_url: 'assets/sounds/message.mp3', name: 'message', category: AssetResourceCategory.EFFECT, key: SoundKeys.MESSAGE},
-    {id: 5, resource_url: 'assets/sounds/notification.mp3', name: 'notification', category: AssetResourceCategory.EFFECT, key: SoundKeys.NOTIFICATION},
-    {id: 6, resource_url: 'assets/sounds/success.mp3', name: 'success', category: AssetResourceCategory.EFFECT, key: SoundKeys.SUCCESS},
-    {id: 7, resource_url: 'assets/sounds/fail.mp3', name: 'success', category: AssetResourceCategory.EFFECT, key: SoundKeys.FAILED},
-    {id: 8, resource_url: 'assets/sounds/error.mp3', name: 'error', category: AssetResourceCategory.EFFECT, key: SoundKeys.ERROR},
-    {id: 9, resource_url: 'assets/sounds/background-default.mp3', name: 'Cuộc sống tươi đẹp', category: AssetResourceCategory.BACKGROUND},
-    {id: 10, resource_url: 'assets/sounds/background-music-soft-calm.mp3', name: 'Lạc quan mới', category: AssetResourceCategory.BACKGROUND},
-    {id: 11, resource_url: 'assets/sounds/background-music-soft-corporate.mp3', name: 'Nhịp điệu ngày mới', category: AssetResourceCategory.BACKGROUND},
+  public static sound_gallery: Array<IAssetsResource> = [
+    {
+      id: 1,
+      resource_url: 'assets/sounds/touch.mp3',
+      name: 'touch',
+      category: AssetResourceCategory.EFFECT,
+      key: SoundKeys.TOUCH
+    },
+    {
+      id: 2,
+      resource_url: 'assets/sounds/reload.mp3',
+      name: 'reload',
+      category: AssetResourceCategory.EFFECT,
+      key: SoundKeys.RELOAD
+    },
+    {
+      id: 3,
+      resource_url: 'assets/sounds/loading.mp3',
+      name: 'loading',
+      category: AssetResourceCategory.EFFECT,
+      key: SoundKeys.LOADING
+    },
+    {
+      id: 4,
+      resource_url: 'assets/sounds/message.mp3',
+      name: 'message',
+      category: AssetResourceCategory.EFFECT,
+      key: SoundKeys.MESSAGE
+    },
+    {
+      id: 5,
+      resource_url: 'assets/sounds/notification.mp3',
+      name: 'notification',
+      category: AssetResourceCategory.EFFECT,
+      key: SoundKeys.NOTIFICATION
+    },
+    {
+      id: 6,
+      resource_url: 'assets/sounds/success.mp3',
+      name: 'success',
+      category: AssetResourceCategory.EFFECT,
+      key: SoundKeys.SUCCESS
+    },
+    {
+      id: 7,
+      resource_url: 'assets/sounds/fail.mp3',
+      name: 'success',
+      category: AssetResourceCategory.EFFECT,
+      key: SoundKeys.FAILED
+    },
+    {
+      id: 8,
+      resource_url: 'assets/sounds/error.mp3',
+      name: 'error',
+      category: AssetResourceCategory.EFFECT,
+      key: SoundKeys.ERROR
+    },
+    {
+      id: 9,
+      resource_url: 'assets/sounds/background-default.mp3',
+      name: 'Cuộc sống tươi đẹp',
+      category: AssetResourceCategory.BACKGROUND
+    },
+    {
+      id: 10,
+      resource_url: 'assets/sounds/background-music-soft-calm.mp3',
+      name: 'Lạc quan mới',
+      category: AssetResourceCategory.BACKGROUND
+    },
+    {
+      id: 11,
+      resource_url: 'assets/sounds/background-music-soft-corporate.mp3',
+      name: 'Nhịp điệu ngày mới',
+      category: AssetResourceCategory.BACKGROUND
+    },
   ];
 
   /**
@@ -482,6 +549,74 @@ export class CommonConstants {
    */
   public static getCurrentDateFormated(): string {
     return formatDate(new Date(), 'yyyy-MM-dd', 'en').toString();
+  }
+
+  /**
+   * Chuyển base64 về Blob để tải xuống trên native
+   * @param b64Data
+   * @param contentType
+   */
+  public static b64toBlob(b64Data: string, contentType: string): Blob {
+    contentType = contentType || '';
+    let sliceSize = 512;
+    let byteCharacters = atob(b64Data);
+    let byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      let byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      let byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    return new Blob(byteArrays, {type: contentType});
+  }
+
+  /**
+   * Xoá html tags
+   * @param text
+   * @param maxLength
+   */
+  public static stripHtmlAndTruncate(
+    text: string,
+    maxLength: number = 360
+  ): string {
+    // Thay các thẻ block bằng dấu cách, xóa các thẻ khác
+    const cleanText = text
+      .replace(/<\/?(p|div|br|h[1-6]|li|ul|ol)>/gi, ' ') // Thêm dấu cách cho thẻ block
+      .replace(/<[^>]*>/g, '') // Xóa các thẻ HTML còn lại
+      .replace(/\s+/g, ' ') // Thay nhiều dấu cách/thẻ trắng bằng một dấu cách
+      .trim();
+
+    // Decode HTML entities
+    const decodedText = cleanText
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, '\'');
+
+    // Nếu chuỗi đã ngắn hơn maxLength, trả về nguyên vẹn
+    if (decodedText.length <= maxLength) {
+      return decodedText;
+    }
+
+    // Cắt chuỗi đến maxLength, không cắt giữa từ
+    let truncated = decodedText.substring(0, maxLength);
+    const lastSpaceIndex = truncated.lastIndexOf(' ');
+
+    if (lastSpaceIndex > 0) {
+      truncated = truncated.substring(0, lastSpaceIndex);
+    }
+
+    return truncated.trim() + '...';
   }
 
   /**

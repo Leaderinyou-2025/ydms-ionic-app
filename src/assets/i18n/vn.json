@@ -362,7 +362,8 @@
     "progress_result": "Tiến độ hoàn thành",
     "result_description": "Mô tả kết quả tiến độ",
     "capture": "chụp ảnh",
-    "gallery": "thư viện"
+    "gallery": "thư viện",
+    "documents": "documents"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",
@@ -414,7 +415,10 @@
     "executing": "Tham gia",
     "no_execution": "Không tham gia",
     "ignore": "Bỏ qua",
-    "end": "Kết thúc"
+    "end": "Kết thúc",
+    "submit": "Gửi",
+    "delete": "Xoá",
+    "edit": "Sửa"
   },
   "TOAST": {
     "error_header": "Lỗi",
@@ -489,10 +493,10 @@
     "chatbot": "Hôm nay bạn cảm thấy thế nào? Chia sẻ với mình nhé!"
   },
   "AREA_OF_EXPERTISE": {
-    "emotion": "Cảm xúc",
+    "emotion": "Điều tiết cảm xúc",
     "conflict": "Giảm mâu thuẫn gia đình",
-    "communication": "Cải thiện giao tiếp",
-    "discovery": "Khám phá bản thân"
+    "communication": "Cải thiện giao tiếp gia đình",
+    "discovery": "Khám phá và phát triển bản thân"
   },
   "ACHIEVEMENT": {
     "badge_no_achievements_yet": "Chưa có huy hiệu nào trong danh mục này"
@@ -508,5 +512,50 @@
     "medium": "Gia đình bạn có mức độ mâu thuẫn ở mức trung bình. Có thể cần cải thiện cách giao tiếp và giải quyết xung đột trong gia đình. Hãy thử tìm hiểu nguyên nhân và cùng nhau tìm giải pháp.",
     "high": "Gia đình bạn có mức độ mâu thuẫn cao. Điều này có thể ảnh hưởng đến sức khỏe tinh thần và mối quan hệ gia đình. Nên tìm kiếm sự hỗ trợ từ chuyên gia tâm lý hoặc tham gia các khóa học về kỹ năng giao tiếp gia đình.",
     "unknown": "Không có đủ thông tin để đánh giá."
+  },
+  "SHARE_EXPERIENCE": {
+    "title": "Chia sẻ kinh nghiệm",
+    "caption": "Hãy chia sẻ kinh nghiệm cho mọi người cùng biết nhé",
+    "detail_title": "Chi tiết kinh nghiệm",
+    "no_posts": "Chưa có bài chia sẻ kinh nghiệm nào",
+    "status_wait_accept": "Chờ phê duyệt",
+    "status_accepted": "Đã phê duyệt",
+    "status_rejected": "Đã từ chối",
+    "tab_community": "Tin cộng đồng",
+    "tab_family": "Tin gia đình",
+    "like_count": "lượt thích",
+    "love_count": "lượt yêu thích",
+    "like_button": "Thích",
+    "love_button": "Yêu thích",
+    "area_of_expertise": "Khía cạnh",
+    "author": "Tác giả",
+    "content": "Nội dung"
+  },
+  "CREATE_EXPERIENCE": {
+    "title": "Tạo đánh giá chia sẻ kinh nghiệm",
+    "name_label": "Tiêu đề",
+    "name_placeholder": "Nhập tên đánh giá...",
+    "area_label": "Khía cạnh",
+    "area_placeholder": "Chọn khía cạnh",
+    "content_label": "Nội dung chia sẻ",
+    "content_placeholder": "Chia sẻ kinh nghiệm và hiểu biết của bạn...",
+    "preview_label": "Xem trước",
+    "submit": "Gửi đánh giá",
+    "attachment_label": "File đính kèm (Tùy chọn)",
+    "attachment_placeholder": "Nhấn để chọn file",
+    "attachment_hint": "Hỗ trợ: PDF, Word, Hình ảnh (tối đa 10MB)",
+    "confirm_submit_header": "Xác nhận",
+    "confirm_submit_message": "Bạn có chắc chắn muốn chia sẻ kinh nghiệm này không?",
+    "confirm_cancel_header": "Xác nhận",
+    "confirm_cancel_message": "Bạn có thay đổi chưa được lưu. Bạn có chắc chắn muốn thoát không?",
+    "stay_button": "Ở lại",
+    "exit_button": "Thoát",
+    "success_message": "Bài chia sẻ kinh nghiệm đã được tạo thành công và đang chờ phê duyệt",
+    "error_auth": "Không thể xác thực người dùng",
+    "error_create": "Có lỗi xảy ra khi tạo bài chia sẻ"
+  },
+  "VALIDATION": {
+    "required": "Trường này là bắt buộc",
+    "min_length": "Yêu cầu tối thiểu {{min}} ký tự"
   }
 }

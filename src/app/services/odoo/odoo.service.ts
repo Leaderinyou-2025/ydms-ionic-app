@@ -64,7 +64,7 @@ export class OdooService {
    * @param model
    * @param values
    */
-  public async create<T>(model: ModelName, values: Partial<T>): Promise<number | undefined> {
+  public async create<T>(model: ModelName, values: Partial<T | any>): Promise<number | undefined> {
     if (!model || !values) return;
     return this.callKw<T>(model, OdooMethodName.CREATE, [values]);
   }
@@ -75,7 +75,7 @@ export class OdooService {
    * @param ids
    * @param values
    */
-  public async write<T>(model: ModelName, ids: Array<number>, values: Partial<T>): Promise<number | boolean> {
+  public async write<T>(model: ModelName, ids: Array<number>, values: Partial<T | any>): Promise<number | boolean> {
     if (!model || !ids?.length || !values) return false;
     return this.callKw<T>(model, OdooMethodName.WRITE, [ids, values]);
   }
