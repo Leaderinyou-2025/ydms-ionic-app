@@ -37,4 +37,5 @@ export enum PageRoutes {
   FAMILY_DIALOGUE_SESSION = 'family-dialogue-session',
   TASK_EXECUTING = 'task-executing',
   SHARE_EXPERIENCE = 'share-experience',
+  CREATE_EXPERIENCE = 'create-experience',
 }

@@ -362,7 +362,8 @@
     "progress_result": "Tiến độ hoàn thành",
     "result_description": "Mô tả kết quả tiến độ",
     "capture": "chụp ảnh",
-    "gallery": "thư viện"
+    "gallery": "thư viện",
+    "documents": "documents"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",
@@ -415,7 +416,9 @@
     "no_execution": "Không tham gia",
     "ignore": "Bỏ qua",
     "end": "Kết thúc",
-    "submit": "Gửi"
+    "submit": "Gửi",
+    "delete": "Xoá",
+    "edit": "Sửa"
   },
   "TOAST": {
     "error_header": "Lỗi",

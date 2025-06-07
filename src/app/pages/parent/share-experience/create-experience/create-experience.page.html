@@ -1,7 +1,7 @@
-<!-- Header trang tạo bài chia sẻ kinh nghiệm -->
 <app-header
   [pageTitle]="TranslateKeys.CREATE_EXPERIENCE_TITLE"
   [caption]="TranslateKeys.SHARE_EXPERIENCE_CAPTION"
+  defaultBackHref="/{{PageRoutes.SHARE_EXPERIENCE}}"
   backgroundImageUrl="/assets/images/banner.svg"
   [animeImage]="animeImage">
 </app-header>
@@ -9,79 +9,111 @@
 <ion-content [fullscreen]="true" class="custom-page-bg-light">
   <div class="m-3 py-4 px-3 rounded-xl bg-gray-50 dark:bg-gray-800" *ngIf="experienceForm">
     <!-- Form tạo bài chia sẻ kinh nghiệm -->
-    <form class="create-experience" *ngIf="experienceForm" [formGroup]="experienceForm" (ngSubmit)="onSubmit()">
+    <form class="create-experience" [formGroup]="experienceForm" (ngSubmit)="onSubmit()">
       <ion-grid>
         <ion-row>
           <!-- Trường nhập tiêu đề bài chia sẻ -->
           <ion-col size="12">
             <ion-label position="stacked">
-              {{ TranslateKeys.CREATE_EXPERIENCE_NAME_LABEL | translate }} <span class="text-red-500">*</span>
+              {{ TranslateKeys.CREATE_EXPERIENCE_NAME_LABEL | translate }} <span
+              class="text-red-500">*</span>
             </ion-label>
 
             <ion-input formControlName="name" type="text" inputmode="text"></ion-input>
 
             <!-- Hiển thị lỗi validation cho tiêu đề -->
-            <div *ngIf="experienceForm.get('name')?.invalid && experienceForm.get('name')?.touched"
-                 class="text-red-500 text-sm mt-1 ml-4">
-                <span *ngIf="experienceForm.get('name')?.errors?.['required']">
-                  {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
-                </span>
-              <span *ngIf="experienceForm.get('name')?.errors?.['minlength']">
-                  {{ TranslateKeys.VALIDATION_MIN_LENGTH | translate: {min: 5} }}
-                </span>
+            <div *ngIf="hasError('name', 'required')"
+                 class="text-red-500 text-sm mt-1 ml-1">
+              {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
             </div>
           </ion-col>
 
           <!-- Trường chọn khía cạnh -->
           <ion-col size="12">
             <ion-label position="stacked">
-              {{ TranslateKeys.CREATE_EXPERIENCE_AREA_LABEL | translate }} <span class="text-red-500">*</span>
+              {{ TranslateKeys.CREATE_EXPERIENCE_AREA_LABEL | translate }} <span
+              class="text-red-500">*</span>
             </ion-label>
 
-            <ion-select formControlName="gender" class="border overflow-hidden" interface="action-sheet">
+            <ion-select formControlName="area_of_expertise" class="border overflow-hidden" interface="action-sheet">
               <ion-select-option *ngFor="let area of areaOfExpertiseOptions" [value]="area.area">
                 {{ area.title | translate }}
               </ion-select-option>
             </ion-select>
 
             <!-- Hiển thị lỗi validation cho tiêu đề -->
-            <div
-              *ngIf="experienceForm.get('area_of_expertise')?.invalid && experienceForm.get('area_of_expertise')?.touched"
-              class="text-red-500 text-sm mt-1 ml-4">
-              <span *ngIf="experienceForm.get('area_of_expertise')?.errors?.['required']">
-                {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
-              </span>
+            <div *ngIf="hasError('area_of_expertise', 'required')"
+                 class="text-red-500 text-sm mt-1 ml-1">
+              {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
             </div>
           </ion-col>
 
           <!-- Trường nhập nội dung kinh nghiệm -->
           <ion-col size="12">
             <ion-label position="stacked">
-              {{ TranslateKeys.CREATE_EXPERIENCE_CONTENT_LABEL | translate }} <span class="text-red-500">*</span>
+              {{ TranslateKeys.CREATE_EXPERIENCE_CONTENT_LABEL | translate }} <span
+              class="text-red-500">*</span>
             </ion-label>
 
             <!-- Quill Editor cho viết nội dung rich text -->
             <quill-editor formControlName="experience_content"
-                          placeholder="" class="rounded-xl" [style.height]="'200px'" format="html"
-                          theme="snow"></quill-editor>
+                          [ngClass]="{'ion-touched ion-invalid': hasError('experience_content', 'required')}"
+                          placeholder="" class="h-52" format="html" theme="snow"></quill-editor>
+
+            <!-- Hiển thị lỗi validation cho nội dung -->
+            <div *ngIf="hasError('experience_content', 'required')"
+                 class="text-red-500 text-sm ml-1">
+              {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
+            </div>
           </ion-col>
 
           <!-- Trường đính kèm file -->
-          <ion-col size="12">
+          <ion-col size="12" class="mb-5">
             <ion-label position="stacked">
               {{ TranslateKeys.CREATE_EXPERIENCE_ATTACHMENT_LABEL | translate }}
             </ion-label>
-            <ion-button expand="block" fill="outline" color="medium" class="file-upload-button h-20">
-              <div class="flex flex-col items-center space-y-1">
-                <ion-icon name="attach-outline" class="text-2xl"></ion-icon>
-                <span class="text-sm font-medium">
-                  {{ TranslateKeys.CREATE_EXPERIENCE_ATTACHMENT_PLACEHOLDER | translate }}
-                </span>
-                <span class="text-xs opacity-70">
-                  {{ TranslateKeys.CREATE_EXPERIENCE_ATTACHMENT_HINT | translate }}
-                </span>
-              </div>
-            </ion-button>
+            <div class="attached-files flex items-center justify-center flex-wrap gap-1">
+              <ion-button shape="round" fill="outline" color="dark" class="min-h-0"
+                          (click)="onClickSelectAttachedFile('doc')">
+                <ion-icon name="attach" class="py-1 text-lg"></ion-icon>
+                <span class="text-sm pl-2">{{ TranslateKeys.TITLE_DOCUMENTS | translate }}</span>
+              </ion-button>
+              <ion-button shape="round" fill="outline" color="dark" class="min-h-0"
+                          (click)="onClickSelectAttachedFile('gallery')">
+                <ion-icon name="images" class="py-1 text-lg"></ion-icon>
+                <span class="text-sm pl-2">{{ TranslateKeys.TITLE_GALLERY | translate }}</span>
+              </ion-button>
+              <ion-button shape="round" fill="outline" color="dark" class="min-h-0"
+                          (click)="onClickSelectAttachedFile('camera')">
+                <ion-icon name="camera" class="py-1 text-lg"></ion-icon>
+                <span class="text-sm pl-2">{{ TranslateKeys.TITLE_CAPTURE | translate }}</span>
+              </ion-button>
+            </div>
+
+            <!--     Image preview       -->
+            <div class="mt-5 relative w-full border rounded-xl overflow-hidden group"
+                 *ngIf="attachedImage">
+              <ion-icon
+                class="absolute top-2 right-2 text-2xl text-red-500 opacity-0 group-hover:opacity-100 transition duration-200 cursor-pointer"
+                name="close-circle"
+                (click)="attachedImage = undefined">
+              </ion-icon>
+
+              <ion-img [src]="CommonConstants.formatBase64ImageUrl(attachedImage)"
+                       class="w-full h-auto">
+              </ion-img>
+            </div>
+
+            <!--     File list      -->
+            <div class="mt-5 w-full border rounded-xl overflow-hidden group" *ngIf="attachedFile">
+              <ion-item lines="none" detail="false" class="bg-transparent">
+                <ion-icon slot="start" name="document-attach" class="text-xl"></ion-icon>
+                <ion-label>{{ attachedFile.fileName }}</ion-label>
+                <ion-icon slot="end" name="close-circle" class="text-xl text-red-500"
+                          (click)="attachedFile = undefined"></ion-icon>
+              </ion-item>
+            </div>
+
           </ion-col>
 
           <ion-col class="ion-text-center">

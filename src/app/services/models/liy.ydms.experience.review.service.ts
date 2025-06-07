@@ -143,4 +143,22 @@ export class LiyYdmsExperienceReviewService {
       return false;
     }
   }
+
+  /**
+   * createReview
+   * @param experienceId
+   * @param reviewType
+   */
+  public async createReview(
+    experienceId: number,
+    reviewType: ExperienceReviewType
+  ): Promise<number | undefined> {
+    if (!reviewType || !experienceId) return undefined;
+    return this.odooService.create<ILiyYdmsExperienceReview>(
+      ModelName.EXPERIENCE_REVIEW, {
+        experience_id: experienceId,
+        review: reviewType,
+      }
+    );
+  }
 }

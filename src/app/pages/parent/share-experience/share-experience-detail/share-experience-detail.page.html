@@ -1,19 +1,19 @@
-<!-- Header trang chi tiết bài chia sẻ kinh nghiệm -->
 <app-header
   [pageTitle]="TranslateKeys.SHARE_EXPERIENCE_DETAIL_TITLE"
   [caption]="TranslateKeys.SHARE_EXPERIENCE_CAPTION"
+  defaultBackHref="/{{PageRoutes.SHARE_EXPERIENCE}}"
   backgroundImageUrl="/assets/images/banner.svg"
   [animeImage]="animeImage">
 </app-header>
 
-<ion-content [fullscreen]="true" class="ion-padding-start ion-padding-end">
+<ion-content [fullscreen]="true" class="ion-padding-start ion-padding-end custom-page-bg-light">
   <!-- Hiển thị loading khi đang tải dữ liệu -->
   <div *ngIf="isLoading" class="flex justify-center items-center py-8">
     <ion-spinner name="bubbles"></ion-spinner>
   </div>
 
   <!-- Nội dung chi tiết bài chia sẻ kinh nghiệm -->
-  <div *ngIf="!isLoading && experienceDetail" class="py-4">
+  <div *ngIf="experienceDetail" class="py-4">
     <!-- Card nội dung chính -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
 
@@ -22,7 +22,7 @@
         <div class="flex items-center flex-1">
           <!-- Avatar tác giả -->
           <ion-avatar class="w-12 h-12 mr-4">
-            <img src="assets/icons/svg/avatar.svg" alt="Avatar" class="rounded-full">
+            <ion-img src="assets/icons/svg/avatar.svg" alt="Avatar" class="rounded-full"></ion-img>
           </ion-avatar>
           <!-- Thông tin tác giả -->
           <div class="flex-1">
@@ -41,51 +41,72 @@
 
       <!-- Tiêu đề bài chia sẻ -->
       <div class="px-6 pt-6">
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">{{ experienceDetail.name }}</h1>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">{{ experienceDetail.name }}</h1>
       </div>
 
       <!-- Nội dung kinh nghiệm -->
-      <div class="px-6 pb-6">
-        <div class="experience-content text-gray-700 dark:text-gray-300 text-base leading-relaxed">
-          <quill-view [content]="experienceDetail.experience_content" theme="bubble"></quill-view>
+      <div class="px-3 pb-6 text-gray-700 dark:text-gray-300 text-base">
+        <quill-view [content]="experienceDetail.experience_content" theme="snow"></quill-view>
+      </div>
+
+      <div class="px-6 pb-6" *ngIf="experienceDetail.attach_file">
+        <!--     Image preview       -->
+        <div class="relative w-full border rounded-xl overflow-hidden"
+             *ngIf="!experienceDetail.x_attach_file_name">
+          <ion-img [src]="CommonConstants.formatBase64ImageUrl(experienceDetail.attach_file)"
+                   class="w-full h-auto">
+          </ion-img>
+        </div>
+
+        <!--     File list       -->
+        <div class="w-full border rounded-xl overflow-hidden group" *ngIf="experienceDetail.x_attach_file_name">
+          <ion-item lines="none" detail="false" class="bg-transparent" (click)="onClickDownloadFile()">
+            <ion-icon slot="start" name="document-attach" class="text-xl text-sky-500"></ion-icon>
+            <ion-label><span class="text-sky-500">{{ experienceDetail.x_attach_file_name }}</span></ion-label>
+            <ion-icon slot="end" name="cloud-download" class="text-xl text-sky-500"></ion-icon>
+          </ion-item>
         </div>
       </div>
 
-      <!-- Số lượt tương tác và trạng thái -->
-      <div class="flex items-center justify-between px-6 py-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
-        <!-- Số lượt Like và Love -->
-        <div class="flex items-center space-x-3">
-          <ion-chip *ngIf="reactionCounts.like > 0" color="primary">
-            <span>{{ reactionCounts.like }}</span>
-            <ion-icon name="thumbs-up" class="ml-1"></ion-icon>
-          </ion-chip>
-          <ion-chip *ngIf="reactionCounts.love > 0" color="danger">
-            <span>{{ reactionCounts.love }}</span>
-            <ion-icon name="heart" class="ml-1"></ion-icon>
-          </ion-chip>
+      <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100 dark:border-gray-700" (click)="$event.stopPropagation()">
+        <!-- Like/Love buttons - Unified design for both tabs -->
+        <div class="flex items-center justify-start gap-2">
+          <ng-container *ngIf="experienceDetail.status === ExperienceStatus.ACCEPTED">
+            <!-- Like option -->
+            <ion-chip color="primary" (click)="selectReaction(ExperienceReviewType.LIKE)">
+              <ion-icon name="thumbs-up"></ion-icon>
+              <span class="ml-1">{{ experienceDetail.total_like || 0 }}</span>
+            </ion-chip>
 
-          <!-- Thông báo khi chưa có tương tác -->
-          <div *ngIf="reactionCounts.like === 0 && reactionCounts.love === 0" class="text-gray-500 dark:text-gray-400 text-sm italic">
-            Chưa có phản ứng nào
-          </div>
+            <!-- Love option -->
+            <ion-chip color="danger" (click)="selectReaction(ExperienceReviewType.LOVE)">
+              <ion-icon name="heart"></ion-icon>
+              <span class="ml-1">{{ experienceDetail.total_love || 0 }}</span>
+            </ion-chip>
+          </ng-container>
+
+          <ng-container *ngIf="experienceDetail.status !== ExperienceStatus.ACCEPTED && experienceDetail.create_uid?.id === authData?.id">
+            <!--    Edit button      -->
+            <ion-button shape="round" size="small" color="primary"
+                        routerLink="/{{PageRoutes.SHARE_EXPERIENCE}}/{{PageRoutes.CREATE_EXPERIENCE}}/{{experienceDetail.id}}">
+              <span class="text-base py-1">{{ TranslateKeys.BUTTON_EDIT | translate }}</span>
+            </ion-button>
+
+            <!--    Delete button      -->
+            <ion-button shape="round" size="small" color="danger"
+                        (click)="onClickRemoveExperience()">
+              <span class="text-base py-1">{{ TranslateKeys.BUTTON_DELETE | translate }}</span>
+            </ion-button>
+          </ng-container>
         </div>
 
-        <!-- Trạng thái bài viết (chỉ hiển thị cho người tạo) -->
-        <div *ngIf="isOwnPost()" class="flex items-center">
-          <ion-badge
-            [color]="getStatusColor(experienceDetail.status)"
-            class="text-xs px-2 py-1 rounded-full">
+        <!-- Status badge (for family tab or own posts) -->
+        <div *ngIf="experienceDetail.create_uid?.id === authData?.id" class="flex items-center gap-2">
+          <ion-badge [color]="getStatusColor(experienceDetail.status)" class="text-xs px-2 py-1 rounded-full">
             {{ getStatusLabel(experienceDetail.status) | translate }}
           </ion-badge>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Trạng thái lỗi khi không tìm thấy dữ liệu -->
-  <div *ngIf="!isLoading && !experienceDetail" class="flex flex-col items-center justify-center py-12">
-    <span class="text-5xl text-gray-400 mb-4">❌</span>
-    <p class="text-gray-500 dark:text-gray-400 text-center">Không tìm thấy bài chia sẻ kinh nghiệm</p>
-  </div>
-
 </ion-content>

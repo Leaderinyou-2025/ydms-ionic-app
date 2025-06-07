@@ -26,7 +26,8 @@ export class LiyYdmsExperienceService {
     'total_love',
     'status',
     'create_date',
-    'write_date'
+    'write_date',
+    'create_uid',
   ];
 
   constructor(
@@ -60,8 +61,9 @@ export class LiyYdmsExperienceService {
    * @returns Thông tin chi tiết bài chia sẻ hoặc undefined nếu không tìm thấy
    */
   public async getExperienceDetail(id: number): Promise<ILiyYdmsExperience | undefined> {
+    const fields = [...this.experienceFields, 'attach_file', 'x_attach_file_mine_type', 'x_attach_file_name'];
     let results = await this.odooService.read<ILiyYdmsExperience>(
-      ModelName.EXPERIENCE, [id], this.experienceFields
+      ModelName.EXPERIENCE, [id], fields
     );
     if (!results?.length) return undefined;
     results = CommonConstants.convertArr2ListItem(results);
@@ -176,7 +178,7 @@ export class LiyYdmsExperienceService {
    */
   public async updateExperience(
     id: number,
-    experienceData: Partial<ILiyYdmsExperience>
+    experienceData: Partial<ICreateExperienceBody>
   ): Promise<boolean> {
     const result = await this.odooService.write(
       ModelName.EXPERIENCE, [id], experienceData

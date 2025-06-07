@@ -361,7 +361,8 @@
     "progress_result": "Progress",
     "result_description": "Result description",
     "capture": "capture",
-    "gallery": "gallery"
+    "gallery": "gallery",
+    "documents": "documents"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",
@@ -415,7 +416,9 @@
     "no_execution": "No execution",
     "ignore": "Ignore",
     "end": "End",
-    "submit": "Submit"
+    "submit": "Submit",
+    "delete": "Delete",
+    "edit": "Edit"
   },
   "TOAST": {
     "error_header": "Error",
@@ -524,8 +527,6 @@
     "love_count": "loves",
     "like_button": "Like",
     "love_button": "Love",
-
-
     "area_of_expertise": "Aspect",
     "author": "Author",
     "content": "Content"
@@ -556,8 +557,5 @@
   "VALIDATION": {
     "required": "This field is required",
     "min_length": "Minimum {{min}} characters required"
-  },
-  "BUTTON": {
-    "submitting": "Submitting..."
   }
 }

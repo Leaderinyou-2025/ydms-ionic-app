@@ -8,35 +8,34 @@
   (changeSegment)="onTabChange($event)">
 </app-header>
 
-<ion-content [fullscreen]="true" class="ion-padding-start ion-padding-end">
+<ion-content [fullscreen]="true" class="ion-padding-start ion-padding-end custom-page-bg-light">
   <!-- Kéo để làm mới dữ liệu -->
   <ion-refresher slot="fixed" mode="md" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Hiển thị loading khi đang tải dữ liệu -->
-  <div *ngIf="isLoading" class="flex justify-center items-center py-8">
-    <ion-spinner name="bubbles"></ion-spinner>
+  <!-- Loading skeleton -->
+  <div *ngIf="isLoading && !isLoadMore" class="mt-3">
+    <ion-skeleton-text [animated]="true" class="w-full h-48 rounded-lg mb-3" *ngFor="let i of Array(10)"></ion-skeleton-text>
+  </div>
+
+  <!-- No posts message -->
+  <div *ngIf="isLoading === false && experienceList.length === 0" class="flex flex-col items-center justify-center py-12">
+    <ion-icon name="document-text-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+    <p class="text-gray-500 dark:text-gray-400 text-center italic">{{ TranslateKeys.SHARE_EXPERIENCE_NO_POSTS | translate }}</p>
   </div>
 
   <!-- Experience posts list -->
-  <div *ngIf="!isLoading" class="py-4">
-    <!-- No posts message -->
-    <div *ngIf="experienceList.length === 0" class="flex flex-col items-center justify-center py-12">
-      <ion-icon name="document-text-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
-      <p class="text-gray-500 dark:text-gray-400 text-center italic">{{ TranslateKeys.SHARE_EXPERIENCE_NO_POSTS | translate }}</p>
-    </div>
-
+  <div *ngIf="experienceList?.length" class="py-4">
     <!-- Experience cards -->
-    <div *ngFor="let experience of experienceList"
-         class="bg-white dark:bg-gray-800 rounded-xl shadow-md mb-4 overflow-hidden relative"
-         (click)="onExperienceClick(experience)">
+    <div *ngFor="let experience of experienceList" routerLink="/{{PageRoutes.SHARE_EXPERIENCE}}/{{experience.id}}"
+         class="bg-white dark:bg-gray-800 rounded-xl shadow-md mb-4 overflow-hidden relative">
 
       <!-- Card header -->
       <div class="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700">
         <div class="flex items-center flex-1">
           <ion-avatar class="w-10 h-10 mr-3">
-            <img src="assets/icons/svg/avatar.svg" alt="Avatar" class="rounded-full">
+            <ion-img src="assets/icons/svg/avatar.svg" alt="Avatar" class="rounded-full"></ion-img>
           </ion-avatar>
           <div class="flex-1">
             <h3 class="text-base font-medium text-gray-800 dark:text-gray-200">{{ experience.parent_id.name }}</h3>
@@ -56,102 +55,51 @@
       <div class="p-4">
         <!-- Tiêu đề bài chia sẻ -->
         <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">{{ experience.name }}</h4>
+
         <!-- Nội dung kinh nghiệm (hiển thị 3 dòng đầu) -->
-        <div class="experience-content text-xl text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-3">
-          <quill-view [content]="experience.experience_content" theme="bubble"></quill-view>
+        <div class="text-justify text-gray-700 dark:text-gray-300 line-clamp-5-custom">
+          {{ CommonConstants.stripHtmlAndTruncate(experience.experience_content) }}
         </div>
       </div>
 
       <!-- Card actions and status -->
       <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100 dark:border-gray-700" (click)="$event.stopPropagation()">
         <!-- Like/Love buttons - Unified design for both tabs -->
-        <div [class]="'flex items-center space-x-3 bg-gray-100 dark:bg-gray-700 rounded-full' + (getTotalReactionCount(experience) > 0 ? ' pr-6' : '') ">
-          <!-- Unified reaction button -->
-          <div class="relative">
-            <!-- Main reaction button -->
-            <ion-button
-              fill="clear"
-              size="default"
-              [color]="getMainButtonColor(experience.id)"
-              [disabled]="isOwnPost(experience) && currentTab === 'community'"
-              [class]="'main-reaction-button min-w-[60px] h-10' + (hasUserReaction(experience.id) ? ' has-reaction' : '')"
-              (click)="$event.stopPropagation(); toggleReactionMenu(experience.id)">
-              <!-- Show user's current reaction or default icon -->
-              <div class="flex items-center justify-center">
-                <ion-icon
-                  [name]="getUserReactionIcon(experience.id)"
-                  [color]="getUserReactionColor(experience.id)"
-                  [class]="getUserReactionOpacity(experience.id)"
-                  class="text-3xl"></ion-icon>
-              </div>
+        <div class="flex items-center justify-start gap-2">
+          <ng-container *ngIf="experience.status === ExperienceStatus.ACCEPTED">
+            <!-- Like option -->
+            <ion-chip color="primary" (click)="selectReaction(experience, ExperienceReviewType.LIKE)">
+              <ion-icon name="thumbs-up"></ion-icon>
+              <span class="ml-1">{{ experience.total_like || 0 }}</span>
+            </ion-chip>
+
+            <!-- Love option -->
+            <ion-chip color="danger" (click)="selectReaction(experience, ExperienceReviewType.LOVE)">
+              <ion-icon name="heart"></ion-icon>
+              <span class="ml-1">{{ experience.total_love || 0 }}</span>
+            </ion-chip>
+          </ng-container>
+
+          <ng-container *ngIf="currentTab === 'family'">
+            <!--    Edit button      -->
+            <ion-button shape="round" size="small" color="primary"
+                        *ngIf="experience.status !== ExperienceStatus.ACCEPTED"
+                        routerLink="{{PageRoutes.CREATE_EXPERIENCE}}/{{experience.id}}">
+              <span class="text-base py-1">{{ TranslateKeys.BUTTON_EDIT | translate }}</span>
             </ion-button>
 
-            <!-- Reaction bubble menu (shows when button is clicked) -->
-            <div
-              *ngIf="showReactionMenu[experience.id] && currentTab === 'community' && !isOwnPost(experience)"
-              class="reaction-bubble absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-600 p-2 flex space-x-1 z-20"
-              (click)="$event.stopPropagation()">
-
-              <!-- Like option -->
-              <ion-button
-                fill="clear"
-                size="small"
-                [color]="userLikeStatus[experience.id] ? 'primary' : 'medium'"
-                class="reaction-option"
-                (click)="$event.stopPropagation(); selectReaction(experience, 'like')">
-                <ion-icon name="thumbs-up" class="text-2xl"></ion-icon>
-              </ion-button>
-
-              <!-- Love option -->
-              <ion-button
-                fill="clear"
-                size="small"
-                [color]="userLoveStatus[experience.id] ? 'danger' : 'medium'"
-                class="reaction-option"
-                (click)="$event.stopPropagation(); selectReaction(experience, 'love')">
-                <ion-icon name="heart" class="text-2xl"></ion-icon>
-              </ion-button>
-
-              <!-- Bubble arrow -->
-              <div class="bubble-arrow"></div>
-            </div>
-          </div>
-
-          <!-- Individual reaction counts -->
-          <div class="flex items-center space-x-1">
-            <!-- Like count -->
-            <div
-              *ngIf="experience.total_like > 0"
-              class="flex items-center space-x-1 bg-blue-100 dark:bg-blue-900/20 rounded-full py-1 px-3">
-              <ion-icon
-                name="thumbs-up"
-                color="primary"
-                class="text-sm"></ion-icon>
-              <span class="text-sm text-blue-600 dark:text-blue-400 font-medium">
-                {{ experience.total_like }}
-              </span>
-            </div>
-
-            <!-- Love count -->
-            <div
-              *ngIf="experience.total_love > 0"
-              class="flex items-center space-x-1 bg-red-100 dark:bg-red-900/20 rounded-full py-1 px-3">
-              <ion-icon
-                name="heart"
-                color="danger"
-                class="text-sm"></ion-icon>
-              <span class="text-sm text-red-600 dark:text-red-400 font-medium">
-                {{ experience.total_love }}
-              </span>
-            </div>
-          </div>
+            <!--    Delete button      -->
+            <ion-button shape="round" size="small" color="danger"
+                        *ngIf="experience.status !== ExperienceStatus.ACCEPTED"
+                        (click)="onClickRemoveExperience(experience)">
+              <span class="text-base py-1">{{ TranslateKeys.BUTTON_DELETE | translate }}</span>
+            </ion-button>
+          </ng-container>
         </div>
 
         <!-- Status badge (for family tab or own posts) -->
-        <div *ngIf="currentTab === 'family' || isOwnPost(experience)" class="flex items-center">
-          <ion-badge
-            [color]="getStatusColor(experience.status)"
-            class="text-xs px-2 py-1 rounded-full">
+        <div *ngIf="currentTab === 'family'" class="flex items-center gap-2">
+          <ion-badge [color]="getStatusColor(experience.status)" class="text-xs px-2 py-1 rounded-full">
             {{ getStatusLabel(experience.status) | translate }}
           </ion-badge>
         </div>
@@ -159,19 +107,18 @@
     </div>
   </div>
 
-  <!-- Infinite scroll để tải thêm dữ liệu khi cuộn xuống cuối -->
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="onIonInfinite()" *ngIf="!isLoading && hasMoreItems">
-    <ion-infinite-scroll-content
-      loadingSpinner="bubbles"
-      [loadingText]="TranslateKeys.LOADING_MORE_ITEMS | translate">
+  <!-- Infinite scroll -->
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-
 </ion-content>
 
 <!-- Nút floating để tạo bài chia sẻ mới -->
-<ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button (click)="onCreateExperience()" color="primary">
+<ion-fab vertical="bottom" horizontal="end" slot="fixed" class="mb-24">
+  <ion-fab-button color="primary" routerLink="{{PageRoutes.CREATE_EXPERIENCE}}">
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
 </ion-fab>
+
+<app-footer></app-footer>

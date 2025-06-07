@@ -62,7 +62,9 @@ ion-textarea {
   overflow: hidden;
 }
 
-.ion-touched.ion-invalid {
+.ion-touched.ion-invalid,
+.ion-touched.ion-invalid > .ql-container.ql-snow,
+.ion-touched.ion-invalid > .ql-toolbar.ql-snow {
   border-color: var(--ion-color-danger) !important;
 }
 
@@ -72,8 +74,29 @@ ion-select::part(text) {
 
 ion-select::part(icon) {
   margin-inline-start: 0;
+  position: absolute;
+  right: 8px;
 }
 
 .ql-toolbar {
   background: #f4f5f8;
+}
+
+.ql-toolbar.ql-snow {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.ql-container.ql-snow {
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.ql-container.ngx-quill-view {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.ql-container.ngx-quill-view p {
+  text-align: justify;
 }

@@ -423,6 +423,7 @@ export enum TranslateKeys {
   TITLE_RESULT_DESCRIPTION = "TITLE.result_description",
   TITLE_CAPTURE = "TITLE.capture",
   TITLE_GALLERY = "TITLE.gallery",
+  TITLE_DOCUMENTS = "TITLE.documents",
 
   // VALIDATE
   VALIDATE_PHONE_REQUIRED = 'VALIDATE.phone_required',
@@ -475,6 +476,8 @@ export enum TranslateKeys {
   BUTTON_NO_EXECUTION = 'BUTTON_TITLES.no_execution',
   BUTTON_IGNORE = 'BUTTON_TITLES.ignore',
   BUTTON_SUBMIT = 'BUTTON_TITLES.submit',
+  BUTTON_DELETE = 'BUTTON_TITLES.delete',
+  BUTTON_EDIT = 'BUTTON_TITLES.edit',
 
   // TOAST
   TOAST_ERROR_HEADER = 'TOAST.error_header',
