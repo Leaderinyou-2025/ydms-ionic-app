@@ -1,74 +1,41 @@
 import { Injectable } from '@angular/core';
 
-// Services
 import { OdooService, SearchDomain } from '../odoo/odoo.service';
-
-// Enums
 import { ModelName } from '../../shared/enums/model-name';
 import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
 import { ExperienceReviewType } from '../../shared/enums/experience-review-type';
-
-// Interfaces
 import { ILiyYdmsExperienceReview } from '../../shared/interfaces/models/liy.ydms.experience.review';
 
-/**
- * Service: Quản lý đánh giá bài chia sẻ kinh nghiệm
- * Mô tả: Xử lý các thao tác liên quan đến like/love bài chia sẻ
- * Chức năng: Đếm số lượt like, love, lấy thống kê tương tác
- */
 @Injectable({
   providedIn: 'root'
 })
 export class LiyYdmsExperienceReviewService {
 
-  // Danh sách các trường dữ liệu cần lấy từ backend
   public readonly experienceReviewFields = [
     'experience_id',
     'review',
     'create_uid'
   ];
 
-  /**
-   * Constructor: Khởi tạo service
-   * @param odooService - Service kết nối với Odoo backend
-   */
   constructor(
     private odooService: OdooService
   ) {
   }
 
   /**
-   * Đếm số lượt like của một bài chia sẻ
-   * @param experienceId - ID của bài chia sẻ
-   * @returns Số lượng like
+   * Đếm số lượt like/love của một bài chia sẻ
+   * @param experienceId
+   * @param reviewType
    */
-  public async getLikeCountByExperienceId(experienceId: number): Promise<number> {
-    // Tạo điều kiện tìm kiếm like cho bài chia sẻ cụ thể
+  public getCountReactionExperience(
+    experienceId: number,
+    reviewType: ExperienceReviewType
+  ): Promise<number> {
     const searchDomain: SearchDomain = [
       ['experience_id', OdooDomainOperator.EQUAL, experienceId],
-      ['review', OdooDomainOperator.EQUAL, ExperienceReviewType.LIKE]
+      ['review', OdooDomainOperator.EQUAL, reviewType]
     ];
-
-    // Gọi API đếm số lượng
-    const result = await this.odooService.searchCount(ModelName.EXPERIENCE_REVIEW, searchDomain);
-    return result || 0;
-  }
-
-  /**
-   * Đếm số lượt love của một bài chia sẻ
-   * @param experienceId - ID của bài chia sẻ
-   * @returns Số lượng love
-   */
-  public async getLoveCountByExperienceId(experienceId: number): Promise<number> {
-    // Tạo điều kiện tìm kiếm love cho bài chia sẻ cụ thể
-    const searchDomain: SearchDomain = [
-      ['experience_id', OdooDomainOperator.EQUAL, experienceId],
-      ['review', OdooDomainOperator.EQUAL, ExperienceReviewType.LOVE]
-    ];
-
-    // Gọi API đếm số lượng
-    const result = await this.odooService.searchCount(ModelName.EXPERIENCE_REVIEW, searchDomain);
-    return result || 0;
+    return this.odooService.searchCount(ModelName.EXPERIENCE_REVIEW, searchDomain);
   }
 
   /**
@@ -77,17 +44,12 @@ export class LiyYdmsExperienceReviewService {
    * @param experienceId - ID của bài chia sẻ
    * @returns Object chứa số lượt like và love
    */
-  public async getReactionCountsByExperienceId(experienceId: number): Promise<{like: number, love: number}> {
-    // Thực hiện song song để giảm thời gian chờ
+  public async getReactionCountsByExperienceId(experienceId: number): Promise<{ like: number, love: number }> {
     const [likeCount, loveCount] = await Promise.all([
-      this.getLikeCountByExperienceId(experienceId),
-      this.getLoveCountByExperienceId(experienceId)
+      this.getCountReactionExperience(experienceId, ExperienceReviewType.LIKE),
+      this.getCountReactionExperience(experienceId, ExperienceReviewType.LOVE)
     ]);
-
-    return {
-      like: likeCount,
-      love: loveCount
-    };
+    return {like: likeCount, love: loveCount};
   }
 
   /**
@@ -139,7 +101,7 @@ export class LiyYdmsExperienceReviewService {
         const updateResult = await this.odooService.write(
           ModelName.EXPERIENCE_REVIEW,
           [existingReview.id],
-          { review: reviewType }
+          {review: reviewType}
         );
         return updateResult ? existingReview.id : false;
       } else {

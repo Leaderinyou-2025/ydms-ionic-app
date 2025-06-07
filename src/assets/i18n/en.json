@@ -414,7 +414,8 @@
     "executing": "Executing",
     "no_execution": "No execution",
     "ignore": "Ignore",
-    "end": "End"
+    "end": "End",
+    "submit": "Submit"
   },
   "TOAST": {
     "error_header": "Error",

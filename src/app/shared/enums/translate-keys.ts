@@ -474,6 +474,7 @@ export enum TranslateKeys {
   BUTTON_EXECUTING = 'BUTTON_TITLES.executing',
   BUTTON_NO_EXECUTION = 'BUTTON_TITLES.no_execution',
   BUTTON_IGNORE = 'BUTTON_TITLES.ignore',
+  BUTTON_SUBMIT = 'BUTTON_TITLES.submit',
 
   // TOAST
   TOAST_ERROR_HEADER = 'TOAST.error_header',

@@ -414,7 +414,8 @@
     "executing": "Tham gia",
     "no_execution": "Không tham gia",
     "ignore": "Bỏ qua",
-    "end": "Kết thúc"
+    "end": "Kết thúc",
+    "submit": "Gửi"
   },
   "TOAST": {
     "error_header": "Lỗi",
@@ -523,8 +524,6 @@
     "love_count": "lượt yêu thích",
     "like_button": "Thích",
     "love_button": "Yêu thích",
-
-
     "area_of_expertise": "Khía cạnh",
     "author": "Tác giả",
     "content": "Nội dung"
@@ -555,8 +554,5 @@
   "VALIDATION": {
     "required": "Trường này là bắt buộc",
     "min_length": "Yêu cầu tối thiểu {{min}} ký tự"
-  },
-  "BUTTON": {
-    "submitting": "Đang gửi..."
   }
 }

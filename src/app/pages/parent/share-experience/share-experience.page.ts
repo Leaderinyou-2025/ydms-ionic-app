@@ -2,29 +2,19 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { InfiniteScrollCustomEvent, RefresherCustomEvent, ViewWillEnter } from '@ionic/angular';
 
-// Enums và constants
+import { LiyYdmsExperienceService } from '../../../services/models/liy.ydms.experience.service';
+import { LiyYdmsExperienceReviewService } from '../../../services/models/liy.ydms.experience.review.service';
+import { AuthService } from '../../../services/auth/auth.service';
 import { TranslateKeys } from '../../../shared/enums/translate-keys';
 import { DateFormat } from '../../../shared/enums/date-format';
 import { AreaOfExpertise } from '../../../shared/enums/area-of-expertise';
 import { ExperienceStatus } from '../../../shared/enums/experience-status';
 import { ExperienceReviewType } from '../../../shared/enums/experience-review-type';
 import { PageRoutes } from '../../../shared/enums/page-routes';
-
-// Interfaces
 import { IHeaderAnimeImage, IHeaderSegment } from '../../../shared/interfaces/header/header';
 import { ILiyYdmsExperience } from '../../../shared/interfaces/models/liy.ydms.experience';
 import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
 
-// Services
-import { LiyYdmsExperienceService } from '../../../services/models/liy.ydms.experience.service';
-import { LiyYdmsExperienceReviewService } from '../../../services/models/liy.ydms.experience.review.service';
-import { AuthService } from '../../../services/auth/auth.service';
-
-/**
- * Component: Trang chia sẻ kinh nghiệm
- * Mô tả: Hiển thị danh sách các bài chia sẻ kinh nghiệm của phụ huynh
- * Chức năng: Xem danh sách, tạo mới, xem chi tiết bài chia sẻ
- */
 @Component({
   selector: 'app-share-experience',
   templateUrl: './share-experience.page.html',
@@ -33,22 +23,13 @@ import { AuthService } from '../../../services/auth/auth.service';
 })
 export class ShareExperiencePage implements OnInit, ViewWillEnter {
 
-  // Enums để sử dụng trong template
-  TranslateKeys = TranslateKeys;
-  DateFormat = DateFormat;
-  PageRoutes = PageRoutes;
-
-  // Cấu hình header với hình ảnh anime
+  // Header data
   animeImage!: IHeaderAnimeImage;
-
-  // Cấu hình segment cho tab
   segment!: IHeaderSegment;
   currentTab: 'community' | 'family' = 'community';
 
-  // Dữ liệu người dùng hiện tại
   authData?: IAuthData;
 
-  // Danh sách bài chia sẻ kinh nghiệm
   experienceList: ILiyYdmsExperience[] = [];
 
   // Track trạng thái like/love của user hiện tại
@@ -58,13 +39,15 @@ export class ShareExperiencePage implements OnInit, ViewWillEnter {
   // Track trạng thái hiển thị menu reaction
   showReactionMenu: { [experienceId: number]: boolean } = {};
 
-
-
   // Trạng thái loading và phân trang
   isLoading = false;
   hasMoreItems = true;
   currentPage = 1;
   pageSize = 20;
+
+  protected TranslateKeys = TranslateKeys;
+  protected DateFormat = DateFormat;
+  protected PageRoutes = PageRoutes;
 
   constructor(
     private router: Router,
@@ -72,35 +55,10 @@ export class ShareExperiencePage implements OnInit, ViewWillEnter {
     private experienceReviewService: LiyYdmsExperienceReviewService,
     private authService: AuthService
   ) {
-    this.animeImage = {
-      name: 'Share Experience',
-      imageUrl: '/assets/images/share-experience.svg',
-      height: '150px',
-      width: '150px',
-      position: {
-        position: 'absolute',
-        right: '0',
-        bottom: '20px'
-      }
-    };
-
-    // Cấu hình segment cho tab
-    this.segment = {
-      value: 'community',
-      buttons: [
-        {
-          value: 'community',
-          label: TranslateKeys.SHARE_EXPERIENCE_TAB_COMMUNITY
-        },
-        {
-          value: 'family',
-          label: TranslateKeys.SHARE_EXPERIENCE_TAB_FAMILY
-        }
-      ]
-    };
   }
 
   async ngOnInit() {
+    this.initHeader();
     this.authData = await this.authService.getAuthData();
   }
 
@@ -258,10 +216,6 @@ export class ShareExperiencePage implements OnInit, ViewWillEnter {
     }
   }
 
-  trackByExperienceId(index: number, experience: ILiyYdmsExperience): number {
-    return experience.id;
-  }
-
   /**
    * Load trạng thái like/love của user cho danh sách bài chia sẻ
    * @param experiences - Danh sách bài chia sẻ cần kiểm tra
@@ -291,8 +245,6 @@ export class ShareExperiencePage implements OnInit, ViewWillEnter {
       console.error('ERROR loading user like status:', error);
     }
   }
-
-
 
   /**
    * Toggle hiển thị menu reaction
@@ -392,23 +344,23 @@ export class ShareExperiencePage implements OnInit, ViewWillEnter {
     if (!this.authData?.id) return;
 
     // Cập nhật số lượng like/love trên backend
-    const updateCountResult = await this.experienceService.updateLikeLoveCount(experience.id);
+    // const updateCountResult = await this.experienceService.updateLikeLoveCount(experience.id);
 
-    if (updateCountResult) {
-      // Lấy dữ liệu mới nhất sau khi cập nhật
-      const updatedExperience = await this.experienceService.getExperienceDetail(experience.id);
-      if (updatedExperience) {
-        const index = this.experienceList.findIndex(exp => exp.id === experience.id);
-        if (index !== -1) {
-          // Cập nhật cả total_like và total_love
-          this.experienceList[index].total_like = updatedExperience.total_like;
-          this.experienceList[index].total_love = updatedExperience.total_love;
-        }
-      }
-
-      // Cập nhật trạng thái like/love của user
-      await this.loadUserLikeStatus([experience]);
-    }
+    // if (updateCountResult) {
+    //   // Lấy dữ liệu mới nhất sau khi cập nhật
+    //   const updatedExperience = await this.experienceService.getExperienceDetail(experience.id);
+    //   if (updatedExperience) {
+    //     const index = this.experienceList.findIndex(exp => exp.id === experience.id);
+    //     if (index !== -1) {
+    //       // Cập nhật cả total_like và total_love
+    //       this.experienceList[index].total_like = updatedExperience.total_like;
+    //       this.experienceList[index].total_love = updatedExperience.total_love;
+    //     }
+    //   }
+    //
+    //   // Cập nhật trạng thái like/love của user
+    //   await this.loadUserLikeStatus([experience]);
+    // }
   }
 
   /**
@@ -482,7 +434,6 @@ export class ShareExperiencePage implements OnInit, ViewWillEnter {
   }
 
 
-
   /**
    * Đóng tất cả menu reaction khi click ra ngoài
    */
@@ -492,5 +443,34 @@ export class ShareExperiencePage implements OnInit, ViewWillEnter {
     Object.keys(this.showReactionMenu).forEach(id => {
       this.showReactionMenu[parseInt(id)] = false;
     });
+  }
+
+  private initHeader(): void {
+    this.animeImage = {
+      name: 'Share Experience',
+      imageUrl: '/assets/images/share-experience.svg',
+      height: '150px',
+      width: '150px',
+      position: {
+        position: 'absolute',
+        right: '0',
+        bottom: '20px'
+      }
+    };
+
+    // Cấu hình segment cho tab
+    this.segment = {
+      value: 'community',
+      buttons: [
+        {
+          value: 'community',
+          label: TranslateKeys.SHARE_EXPERIENCE_TAB_COMMUNITY
+        },
+        {
+          value: 'family',
+          label: TranslateKeys.SHARE_EXPERIENCE_TAB_FAMILY
+        }
+      ]
+    };
   }
 }

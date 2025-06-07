@@ -92,7 +92,7 @@
             [layout]="segmentButton.layout"
             [type]="segmentButton.type"
             [disabled]="segmentButton.disabled">
-            <ion-label *ngIf="segmentButton.label">{{ segmentButton.label | translate }}</ion-label>
+            <ion-label class="pr-1" *ngIf="segmentButton.label">{{ segmentButton.label | translate }}</ion-label>
             <ion-icon *ngIf="segmentButton.icon" [name]="segmentButton.icon" [color]="segmentButton.iconColor"></ion-icon>
           </ion-segment-button>
         </ng-container>

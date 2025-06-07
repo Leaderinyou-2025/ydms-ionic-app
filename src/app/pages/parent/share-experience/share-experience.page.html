@@ -23,7 +23,7 @@
   <div *ngIf="!isLoading" class="py-4">
     <!-- No posts message -->
     <div *ngIf="experienceList.length === 0" class="flex flex-col items-center justify-center py-12">
-      <span class="text-5xl text-gray-400 mb-4">📝</span>
+      <ion-icon name="document-text-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
       <p class="text-gray-500 dark:text-gray-400 text-center italic">{{ TranslateKeys.SHARE_EXPERIENCE_NO_POSTS | translate }}</p>
     </div>
 

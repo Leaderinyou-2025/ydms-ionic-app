@@ -12,7 +12,7 @@ export interface AreaOfExpertiseOption {
 /**
  * Shared area of expertise options data
  */
-export const areaOfExpertiesData: AreaOfExpertiseOption[] = [
+export const areaOfExpertiseData: AreaOfExpertiseOption[] = [
   {
     area: AreaOfExpertise.EMOTION,
     title: TranslateKeys.AREA_OF_EXPERTISE_EMOTION
