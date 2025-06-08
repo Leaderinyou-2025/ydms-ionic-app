@@ -2,7 +2,7 @@
   <ng-container *ngIf="authData">
     <!--  Avatar, tên, trang cá nhân  -->
     <ion-list class="mb-2">
-      <ion-item lines="none" detail="false" routerLink="/{{PageRoutes.PERSONAL_DIARY}}">
+      <ion-item lines="none" detail="false" routerLink="/{{authData.is_teacher ? PageRoutes.PERSONAL_DIARY : (PageRoutes.PROFILE + '/' + PageRoutes.PERSONAL_INFO)}}">
         <ion-avatar aria-hidden="true" slot="start" class="border">
           <img alt="Silhouette of a person's head" [src]="getUserAvatarImage()"/>
         </ion-avatar>
@@ -27,33 +27,28 @@
       </ion-item>
     </ion-list>
 
-    <!--  Bộ sưu tập huy chương, trang gia đình, nhóm lớp  -->
+    <!--  Pages routes  -->
     <ion-list class="mb-2">
-      <ion-item detail="false" lines="none" routerLink="/{{PageRoutes.NOTIFICATIONS}}">
+      <!--   Student   -->
+      <ion-item detail="false" lines="none" routerLink="/{{PageRoutes.NOTIFICATIONS}}" *ngIf="authData.is_teenager">
         <ion-icon name="mail-unread" slot="start" color="primary" class="text-xl"></ion-icon>
         <ion-label class="py-2 text-gray-500">{{ TranslateKeys.NOTIFICATIONS_TITLE | translate }}</ion-label>
         <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>
       </ion-item>
-      <!--      <ion-item detail="false" routerLink="/{{PageRoutes.BADGE_COLLECTION}}">-->
-      <!--        <ion-icon name="ribbon" slot="start" color="primary" class="text-xl"></ion-icon>-->
-      <!--        <ion-label class="py-2 text-gray-500">{{ TranslateKeys.TITLE_BADGE_COLLECTION | translate }}</ion-label>-->
-      <!--        <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>-->
-      <!--      </ion-item>-->
-      <!--      <ion-item detail="false" routerLink="/{{PageRoutes.FAMILY_GROUP}}">-->
-      <!--        <ion-icon name="heart" slot="start" color="primary" class="text-xl"></ion-icon>-->
-      <!--        <ion-label class="py-2 text-gray-500">{{ TranslateKeys.TITLE_FAMILY_PAGE | translate }}</ion-label>-->
-      <!--        <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>-->
-      <!--      </ion-item>-->
-      <!--      <ion-item lines="none" detail="false" routerLink="/{{PageRoutes.CLASS_GROUP}}">-->
-      <!--        <ion-icon name="easel" slot="start" color="primary" class="text-xl"></ion-icon>-->
-      <!--        <ion-label class="py-2 text-gray-500">{{ TranslateKeys.TITLE_CLASS_GROUP | translate }} {{authData.classroom_id?.name}}</ion-label>-->
-      <!--        <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>-->
-      <!--      </ion-item>-->
-      <!--      <ion-item lines="none" detail="false" routerLink="/{{PageRoutes.SCHOOL_GROUP}}">-->
-      <!--        <ion-icon name="business" slot="start" color="primary" class="text-xl"></ion-icon>-->
-      <!--        <ion-label class="py-2 text-gray-500"> {{ TranslateKeys.TITLE_SCHOOL_GROUP | translate }}</ion-label>-->
-      <!--        <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>-->
-      <!--      </ion-item>-->
+
+      <!--   Parents   -->
+      <ng-container *ngIf="authData.is_parent">
+        <ion-item detail="false" routerLink="/{{PageRoutes.FAMILY_COMMUNICATION_QUALITY_SURVEY}}">
+          <ion-icon name="chatbubbles" slot="start" color="primary" class="text-xl"></ion-icon>
+          <ion-label class="py-2 text-gray-500">{{ TranslateKeys.TITLE_FAMILY_COMMUNICATION_QUALITY_SURVEY | translate }}</ion-label>
+          <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>
+        </ion-item>
+        <ion-item detail="false" lines="none" routerLink="/{{PageRoutes.FAMILY_CONFLICT_SURVEY}}">
+          <ion-icon name="heart-half" slot="start" color="primary" class="text-xl"></ion-icon>
+          <ion-label class="py-2 text-gray-500">{{ TranslateKeys.TITLE_FAMILY_CONFLICT_SURVEY | translate }}</ion-label>
+          <ion-icon name="chevron-forward" slot="end" class="text-base"></ion-icon>
+        </ion-item>
+      </ng-container>
     </ion-list>
 
     <!--  Âm thanh, hình ảnh, thông báo, ngôn ngữ  -->

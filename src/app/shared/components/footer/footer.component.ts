@@ -9,6 +9,7 @@ import { TranslateKeys } from '../../enums/translate-keys';
 import { AuthService } from '../../../services/auth/auth.service';
 import { UserRoles } from '../../enums/user-roles';
 import { NativePlatform } from '../../enums/native-platform';
+import { GuideType } from '../../enums/guide-type';
 
 @Component({
   selector: 'app-footer',
@@ -26,6 +27,8 @@ export class FooterComponent implements OnInit, OnDestroy {
   protected readonly UserRoles = UserRoles;
   protected readonly PageRoutes = PageRoutes;
   private keyboardSubscription!: Subscription;
+  protected readonly NativePlatform = NativePlatform;
+  protected readonly GuideType = GuideType;
 
   constructor(
     public platform: Platform,
@@ -40,7 +43,12 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.userRole = this.authService.getRole();
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
-      this.activePage = event.urlAfterRedirects.split('/')?.pop();
+      const pageUrl = event.urlAfterRedirects.split('/')?.pop();
+      if (pageUrl?.includes('?')) {
+        this.activePage = pageUrl?.split('?')?.[0];
+      } else {
+        this.activePage = pageUrl;
+      }
     });
   }
 
@@ -55,6 +63,4 @@ export class FooterComponent implements OnInit, OnDestroy {
   public isActive(path: string): boolean {
     return this.activePage === path;
   }
-
-  protected readonly NativePlatform = NativePlatform;
 }
