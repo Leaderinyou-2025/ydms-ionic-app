@@ -6,6 +6,8 @@ import { OrderBy } from '../../shared/enums/order-by';
 import { ModelName } from '../../shared/enums/model-name';
 import { CommonConstants } from '../../shared/classes/common-constants';
 import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
+import { GuideType } from '../../shared/enums/guide-type';
+import { AreaOfExpertise } from '../../shared/enums/area-of-expertise';
 
 @Injectable({
   providedIn: 'root'
@@ -66,5 +68,27 @@ export class LiyYdmsGuideService {
   public async getGuideById(id: number): Promise<ILiyYdmsGuide | undefined> {
     const results = await this.getGuideList([['id', OdooDomainOperator.EQUAL, id]], 0, 1,);
     return results?.[0];
+  }
+
+  /**
+   * Lấy danh sách gợi ý điều tiết cảm xúc
+   * @param searchTerm
+   * @param offset
+   * @param limit
+   * @param order
+   */
+  public async getEmotionGuideList(
+    searchTerm: string = '',
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.NAME_ASC,
+  ): Promise<ILiyYdmsGuide[]> {
+    return this.getGuideList(
+      [
+        ['name', OdooDomainOperator.ILIKE, searchTerm],
+        ['guide_type', OdooDomainOperator.EQUAL, GuideType.INSTRUCTION],
+        ['area_of_expertise', OdooDomainOperator.EQUAL, AreaOfExpertise.EMOTION],
+      ], offset, limit, order,
+    );
   }
 }

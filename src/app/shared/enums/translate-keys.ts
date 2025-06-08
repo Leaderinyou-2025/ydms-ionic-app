@@ -40,6 +40,7 @@ export enum TranslateKeys {
 
   // PERSONAL DIARY
   PERSONAL_DIARY_TITLE = 'PERSONAL_DIARY.title',
+  PERSONAL_DIARY_TITLE_WELCOME = 'PERSONAL_DIARY.title_welcome',
   PERSONAL_DIARY_MY_ENTRIES = 'PERSONAL_DIARY.my_entries',
   PERSONAL_DIARY_SHARED_ENTRIES = 'PERSONAL_DIARY.shared_entries',
   PERSONAL_DIARY_NEW_ENTRY = 'PERSONAL_DIARY.new_entry',
@@ -59,6 +60,7 @@ export enum TranslateKeys {
   PERSONAL_DIARY_REACTION_ANGRY = 'PERSONAL_DIARY.reaction_angry',
   PERSONAL_DIARY_TOTAL_REACTIONS = 'PERSONAL_DIARY.total_reactions',
   PERSONAL_DIARY_ANONYMOUS_USER = 'PERSONAL_DIARY.anonymous_user',
+  PERSONAL_SELECT_SUGGESTION_GUIDE = 'PERSONAL_DIARY.select_suggestion_guide',
 
   // EMOTIONS
   EMOTION_HAPPY = 'EMOTION.happy',
@@ -296,6 +298,7 @@ export enum TranslateKeys {
   TITLE_CLOSE_FRIENDS = 'TITLE.close_friends',
   TITLE_ADD_FRIEND = 'TITLE.add_friend',
   TITLE_SEARCH_FRIENDS = 'TITLE.search_friends',
+  TITLE_SEARCH = 'TITLE.search',
   TITLE_DAILY_EMOTION_JOURNAL = 'TITLE.daily_emotion_journal',
   TITLE_CALENDAR = 'TITLE.calendar',
   TITLE_HISTORY = 'TITLE.history',
@@ -417,13 +420,13 @@ export enum TranslateKeys {
   TITLE_IN_PROGRESS = 'TITLE.in_progress',
   TITLE_PENDING = 'TITLE.pending',
   TITLE_IGNORE = 'TITLE.ignore',
-  TITLE_PROGRESS_UPDATING = "TITLE.progress_updating",
-  TITLE_RESULT = "TITLE.result",
-  TITLE_PROGRESS_RESULT = "TITLE.progress_result",
-  TITLE_RESULT_DESCRIPTION = "TITLE.result_description",
-  TITLE_CAPTURE = "TITLE.capture",
-  TITLE_GALLERY = "TITLE.gallery",
-  TITLE_DOCUMENTS = "TITLE.documents",
+  TITLE_PROGRESS_UPDATING = 'TITLE.progress_updating',
+  TITLE_RESULT = 'TITLE.result',
+  TITLE_PROGRESS_RESULT = 'TITLE.progress_result',
+  TITLE_RESULT_DESCRIPTION = 'TITLE.result_description',
+  TITLE_CAPTURE = 'TITLE.capture',
+  TITLE_GALLERY = 'TITLE.gallery',
+  TITLE_DOCUMENTS = 'TITLE.documents',
 
   // VALIDATE
   VALIDATE_PHONE_REQUIRED = 'VALIDATE.phone_required',
@@ -502,6 +505,8 @@ export enum TranslateKeys {
   TOAST_ACCEPT_REQUEST_FAILED = 'TOAST.accept_request_failed',
   TOAST_CHECKIN_EMOTION_FAILED = 'TOAST.checkin_emotion_failed',
   TOAST_CHECKIN_EMOTION_SUCCESS = 'TOAST.checkin_emotion_success',
+  TOAST_SEND_EMOTION_TIPS_SUCCESS = 'TOAST.send_emotion_tops_success',
+  TOAST_SEND_EMOTION_TIPS_FAILED = 'TOAST.send_emotion_tops_failed',
 
   // ERROR
   ERROR_NETWORK = 'ERROR.network',

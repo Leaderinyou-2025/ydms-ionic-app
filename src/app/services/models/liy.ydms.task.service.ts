@@ -10,6 +10,7 @@ import { TaskStatus } from '../../shared/enums/task-status';
 import { AreaOfExpertise } from '../../shared/enums/area-of-expertise';
 import { GuideType } from '../../shared/enums/guide-type';
 import { TaskProgressUpdate } from '../../shared/interfaces/function-data/task-progress-update';
+import { CreateTaskBody } from '../../shared/interfaces/function-data/create-task-body';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class LiyYdmsTaskService {
     'name', 'guide_id', 'guide_type', 'assignee_ids', 'area_of_expertise', 'status',
     'rank_point', 'scores', 'task_image_result', 'task_percentage_result', 'task_text_result',
     'create_date', 'write_date'
-  ]
+  ];
 
   constructor(
     private odooService: OdooService,
@@ -182,5 +183,17 @@ export class LiyYdmsTaskService {
       ['assignee_ids', OdooDomainOperator.IN, [assigneeId]],
       ['guide_type', OdooDomainOperator.EQUAL, guideType]
     ], offset, limit, order);
+  }
+
+  /**
+   * Create task
+   * @param body
+   */
+  public async createTask(
+    body: CreateTaskBody
+  ): Promise<number | undefined> {
+    return this.odooService.create<ILiyYdmsTask>(
+      ModelName.TASK, body,
+    );
   }
 }

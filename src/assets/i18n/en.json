@@ -71,9 +71,10 @@
     "badge_new": "NEW"
   },
   "PERSONAL_DIARY": {
-    "title": "Personal Diary",
-    "my_entries": "My Entries",
-    "shared_entries": "Shared Entries",
+    "title": "Shared Emotional Journals",
+    "title_welcome": "Your emotions deserve to be heard – you deserve to be understood",
+    "my_entries": "Shared by me",
+    "shared_entries": "Shared with me",
     "new_entry": "New Entry",
     "content_placeholder": "What's on your mind?",
     "emotion_type": "How are you feeling?",
@@ -92,7 +93,8 @@
     "total_reactions": "Total Reactions",
     "no_entries": "No entries found",
     "no_suggestions": "No suggestions available for this emotion type",
-    "anonymous_user": "Anonymous user"
+    "anonymous_user": "Anonymous user",
+    "select_suggestion_guide": "Emotion regulation tips"
   },
   "DAILY_EMOTION_JOURNAL": {
     "no_entries": "No journal entries found",
@@ -442,7 +444,9 @@
     "accept_request_success": "Friend request accepted successfully.",
     "accept_request_failed": "Failed to accept friend request. Please try again.",
     "checkin_emotion_failed": "Failed to checkin emotion. Please try again.",
-    "checkin_emotion_success": "Checkin emotion successfully."
+    "checkin_emotion_success": "Checkin emotion successfully.",
+    "send_emotion_tops_success": "Your tips were sent successfully.",
+    "send_emotion_tops_failed": "Something went wrong. Please try sending your tips again."
   },
   "ERROR": {
     "network": "Network error. Please check your internet connection.",

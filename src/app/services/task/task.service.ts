@@ -14,6 +14,7 @@ import { IEmotionQuestion } from '../../shared/interfaces/function-data/emotion-
 import { CommonConstants } from '../../shared/classes/common-constants';
 import { ITaskDetail } from '../../shared/interfaces/function-data/task-detail';
 import { TaskProgressUpdate } from '../../shared/interfaces/function-data/task-progress-update';
+import { CreateTaskBody } from '../../shared/interfaces/function-data/create-task-body';
 
 @Injectable({
   providedIn: 'root'
@@ -105,7 +106,7 @@ export class TaskService {
   ): Promise<ILiyYdmsEmotionalDiary[]> {
     return this.liyYdmsEmotionalDiaryService.getUserEmotionDiaryList(
       teenagerId, offset, limit, order
-    )
+    );
   }
 
   /**
@@ -123,7 +124,7 @@ export class TaskService {
   ): Promise<ILiyYdmsEmotionalDiary[]> {
     return this.liyYdmsEmotionalDiaryService.getUserEmotionDiaryPending(
       teenagerId, offset, limit, order
-    )
+    );
   }
 
   /**
@@ -162,7 +163,7 @@ export class TaskService {
     const randomQuestions: IEmotionQuestion = {
       ...questions[0],
       answers: [],
-    }
+    };
 
     // Lấy danh sách lựa chọn câu trả lời
     if (randomQuestions.answer_ids?.length) {
@@ -217,5 +218,13 @@ export class TaskService {
     return this.liyYdmsTaskService.updateTask(
       taskId, body
     );
+  }
+
+  /**
+   * Create task
+   * @param body
+   */
+  public async createTask(body: CreateTaskBody): Promise<number | undefined> {
+    return this.liyYdmsTaskService.createTask(body);
   }
 }

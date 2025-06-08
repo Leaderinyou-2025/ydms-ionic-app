@@ -71,9 +71,10 @@
     "badge_new": "MỚI"
   },
   "PERSONAL_DIARY": {
-    "title": "Trang cá nhân",
-    "my_entries": "Nhật ký của tôi",
-    "shared_entries": "Nhật ký được chia sẻ",
+    "title": "Chia sẻ cảm xúc",
+    "title_welcome": "Cảm xúc cũng cần được lắng nghe, bạn xứng đáng được thấu hiểu",
+    "my_entries": "Đã chia sẻ",
+    "shared_entries": "Được chia sẻ",
     "new_entry": "Tạo nhật ký mới",
     "content_placeholder": "Bạn đang nghĩ gì?",
     "emotion_type": "Bạn đang cảm thấy thế nào?",
@@ -92,7 +93,8 @@
     "total_reactions": "Tổng số cảm xúc",
     "no_entries": "Không có bài viết nào",
     "no_suggestions": "Không có gợi ý nào cho loại cảm xúc này",
-    "anonymous_user": "Người dùng ẩn danh"
+    "anonymous_user": "Người dùng ẩn danh",
+    "select_suggestion_guide": "Gợi ý cách điều tiết cảm xúc"
   },
   "DAILY_EMOTION_JOURNAL": {
     "no_entries": "Không tìm thấy nhật ký cảm xúc nào",
@@ -433,7 +435,7 @@
     "task_complete_success": "Nhiệm vụ hoàn thành thành công!",
     "task_complete_error": "Không thể hoàn thành nhiệm vụ. Vui lòng thử lại.",
     "answer_all_questions": "Vui lòng trả lời tất cả các câu hỏi trước khi gửi.",
-    "update_failed": "Có lỗi sảy ra khi cập nhật thông tin. Vui long thử lại sau.",
+    "update_failed": "Có lỗi sảy ra khi cập nhật thông tin. Vui lòng thử lại sau.",
     "update_success": "Cập nhật thông tin thành công.",
     "send_request_failed": "Không gửi được yêu cầu. Vui lòng thử lại sau.",
     "send_request_success": "Gửi yêu cầu thành công.",
@@ -441,8 +443,10 @@
     "cancel_request_failed": "Hủy yêu cầu kết bạn thất bại. Vui lòng thử lại.",
     "accept_request_success": "Chấp nhận yêu cầu kết bạn thành công.",
     "accept_request_failed": "Chấp nhận yêu cầu kết bạn thất bại. Vui lòng thử lại.",
-    "checkin_emotion_failed": "Có lỗi sảy ra khi checkin cảm xúc. Vui long thử lại sau.",
-    "checkin_emotion_success": "Checkin cảm xúc thành công. Hãy tiếp tục duy trì chuỗi để nhận thêm nhiều phần thường nhé."
+    "checkin_emotion_failed": "Có lỗi sảy ra khi checkin cảm xúc. Vui lòng thử lại sau.",
+    "checkin_emotion_success": "Checkin cảm xúc thành công. Hãy tiếp tục duy trì chuỗi để nhận thêm nhiều phần thường nhé.",
+    "send_emotion_tops_success": "Gửi gợi ý điều tiết cảm xúc thành công.",
+    "send_emotion_tops_failed": "Có lỗi sảy ra khi gửi gợi ý điều tiết cảm xúc. Vui lòng thử lại sau."
   },
   "ERROR": {
     "network": "Lỗi mạng. Vui lòng kiểm tra kết nối mạng của bạn và thử lại.",

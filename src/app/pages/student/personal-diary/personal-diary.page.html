@@ -1,127 +1,98 @@
 <app-header
   [pageTitle]="TranslateKeys.PERSONAL_DIARY_TITLE"
+  [caption]="TranslateKeys.PERSONAL_DIARY_TITLE_WELCOME"
   backgroundColor="linear-gradient(to bottom, #9333ea, #4c1d95)"
+  defaultBackHref="/{{PageRoutes.PROFILE}}"
   [segment]="segment"
   [animeImage]="animeImage"
   (changeSegment)="segmentChanged($event)">
 </app-header>
 
-<ion-content [fullscreen]="true" class=" custom-page-bg-light">
-  <!-- Diary entries -->
-  <div class="px-4 py-2">
-    <ng-container *ngIf="diaryEntries$ | async as entries">
-      <div *ngIf="entries.length === 0" class="flex flex-col items-center justify-center py-12">
-        <span class="text-5xl text-gray-400 mb-4">📝</span>
-        <p class="text-gray-500 dark:text-gray-400 text-center italic">{{ 'PERSONAL_DIARY.no_entries' | translate }}</p>
-      </div>
+<ion-content [fullscreen]="true" class="custom-page-bg-light ion-padding">
+  <!-- Refresh -->
+  <ion-refresher slot="fixed" mode="md" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
-      <div *ngFor="let entry of entries" class="bg-white dark:bg-gray-800 rounded-xl shadow-md mb-4 overflow-hidden relative">
-        <!-- Card header with avatar and name -->
-        <div class="flex items-center p-4 border-b border-gray-100 dark:border-gray-700">
-          <ion-avatar class="w-10 h-10 mr-3">
-            <img [src]="entry.user.avatar || 'assets/icons/svg/avatar.svg'" alt="Avatar" class="rounded-full">
-          </ion-avatar>
-          <div class="flex-1">
-            <h3 class="text-base font-medium text-gray-800 dark:text-gray-200">{{ getDisplayName(entry) }}</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400">{{ formatTimestamp(entry.timestamp) }}</p>
-          </div>
-          <div class="emotion-badge">
-            <span class="text-xl">{{ getEmotionEmoji(entry.emotionType) }}</span>
-          </div>
-        </div>
-
-        <!-- Card content -->
-        <div class="p-4">
-          <div class="relative">
-            <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{{ entry.content }}</p>
-          </div>
-        </div>
-
-        <!-- Card actions -->
-        <div class="flex items-center px-4 py-3 border-t border-gray-100 dark:border-gray-700">
-          <!-- Reaction button -->
-          <button
-            class="flex items-center mr-4 py-1 px-3 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 relative"
-            (click)="toggleReactions(entry, $event)">
-            <span class="mr-1 text-xl" [ngClass]="{'opacity-50': !getUserReaction(entry.id), 'opacity-100': getUserReaction(entry.id)}">{{ getReactionEmoji(getUserReaction(entry.id)) }}</span>
-
-            <!-- Reaction summary (clickable) -->
-            <div *ngIf="getTotalReactionsCount(entry.id) > 0"
-                 class="ml-1 flex items-center bg-black bg-opacity-5 rounded-xl px-1.5 py-1 cursor-pointer transition-all duration-200 hover:bg-opacity-10"
-                 (click)="showReactionStats(entry, $event)">
-              <div class="flex -space-x-1 mr-1">
-                <span *ngIf="getReactions(entry.id)?.love > 0" class="inline-flex items-center justify-center w-4 h-4 text-xs rounded-full bg-white dark:bg-gray-800 shadow">❤️</span>
-                <span *ngIf="getReactions(entry.id)?.happy > 0" class="inline-flex items-center justify-center w-4 h-4 text-xs rounded-full bg-white dark:bg-gray-800 shadow">😊</span>
-                <span *ngIf="getReactions(entry.id)?.sad > 0" class="inline-flex items-center justify-center w-4 h-4 text-xs rounded-full bg-white dark:bg-gray-800 shadow">😢</span>
-                <span *ngIf="getReactions(entry.id)?.angry > 0" class="inline-flex items-center justify-center w-4 h-4 text-xs rounded-full bg-white dark:bg-gray-800 shadow">😡</span>
-              </div>
-              <span class="text-xs font-medium">{{ getTotalReactionsCount(entry.id) }}</span>
-            </div>
-
-            <!-- Reactions popup -->
-            <div *ngIf="showReactions && reactionEntry?.id === entry.id"
-                 class="absolute bottom-10 left-0 z-20 bg-white dark:bg-gray-800 rounded-full shadow-lg py-1 px-2 flex items-center reaction-popup">
-              <button *ngFor="let reaction of reactions"
-                      class="mx-1 transform transition-transform duration-200 hover:scale-125 bg-transparent border-0 cursor-pointer p-1 rounded-full relative"
-                      [ngClass]="{'active-reaction hover:bg-opacity-10 bg-black bg-opacity-5 scale-110': getUserReaction(entry.id) === reaction.name}"
-                      (click)="addReaction(entry.id, reaction.name, $event)">
-                <span class="text-xl">{{ reaction.emoji }}</span>
-              </button>
-            </div>
-          </button>
-
-          <div class="flex ml-auto">
-            <!-- Suggestion button (toggle) -->
-            <button
-              class="flex items-center mr-2 py-1 px-2 rounded-full transition-colors duration-200"
-              [ngClass]="{
-                'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300': showSuggestions && selectedEntry?.id === entry.id,
-                'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700': !(showSuggestions && selectedEntry?.id === entry.id)
-              }"
-              (click)="showSuggestionsForEntry(entry, $event)">
-              <span class="text-lg" [ngClass]="{
-                'text-yellow-500': !(showSuggestions && selectedEntry?.id === entry.id),
-                'text-yellow-700 dark:text-yellow-300': showSuggestions && selectedEntry?.id === entry.id
-              }">💡</span>
-            </button>
-
-            <!-- Withdraw button (only for own entries) -->
-            <button
-              *ngIf="isOwnEntry(entry)"
-              class="flex items-center py-1 px-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
-              (click)="withdrawEntry(entry.id)">
-              <span class="text-lg text-red-500">↩️</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Suggestions section (inside card) -->
-        <div *ngIf="showSuggestions && selectedEntry?.id === entry.id"
-             class="px-4 py-3 border-t border-gray-100 dark:border-gray-700 bg-yellow-50 dark:bg-gray-700 rounded-b-xl suggestions-section">
-          <div class="flex justify-between items-center mb-2">
-            <h4 class="text-sm font-semibold text-yellow-700 dark:text-yellow-300">{{ TranslateKeys.PERSONAL_DIARY_SUGGESTIONS | translate }}:</h4>
-          </div>
-
-          <!-- No suggestions message -->
-          <div *ngIf="emotionSuggestions.length === 0" class="text-sm text-gray-600 dark:text-gray-300 italic">
-            {{ 'PERSONAL_DIARY.no_suggestions' | translate }}
-          </div>
-
-          <!-- Suggestions list -->
-          <ul *ngIf="emotionSuggestions.length > 0" class="pl-5 pr-2 mb-0">
-            <li *ngFor="let suggestion of emotionSuggestions" class="text-sm text-gray-700 dark:text-gray-300 mb-1 list-disc">
-              {{ suggestion }}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </ng-container>
+  <!-- Loading skeleton -->
+  <div *ngIf="isLoading && !isLoadMore">
+    <ion-skeleton-text animated="true" class="w-full h-32 rounded-lg mb-4" *ngFor="let i of Array(10)"></ion-skeleton-text>
   </div>
 
-  <!-- Floating action button to add new entry -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="mb-4 mr-4">
-    <ion-fab-button color="primary" class="shadow-lg rounded-[30px]" (click)="openAddEntryModal()">
-      <span class="text-xl">➕</span>
-    </ion-fab-button>
-  </ion-fab>
+  <!-- Empty state -->
+  <div *ngIf="isLoading === false && emotionalDiaryList.length === 0" class="flex flex-col items-center justify-center py-10">
+    <ion-icon name="document-text-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+    <p class="text-center text-gray-500">{{ TranslateKeys.TITLE_NO_DATA | translate }}</p>
+  </div>
+
+  <!-- Diary list  -->
+  <div *ngIf="emotionalDiaryList?.length">
+    <div *ngFor="let emotionDiary of emotionalDiaryList"
+         class="bg-white dark:bg-gray-800 rounded-xl shadow-md mb-4 overflow-hidden relative">
+
+      <!-- Card header with avatar and name -->
+      <div class="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex-1" routerLink="/{{PageRoutes.DAILY_EMOTION_JOURNAL}}/{{emotionDiary.id}}">
+          <h3 class="text-base font-medium text-gray-800 dark:text-gray-200">{{ emotionDiary.nickname }}</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            {{ emotionDiary['create_time'] }} {{ emotionDiary.create_date | date: DateFormat.DATE_ONLY }}
+          </p>
+        </div>
+
+        <!--   Suggestion button   -->
+        <ion-button *ngIf="activeTab === EmotionFilterType.SHARED_ENTRIES && emotionDiary.create_date === CommonConstants.getCurrentDateFormated()"
+                    (click)="onClickSuggestionGuide(emotionDiary)"
+                    fill="outline" shape="round" color="warning" class="min-h-0 suggestions-button">
+          <span class="py-1 text-xl">💡</span>
+        </ion-button>
+      </div>
+
+      <!-- Card content -->
+      <div class="p-4" routerLink="/{{PageRoutes.DAILY_EMOTION_JOURNAL}}/{{emotionDiary.id}}">
+        <div class="flex flex-col items-center justify-center">
+          <ion-img [src]="CommonConstants.formatBase64ImageUrl(emotionDiary.answer_icon || '')" class="w-20 h-20" alt="Avatar"></ion-img>
+          <p class="py-2 text-2xl text-sky-500 font-bold">{{ emotionDiary.answer_id?.name }}</p>
+          <p class="italic text-sm">{{ emotionDiary.question_id.name }}</p>
+        </div>
+      </div>
+
+      <!-- Card suggestions & actions -->
+      <div *ngIf="activeTab === EmotionFilterType.MY_ENTRIES"
+           class="flex items-center justify-between px-4 py-3 border-t border-gray-100 dark:border-gray-700">
+        <!-- Trạng thái chia sẻ -->
+        <div class="flex items-center justify-center text-sm font-medium text-sky-500">
+          <ion-icon name="share-social" class="pr-2 text-lg"></ion-icon>
+          {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARED_WITH | translate }}
+          <span class="pl-1 lowercase" *ngIf="emotionDiary.public_emotional_to === PublicEmotionalOption.ALL">
+            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_ALL  | translate }}
+          </span>
+          <span class="pl-1 lowercase" *ngIf="emotionDiary.public_emotional_to === PublicEmotionalOption.ALL_FRIENDS">
+            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_ALL_FRIENDS  | translate }}
+          </span>
+          <span class="pl-1 lowercase" *ngIf="emotionDiary.public_emotional_to === PublicEmotionalOption.FRIENDS">
+            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_FRIENDS  | translate }}
+          </span>
+          <span class="pl-1 lowercase" *ngIf="emotionDiary.public_emotional_to === PublicEmotionalOption.PARENT">
+            {{ TranslateKeys.EMOTION_SHARE_TARGET_FAMILY  | translate }}
+          </span>
+          <span class="pl-1 lowercase" *ngIf="emotionDiary.public_emotional_to === PublicEmotionalOption.TEACHER">
+            {{ TranslateKeys.EMOTION_SHARE_TARGET_TEACHERS  | translate }}
+          </span>
+          <span class="pl-1 lowercase" *ngIf="emotionDiary.public_emotional_to === PublicEmotionalOption.FRIEND">
+            {{ TranslateKeys.DAILY_EMOTION_JOURNAL_SHARE_TYPE_ALL_FRIENDS  | translate }}
+          </span>
+        </div>
+
+        <!--    Stop sharing button    -->
+        <ion-button shape="round" color="primary" size="small" class="min-h-8" (click)="onClickUnPublicEmotional(emotionDiary)">
+          {{ TranslateKeys.DAILY_EMOTION_JOURNAL_STOP_SHARING | translate }}
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Infinite scroll -->
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
