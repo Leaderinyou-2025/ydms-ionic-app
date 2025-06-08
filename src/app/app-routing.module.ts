@@ -79,11 +79,6 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: PageRoutes.FAMILY_ACTIONS,
-    loadChildren: () => import('./pages/parent/family-actions/family-actions.module').then(m => m.FamilyActionsPageModule),
-    canActivate: [AuthGuard],
-  },
-  {
     path: PageRoutes.EXPERT_GUIDE,
     loadChildren: () => import('./pages/teacher/expert-guide/expert-guide.module').then(m => m.ExpertGuidePageModule),
     canActivate: [AuthGuard],

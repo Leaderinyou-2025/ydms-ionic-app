@@ -33,9 +33,10 @@
           <ion-img src="/assets/icons/footer/ico_home.svg" class="w-8 h-8"></ion-img>
           <span class="pt-1" [class.text-blue-500]="isActive(PageRoutes.PARENT_DASHBOARD)">{{ TranslateKeys.TITLE_HOME | translate }}</span>
         </a>
-        <a [routerLink]="'/' + PageRoutes.FAMILY_ACTIONS" routerLinkActive="active" class="flex flex-col items-center justify-center text-gray-500">
+        <a routerLink="/{{PageRoutes.TASK_EXECUTING}}" [queryParams]="{ guideType: GuideType.FAMILY_ACTIVITY, showFooter: true }" routerLinkActive="active"
+           class="flex flex-col items-center justify-center text-gray-500">
           <ion-img src="/assets/icons/footer/icon_home_idea.svg" class="w-8 h-8"></ion-img>
-          <span class="pt-1" [class.text-blue-500]="isActive(PageRoutes.FAMILY_ACTIONS)">{{ TranslateKeys.TITLE_ACTIONS | translate }}</span>
+          <span class="pt-1" [class.text-blue-500]="isActive(PageRoutes.TASK_EXECUTING)">{{ TranslateKeys.TITLE_ACTIONS | translate }}</span>
         </a>
         <a [routerLink]="'/' + PageRoutes.NOTIFICATIONS" routerLinkActive="active" class="flex flex-col items-center justify-center text-gray-500">
           <ion-img src="/assets/icons/footer/ico_notificationsl.svg" class="w-8 h-8"></ion-img>
