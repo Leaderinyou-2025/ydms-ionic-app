@@ -90,7 +90,7 @@ export class AddNewFriendComponent implements OnInit {
     }
 
     // No more
-    if (this.listFriends?.length < ((this.paged - 1) * this.limit + 1)) {
+    if (this.listFriends?.length < ((this.paged - 1) * this.limit)) {
       event.target.complete();
       return;
     }

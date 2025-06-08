@@ -97,7 +97,7 @@ export class ShareExperiencePage implements OnInit, ViewWillEnter {
     }
 
     // No more
-    if (this.experienceList?.length < ((this.paged - 1) * this.limit + 1)) {
+    if (this.experienceList?.length < ((this.paged - 1) * this.limit)) {
       event.target.complete();
       return;
     }
