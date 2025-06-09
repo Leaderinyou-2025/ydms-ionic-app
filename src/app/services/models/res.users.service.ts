@@ -28,6 +28,12 @@ export class ResUsersService {
     'gender',
     'dob',
     'is_teenager',
+    'total_friendly_points',
+    'street',
+    'precint_id',
+    'district_id',
+    'state_id',
+    'parent_id',
     'create_date',
     'write_date'
   ];

@@ -9,7 +9,7 @@ import { EmotionType } from '../enums/personal-diary/personal-diary.enum';
 import { IResource } from '../interfaces/resource/resource.interface';
 import { ResourceType } from '../enums/libary/resource-type.enum';
 import { ResourceTopic } from '../enums/libary/resource-topic.enum';
-import { ILiyYdmsClass } from '../interfaces/models/liy.ydms.class';
+import { ILiyYdmsClassroom } from '../interfaces/models/liy.ydms.classroom';
 import { ILiyYdmsStudent } from '../interfaces/models/liy.ydms.student';
 
 export class ForceTestData {
@@ -433,54 +433,6 @@ export class ForceTestData {
       viewCount: 310,
       createdDate: '2023-03-30',
     },
-  ];
-
-  /**
-   * Classes data for teacher
-   */
-  static classes: ILiyYdmsClass[] = [
-    {
-      id: 1,
-      name: 'Lớp 6A',
-      code: '6A-2024',
-      teacher_id: { id: 1, name: 'Nguyễn Thị Lan' },
-      grade: 'Khối 6',
-      academic_year: '2024-2025',
-      student_count: 25,
-      student_ids: [1, 2, 3, 4, 5],
-      description: 'Lớp học chính khóa 6A năm học 2024-2025',
-      active: true,
-      create_date: '2024-09-01 08:00:00',
-      write_date: '2024-09-01 08:00:00'
-    },
-    {
-      id: 2,
-      name: 'Lớp 6B',
-      code: '6B-2024',
-      teacher_id: { id: 1, name: 'Nguyễn Thị Lan' },
-      grade: 'Khối 6',
-      academic_year: '2024-2025',
-      student_count: 28,
-      student_ids: [6, 7, 8, 9, 10],
-      description: 'Lớp học chính khóa 6B năm học 2024-2025',
-      active: true,
-      create_date: '2024-09-01 08:00:00',
-      write_date: '2024-09-01 08:00:00'
-    },
-    {
-      id: 3,
-      name: 'Lớp 7A',
-      code: '7A-2024',
-      teacher_id: { id: 1, name: 'Nguyễn Thị Lan' },
-      grade: 'Khối 7',
-      academic_year: '2024-2025',
-      student_count: 30,
-      student_ids: [11, 12, 13, 14, 15],
-      description: 'Lớp học chính khóa 7A năm học 2024-2025',
-      active: true,
-      create_date: '2024-09-01 08:00:00',
-      write_date: '2024-09-01 08:00:00'
-    }
   ];
 
   /**

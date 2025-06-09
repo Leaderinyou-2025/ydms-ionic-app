@@ -2,19 +2,17 @@ import { Injectable } from '@angular/core';
 
 import { OdooService, SearchDomain } from '../odoo/odoo.service';
 import { OrderBy } from '../../shared/enums/order-by';
-import { ILiyYdmsClass } from '../../shared/interfaces/models/liy.ydms.class';
+import { ILiyYdmsClassroom } from '../../shared/interfaces/models/liy.ydms.classroom';
 import { ModelName } from '../../shared/enums/model-name';
 import { CommonConstants } from '../../shared/classes/common-constants';
+import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LiyYdmsClassService {
 
-  public readonly classFields = [
-    'name',
-    'code',
-  ];
+  public readonly classFields = ['name', 'code'];
 
   constructor(
     private odooService: OdooService,
@@ -33,8 +31,8 @@ export class LiyYdmsClassService {
     offset: number = 0,
     limit: number = 20,
     order: OrderBy = OrderBy.NAME_ASC
-  ): Promise<ILiyYdmsClass[]> {
-    let results = await this.odooService.searchRead<ILiyYdmsClass>(
+  ): Promise<ILiyYdmsClassroom[]> {
+    let results = await this.odooService.searchRead<ILiyYdmsClassroom>(
       ModelName.CLASS, searchDomain, this.classFields, offset, limit, order
     );
     return CommonConstants.convertArr2ListItem(results);
@@ -44,9 +42,9 @@ export class LiyYdmsClassService {
    * getClassById
    * @param classId
    */
-  public async getClassById(classId: number): Promise<ILiyYdmsClass | undefined> {
+  public async getClassById(classId: number): Promise<ILiyYdmsClassroom | undefined> {
     if (!classId) return undefined;
-    const results = await this.odooService.read<ILiyYdmsClass>(
+    const results = await this.odooService.read<ILiyYdmsClassroom>(
       ModelName.CLASS, [classId], this.classFields
     );
     return results?.length ? results[0] : undefined;
@@ -57,7 +55,7 @@ export class LiyYdmsClassService {
     offset: number = 0,
     limit: number = 20,
     order: OrderBy = OrderBy.NAME_ASC
-  ): Promise<ILiyYdmsClass[]> {
+  ): Promise<ILiyYdmsClassroom[]> {
     if (!classIds?.length) return [];
     const searchDomain: SearchDomain = [
       ['id', 'in', classIds]
@@ -74,7 +72,7 @@ export class LiyYdmsClassService {
     const searchDomain: SearchDomain = [
       ['id', 'in', classIds]
     ];
-    return this.odooService.searchCount<ILiyYdmsClass>(ModelName.CLASS, searchDomain);
+    return this.odooService.searchCount<ILiyYdmsClassroom>(ModelName.CLASS, searchDomain);
   }
 
   /**
@@ -92,7 +90,7 @@ export class LiyYdmsClassService {
     offset: number = 0,
     limit: number = 20,
     order: OrderBy = OrderBy.NAME_ASC
-  ): Promise<ILiyYdmsClass[]> {
+  ): Promise<ILiyYdmsClassroom[]> {
     const allClassIds: Array<number> = [];
 
     // Add single classroom_id if exists
@@ -111,7 +109,7 @@ export class LiyYdmsClassService {
     if (!uniqueClassIds.length) return [];
 
     const searchDomain: SearchDomain = [
-      ['id', 'in', uniqueClassIds]
+      ['id', OdooDomainOperator.IN, uniqueClassIds]
     ];
     return this.getClassList(searchDomain, offset, limit, order);
   }
@@ -144,8 +142,8 @@ export class LiyYdmsClassService {
     if (!uniqueClassIds.length) return 0;
 
     const searchDomain: SearchDomain = [
-      ['id', 'in', uniqueClassIds]
+      ['id', OdooDomainOperator.IN, uniqueClassIds]
     ];
-    return this.odooService.searchCount<ILiyYdmsClass>(ModelName.CLASS, searchDomain);
+    return this.odooService.searchCount<ILiyYdmsClassroom>(ModelName.CLASS, searchDomain);
   }
 }

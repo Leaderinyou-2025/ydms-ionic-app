@@ -1,22 +1,40 @@
-<app-header
-  [pageTitle]="'TITLE.teacher_dashboard' | translate"
-  backgroundColor="linear-gradient(to bottom, #3b82f6, #1e40af)">
-</app-header>
+<ion-content [fullscreen]="true" class="custom-page-bg-light ion-padding">
+  <ng-container *ngIf="authData">
 
-<ion-content [fullscreen]="true" class="bg-white">
-  <div class="p-4 h-full overflow-auto">
-    <!-- Welcome Section -->
-    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-6 mb-6">
-      <h1 class="text-2xl font-bold mb-2">Chào mừng Giáo viên!</h1>
-      <p class="text-blue-100">Quản lý lớp học và theo dõi tiến độ học sinh của bạn</p>
+    <!-- Teacher info -->
+    <div routerLink="/{{PageRoutes.PROFILE}}/{{PageRoutes.PERSONAL_INFO}}"
+         class="flex items-center justify-between bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-6 mb-6 shadow-2xl">
+      <div class="flex-col">
+        <h1 class="text-xl font-bold mb-2">{{ authData.name }}</h1>
+        <div class="flex items-center gap-2 mb-1">
+          <ion-icon name="business" class="text-xl"></ion-icon>
+          <span>{{ authData.school_id?.name }}</span>
+        </div>
+        <div class="flex items-center gap-2 mb-1">
+          <ion-icon name="school" class="text-xl"></ion-icon>
+          <span>{{ authData.classroom_id?.name }}</span>
+        </div>
+        <div class="flex items-center gap-3 mb-1 ">
+          <div class="flex items-center gap-2">
+            <ion-icon name="call" class="text-xl"></ion-icon>
+            <span>{{ authData.phone }}</span>
+          </div>
+          <span>-</span>
+          <div class="flex items-center gap-2">
+            <ion-icon name="mail" class="text-xl"></ion-icon>
+            <span>{{ authData.email }}</span>
+          </div>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward" class="text-xl text-gray-400"></ion-icon>
     </div>
 
     <!-- Quick Actions -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
       <!-- Class Management -->
-      <div
-        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 cursor-pointer hover:shadow-lg transition-shadow"
-        (click)="navigateToClassManagement()">
+      <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md"
+           routerLink="/{{PageRoutes.CLASS_MANAGEMENT}}/{{authData.classroom_id?.id}}/{{PageRoutes.STUDENTS}}">
         <div class="flex items-center justify-between">
           <div class="flex items-center">
             <div class="bg-blue-100 p-3 rounded-full mr-4">
@@ -24,55 +42,17 @@
             </div>
             <div>
               <h3 class="text-lg font-semibold text-gray-800">{{ 'CLASS_MANAGEMENT.title' | translate }}</h3>
-              <p class="text-sm text-gray-500">Quản lý lớp học và học sinh</p>
-            </div>
-          </div>
-          <ion-icon name="chevron-forward" class="text-gray-400"></ion-icon>
-        </div>
-      </div>
-
-      <!-- Expert Guide -->
-      <div
-        class="bg-white rounded-xl shadow-md border border-gray-200 p-6 cursor-pointer hover:shadow-lg transition-shadow"
-        (click)="navigateToExpertGuide()">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div class="bg-green-100 p-3 rounded-full mr-4">
-              <ion-icon name="book" class="text-2xl text-green-600"></ion-icon>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-800">Hướng dẫn chuyên môn</h3>
-              <p class="text-sm text-gray-500">Tài liệu và hướng dẫn giảng dạy</p>
+              <p class="text-sm text-gray-500">
+                {{ authData.classroom_id?.name }}
+                <span *ngIf="totalStudents">({{ totalStudents }} {{ TranslateKeys.CLASS_MANAGEMENT_STUDENTS | translate }})</span>
+              </p>
             </div>
           </div>
           <ion-icon name="chevron-forward" class="text-gray-400"></ion-icon>
         </div>
       </div>
     </div>
-
-    <!-- Statistics Section -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
-      <h2 class="text-xl font-semibold text-gray-800 mb-4">Thống kê tổng quan</h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="text-center">
-          <div class="text-2xl font-bold text-blue-600">{{ totalClasses }}</div>
-          <div class="text-sm text-gray-500">Lớp học</div>
-        </div>
-        <div class="text-center">
-          <div class="text-2xl font-bold text-green-600">{{ totalStudents }}</div>
-          <div class="text-sm text-gray-500">Học sinh</div>
-        </div>
-        <div class="text-center">
-          <div class="text-2xl font-bold text-orange-600">{{ totalTasks }}</div>
-          <div class="text-sm text-gray-500">Nhiệm vụ</div>
-        </div>
-        <div class="text-center">
-          <div class="text-2xl font-bold text-purple-600">{{ totalNotifications }}</div>
-          <div class="text-sm text-gray-500">Thông báo</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  </ng-container>
 </ion-content>
 
 <app-footer></app-footer>

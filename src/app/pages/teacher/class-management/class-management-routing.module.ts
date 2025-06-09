@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { ClassManagementPage } from './class-management.page';
+import { StudentsComponent } from './students/students.component';
+import { PageRoutes } from '../../../shared/enums/page-routes';
+import { StudentDetailComponent } from './student-detail/student-detail.component';
 
 const routes: Routes = [
   {
@@ -9,8 +12,12 @@ const routes: Routes = [
     component: ClassManagementPage
   },
   {
-    path: 'student-list/:classId',
-    loadChildren: () => import('./student-list/student-list.module').then(m => m.StudentListPageModule)
+    path: `:id/${PageRoutes.STUDENTS}`,
+    component: StudentsComponent
+  },
+  {
+    path: `:classId/${PageRoutes.STUDENTS}/:id`,
+    component: StudentDetailComponent
   }
 ];
 
@@ -18,4 +25,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ClassManagementPageRoutingModule {}
+export class ClassManagementPageRoutingModule {
+}
