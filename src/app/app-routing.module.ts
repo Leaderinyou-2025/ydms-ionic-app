@@ -35,20 +35,6 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: PageRoutes.FAMILY_GROUP,
-    loadChildren: () => import('./pages/social-network/family-group/family-group.module').then(m => m.FamilyGroupPageModule)
-  },
-  {
-    path: PageRoutes.CLASS_GROUP,
-    loadChildren: () => import('./pages/social-network/class-group/class-group.module').then(m => m.ClassGroupPageModule),
-    canActivate: [AuthGuard],
-  },
-  {
-    path: PageRoutes.SCHOOL_GROUP,
-    loadChildren: () => import('./pages/social-network/school-group/school-group.module').then(m => m.SchoolGroupPageModule),
-    canActivate: [AuthGuard],
-  },
-  {
     path: PageRoutes.PERSONAL_DIARY,
     loadChildren: () => import('./pages/student/personal-diary/personal-diary.module').then(m => m.PersonalDiaryPageModule),
     canActivate: [AuthGuard],
@@ -121,6 +107,11 @@ const routes: Routes = [
   {
     path: PageRoutes.SHARE_EXPERIENCE,
     loadChildren: () => import('./pages/parent/share-experience/share-experience.module').then(m => m.ShareExperiencePageModule),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: PageRoutes.CLASS_MANAGEMENT,
+    loadChildren: () => import('./pages/teacher/class-management/class-management.module').then(m => m.ClassManagementPageModule),
     canActivate: [AuthGuard],
   },
 ];

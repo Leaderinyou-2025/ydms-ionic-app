@@ -1,0 +1,78 @@
+<app-header
+  [pageTitle]="TranslateKeys.CLASS_MANAGEMENT_STUDENT_DETAIL"
+  backgroundColor="linear-gradient(to bottom, #3b82f6, #1e40af)">
+</app-header>
+
+<ion-content [fullscreen]="true" class="custom-page-bg-light ion-padding">
+  <!-- Student info -->
+  <div class="p-4 mb-4 bg-white border rounded-xl shadow-xl" *ngIf="student">
+    <!--  Avatar & nickname  -->
+    <div class="flex flex-col items-center justify-center gap-3 mb-3">
+      <ion-img [src]="CommonConstants.formatBase64ImageUrl(student.avatar_512 || '')"></ion-img>
+      <h2 class="text-2xl text-sky-500 font-bold">{{ student.nickname || student.name }}</h2>
+      <div class="flex items-center gap-1 px-7 py-0 text-red-500 bg-red-100 rounded-full">
+        <span class="text-2xl">{{ student.total_friendly_points || 0 }}</span>
+        <ion-icon name="heart" class="text-2xl"></ion-icon>
+      </div>
+    </div>
+
+    <!--  Họ tên, mã học sinh  -->
+    <div class="flex items-center justify-center gap-1 mb-1 text-base">
+      <ion-icon name="card" class="text-blue-500"></ion-icon>
+      <p>{{ student.name }} <span class="font-medium" *ngIf="student.edu_id"> - {{ student.edu_id }}</span></p>
+    </div>
+
+    <!--  Điện thoại, email  -->
+    <div class="flex items-center justify-center gap-4 mb-1 text-base" *ngIf="student.phone || student.email">
+      <div class="flex items-center gap-1" *ngIf="student.phone">
+        <ion-icon name="call" class="text-blue-500"></ion-icon>
+        <a href="tel:{{student.phone}}">{{ student.phone }}</a>
+      </div>
+      <div class="flex items-center gap-1" *ngIf="student.email">
+        <ion-icon name="mail" class="text-blue-500"></ion-icon>
+        <a href="mailto:{{ student.email }}">{{ student.email }}</a>
+      </div>
+    </div>
+
+    <!--  Giới tính, sinh nhật  -->
+    <div class="flex items-center justify-center gap-4 mb-1 text-base">
+      <div class="flex items-center gap-1" *ngIf="student.gender">
+        <ion-icon name="person" class="text-blue-500"></ion-icon>
+        <span *ngIf="student.gender === 'male'">{{ TranslateKeys.TITLE_MALE | translate }}</span>
+        <span *ngIf="student.gender === 'female'">{{ TranslateKeys.TITLE_FEMALE | translate }}</span>
+        <span *ngIf="student.gender === 'other'">{{ TranslateKeys.TITLE_OTHER | translate }}</span>
+      </div>
+
+      <div class="flex items-center gap-1" *ngIf="student.dob">
+        <ion-icon name="calendar" class="text-blue-500"></ion-icon>
+        <span>{{ student.dob | date: DateFormat.DATE_ONLY }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parent info -->
+  <div class="py-6 px-4 mb-4 bg-white border rounded-xl shadow-xl" *ngIf="parent">
+    <h2 class="mb-4 text-center text-2xl font-bold">Người giám hộ</h2>
+    <div class="flex items-center gap-2 mb-3" *ngIf="parent.phone">
+      <ion-icon name="person" class="text-blue-500 text-xl"></ion-icon>
+      <span class="text-xl">{{ parent.name }}</span>
+    </div>
+    <div class="flex items-center gap-2 mb-3" *ngIf="parent.phone">
+      <ion-icon name="call" class="text-blue-500 text-xl"></ion-icon>
+      <a href="tel:{{parent.phone}}">{{ parent.phone }}</a>
+    </div>
+    <div class="flex items-center gap-2 mb-3" *ngIf="parent.email">
+      <ion-icon name="mail" class="text-blue-500 text-xl"></ion-icon>
+      <a href="mailto:{{ parent.email }}">{{ parent.email }}</a>
+    </div>
+    <div class="flex items-start gap-2">
+      <ion-icon name="navigate-circle" class="text-blue-500 text-xl min-w-5"></ion-icon>
+      <span>
+        <span *ngIf="parent.street">{{ parent.street }}</span>
+        <span *ngIf="parent.precint_id">, {{ parent.precint_id.name }}</span>
+        <span *ngIf="parent.district_id">, {{ parent.district_id.name }}</span>
+        <span *ngIf="parent.state_id">, {{ parent.state_id.name }}</span>
+      </span>
+    </div>
+  </div>
+</ion-content>

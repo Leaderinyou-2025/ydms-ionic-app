@@ -1,0 +1,76 @@
+<app-header
+  [pageTitleString]="pageTitle"
+  backgroundColor="linear-gradient(to bottom, #3b82f6, #1e40af)"
+  defaultBackHref="/{{PageRoutes.CLASS_MANAGEMENT}}"
+  [searchbar]="searchbar"
+  (inputSearch)="onSearchChange($event)">
+</app-header>
+
+<ion-content [fullscreen]="true" class="custom-page-bg-light ion-padding">
+  <!-- Refresher -->
+  <ion-refresher slot="fixed" mode="md" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Loading skeleton -->
+  <div *ngIf="isLoading" class="mt-3">
+    <ion-skeleton-text animated="true" class="mb-3 w-full h-36 rounded-lg" *ngFor="let i of Array(10)"></ion-skeleton-text>
+  </div>
+
+  <!-- No students message -->
+  <div *ngIf="isLoading === false && filteredStudents.length === 0" class="text-center">
+    <ion-icon name="people-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+    <p class="text-gray-500 text-lg">{{ TranslateKeys.CLASS_MANAGEMENT_NO_STUDENTS | translate }}</p>
+  </div>
+
+  <!-- Students grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 " *ngIf="filteredStudents.length > 0 ">
+    <div *ngFor="let student of filteredStudents" routerLink="{{student.id}}"
+         class="bg-white rounded-xl shadow-md border border-gray-200 p-4 hover:shadow-lg transition-shadow cursor-pointer">
+
+      <!-- Student header with avatar -->
+      <div class="flex items-center mb-3">
+        <!-- Avatar -->
+        <div class="flex-shrink-0 mr-3">
+          <ion-avatar class="w-12 h-12">
+            <ion-img [src]="CommonConstants.formatBase64ImageUrl(student.avatar_512 || '')" [alt]="student.name"></ion-img>
+          </ion-avatar>
+        </div>
+
+        <!-- Student Info -->
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold text-gray-800">{{ student.name }}</h3>
+          <p class="text-sm text-gray-500" *ngIf="student.nickname">{{ student.nickname }}</p>
+        </div>
+      </div>
+
+      <!-- Student details -->
+      <div class="space-y-2 text-sm">
+        <div class="flex items-center text-gray-600" *ngIf="student.edu_id">
+          <ion-icon name="card-outline" class="mr-2 text-blue-500"></ion-icon>
+          <span>{{ student.edu_id }}</span>
+        </div>
+        <div class="flex items-center text-gray-600" *ngIf="student.phone">
+          <ion-icon name="call-outline" class="mr-2 text-orange-500"></ion-icon>
+          <span>{{ student.phone }}</span>
+        </div>
+
+        <div class="flex items-center text-gray-600" *ngIf="student.gender">
+          <ion-icon name="person-outline" class="mr-2 text-purple-500"></ion-icon>
+          <span *ngIf="student.gender === 'male'">{{ TranslateKeys.TITLE_MALE | translate }}</span>
+          <span *ngIf="student.gender === 'female'">{{ TranslateKeys.TITLE_FEMALE | translate }}</span>
+          <span *ngIf="student.gender === 'other'">{{ TranslateKeys.TITLE_OTHER | translate }}</span>
+        </div>
+
+        <div class="flex items-center justify-between border-t border-gray-100">
+          <div class="flex items-center text-blue-600">
+            <ion-icon name="heart-outline" class="mr-1"></ion-icon>
+            <span class="font-medium">{{ student.total_friendly_points || 0 }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<app-footer></app-footer>

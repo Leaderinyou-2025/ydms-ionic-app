@@ -64,7 +64,7 @@ export class ResUserService {
     const searchDomain: SearchDomain = [];
 
     if (authData?.id) {
-      searchDomain.push(['id', OdooDomainOperator.NOT_EQUAL, authData.id])
+      searchDomain.push(['id', OdooDomainOperator.NOT_EQUAL, authData.id]);
     }
 
     if (isTeenager) {
@@ -120,5 +120,16 @@ export class ResUserService {
   public async getFriendListByIds(ids: Array<number>): Promise<Partial<IAuthData>[]> {
     const results = await this.odooService.read<IAuthData>(ModelName.RES_USERS, ids, ['nickname', 'avatar_512', 'school_id', 'classroom_id']);
     return CommonConstants.convertArr2ListItem(results);
+  }
+
+  /**
+   * Get count teenager by classroom id
+   * @param classroomId
+   */
+  public async getCountTeenagerByClassroomId(classroomId: number): Promise<number> {
+    return this.getCountUser([
+      ['classroom_id', OdooDomainOperator.EQUAL, classroomId],
+      ['is_teenager', OdooDomainOperator.EQUAL, true],
+    ]);
   }
 }

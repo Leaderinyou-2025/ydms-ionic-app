@@ -2,7 +2,7 @@
   <ng-container *ngIf="authData">
     <!--  Avatar, tên, trang cá nhân  -->
     <ion-list class="mb-2">
-      <ion-item lines="none" detail="false" routerLink="/{{authData.is_teacher ? PageRoutes.PERSONAL_DIARY : (PageRoutes.PROFILE + '/' + PageRoutes.PERSONAL_INFO)}}">
+      <ion-item lines="none" detail="false" routerLink="/{{authData.is_teenager ? PageRoutes.PERSONAL_DIARY : (PageRoutes.PROFILE + '/' + PageRoutes.PERSONAL_INFO)}}">
         <ion-avatar aria-hidden="true" slot="start" class="border">
           <img alt="Silhouette of a person's head" [src]="getUserAvatarImage()"/>
         </ion-avatar>

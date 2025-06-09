@@ -1,0 +1,49 @@
+<app-header
+  [pageTitle]="TranslateKeys.CLASS_MANAGEMENT_TITLE | translate"
+  backgroundColor="linear-gradient(to bottom, #3b82f6, #1e40af)"
+  defaultBackHref="/teacher-dashboard">
+</app-header>
+
+<ion-content [fullscreen]="true" class="custom-page-bg-light ion-padding">
+  <!-- Refresher -->
+  <ion-refresher slot="fixed" mode="md" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="flex justify-center items-center h-32">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+  </div>
+
+  <!-- No classes message -->
+  <div *ngIf="isLoading === false && classes.length === 0" class="text-center py-8">
+    <ion-icon name="school-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+    <p class="text-gray-500 text-lg">{{ TranslateKeys.CLASS_MANAGEMENT_NO_CLASSES | translate }}</p>
+  </div>
+
+  <!-- Class List -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" *ngIf="classes.length > 0">
+    <div *ngFor="let classItem of classes" routerLink="{{classItem.id}}/{{PageRoutes.STUDENTS}}"
+         class="p-4 rounded-xl shadow-xl border border-gray-200">
+
+      <!-- Class header -->
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center">
+          <ion-icon name="school" class="text-2xl text-blue-500 mr-2"></ion-icon>
+          <h3 class="text-lg font-semibold text-gray-800">{{ classItem.name }}</h3>
+        </div>
+      </div>
+
+      <!-- Class details -->
+      <div class="space-y-2">
+        <div class="flex items-center text-sm text-gray-600" *ngIf="classItem.code">
+          <ion-icon name="bookmark-outline" class="mr-2"></ion-icon>
+          <span>{{ TranslateKeys.CLASS_MANAGEMENT_CLASS_CODE | translate }}: {{ classItem.code }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ion-content>
+
+<app-footer></app-footer>

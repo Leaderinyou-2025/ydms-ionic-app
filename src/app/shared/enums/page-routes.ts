@@ -38,4 +38,6 @@ export enum PageRoutes {
   TASK_EXECUTING = 'task-executing',
   SHARE_EXPERIENCE = 'share-experience',
   CREATE_EXPERIENCE = 'create-experience',
+  CLASS_MANAGEMENT = 'class-management',
+  STUDENTS = 'students',
 }
