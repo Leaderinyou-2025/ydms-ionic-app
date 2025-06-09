@@ -1,18 +1,13 @@
 <app-header
   [pageTitle]="TranslateKeys.TITLE_EXPERT_GUIDE_DETAIL"
   defaultBackHref="/{{PageRoutes.EXPERT_GUIDE}}"
-  [caption]="TranslateKeys.EXPERT_GUIDE_LIST_SUBTITLE"
-  backgroundColor="linear-gradient(to bottom, #9333ea, #4c1d95)"
-  [animeImage]="animeImage">
+  backgroundColor="linear-gradient(to bottom, #9333ea, #4c1d95)">
 </app-header>
 
 <ion-content [fullscreen]="true" class="native-padding-content custom-page-bg-light ion-padding pb-32">
   <!-- Loading skeleton -->
   <div *ngIf="isLoading" class="mt-3">
-    <ion-skeleton-text animated class="w-full h-8 rounded-lg mb-3"></ion-skeleton-text>
-    <ion-skeleton-text animated class="w-3/4 h-6 rounded-lg mb-4"></ion-skeleton-text>
-    <ion-skeleton-text animated class="w-full h-32 rounded-lg mb-3"></ion-skeleton-text>
-    <ion-skeleton-text animated class="w-full h-64 rounded-lg mb-3"></ion-skeleton-text>
+    <ion-skeleton-text animated="true" class="mb-3 w-full h-96 rounded-lg"></ion-skeleton-text>
   </div>
 
   <!-- Guide detail content -->

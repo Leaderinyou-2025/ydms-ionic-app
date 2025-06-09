@@ -111,4 +111,5 @@ export class ExpertGuideDetailComponent implements OnInit {
     }
   }
 
+  protected readonly Array = Array;
 }
