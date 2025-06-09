@@ -91,4 +91,55 @@ export class LiyYdmsGuideService {
       ], offset, limit, order,
     );
   }
+
+  /**
+   * Get guide list by guide_type
+   * @param guideType
+   * @param offset
+   * @param limit
+   * @param order
+   */
+  public async getGuideListByGuideType(
+    guideType: GuideType,
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.CREATE_AT_DESC,
+  ): Promise<ILiyYdmsGuide[]> {
+    return this.getGuideList(
+      [['guide_type', OdooDomainOperator.EQUAL, guideType]], offset, limit, order,
+    );
+  }
+
+  /**
+   * Get guide list with search and filters
+   * @param searchTerm
+   * @param areaOfExpertise
+   * @param categoryIds
+   * @param offset
+   * @param limit
+   * @param order
+   */
+  public async getGuideListWithFilters(
+    searchTerm: string = '',
+    areaOfExpertise?: AreaOfExpertise | 'all',
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.CREATE_AT_DESC,
+  ): Promise<ILiyYdmsGuide[]> {
+    const searchDomain: SearchDomain = [
+      ['guide_type', OdooDomainOperator.EQUAL, GuideType.INSTRUCTION]
+    ];
+
+    // Add search term filter
+    if (searchTerm.trim()) {
+      searchDomain.push(['name', OdooDomainOperator.ILIKE, searchTerm.trim()]);
+    }
+
+    // Add area of expertise filter
+    if (areaOfExpertise && areaOfExpertise !== 'all') {
+      searchDomain.push(['area_of_expertise', OdooDomainOperator.EQUAL, areaOfExpertise]);
+    }
+
+    return this.getGuideList(searchDomain, offset, limit, order);
+  }
 }

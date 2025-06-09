@@ -19,7 +19,8 @@
     "pull_to_refresh": "Pull to refresh",
     "refreshing": "Refreshing...",
     "loading_more_items": "Loading more items...",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "loading_more": "Loading more..."
   },
   "MESSAGE": {
     "feature_under_development": "This feature is under development"
@@ -244,7 +245,8 @@
     "notification": "Notification",
     "share": "Share",
     "actions": "Action",
-    "expert_guide": "Expert guide",
+    "expert_guide": "Expert Guide",
+    "expert_guide_detail": "Expert Guide Detail",
     "on": "On",
     "off": "Off",
     "show": "Show",
@@ -504,6 +506,19 @@
   },
   "ACHIEVEMENT": {
     "badge_no_achievements_yet": "Chưa có huy hiệu nào trong danh mục này"
+  },
+  "EXPERT_GUIDE": {
+    "title": "Expert Guide",
+    "list_subtitle": "Discover useful expert guidance",
+    "categories": "Aspects",
+    "scores": "Scores",
+    "rank_point": "Rank Points",
+    "description": "Description",
+    "content": "Guide Content",
+    "no_data": "No expert guide found",
+    "search_placeholder": "Search expert guides...",
+    "filter_all": "All",
+    "filter_area": "Area of Expertise"
   },
   "CONFLICT_LEVEL": {
     "low": "Low conflict level",
