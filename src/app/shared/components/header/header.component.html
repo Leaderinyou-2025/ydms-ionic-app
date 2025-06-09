@@ -51,7 +51,7 @@
   </ng-container>
 
   <!-- Searchbar & segment -->
-  <div class="flex flex-wrap items-end justify-items-center w-full h-28" *ngIf="segment || searchbar">
+  <div class="flex flex-wrap items-end justify-items-center w-full" *ngIf="segment || searchbar">
     <!-- Searchbar -->
     <div *ngIf="searchbar" class="block w-full py-2 px-2">
       <ion-searchbar
@@ -92,7 +92,7 @@
             [layout]="segmentButton.layout"
             [type]="segmentButton.type"
             [disabled]="segmentButton.disabled">
-            <ion-label *ngIf="segmentButton.label">{{ segmentButton.label | translate }}</ion-label>
+            <ion-label class="pr-1" *ngIf="segmentButton.label">{{ segmentButton.label | translate }}</ion-label>
             <ion-icon *ngIf="segmentButton.icon" [name]="segmentButton.icon" [color]="segmentButton.iconColor"></ion-icon>
           </ion-segment-button>
         </ng-container>

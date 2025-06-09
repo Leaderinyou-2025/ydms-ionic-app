@@ -27,6 +27,7 @@ export class TaskExecutingPage implements OnInit {
   animation!: IHeaderAnimation;
   guideType!: GuideType;
   pageTitle!: TranslateKeys;
+  showFooter?: boolean;
 
   taskList!: ILiyYdmsTask[];
   isLoading?: boolean;
@@ -50,6 +51,7 @@ export class TaskExecutingPage implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.guideType = params['guideType'] || GuideType.INSTRUCTION;
+      this.showFooter = params['showFooter'];
       this.initHeader();
       this.authService.getAuthData().then((authData) => {
         this.authData = authData;

@@ -71,9 +71,10 @@
     "badge_new": "NEW"
   },
   "PERSONAL_DIARY": {
-    "title": "Personal Diary",
-    "my_entries": "My Entries",
-    "shared_entries": "Shared Entries",
+    "title": "Shared Emotional Journals",
+    "title_welcome": "Your emotions deserve to be heard – you deserve to be understood",
+    "my_entries": "Shared by me",
+    "shared_entries": "Shared with me",
     "new_entry": "New Entry",
     "content_placeholder": "What's on your mind?",
     "emotion_type": "How are you feeling?",
@@ -92,7 +93,8 @@
     "total_reactions": "Total Reactions",
     "no_entries": "No entries found",
     "no_suggestions": "No suggestions available for this emotion type",
-    "anonymous_user": "Anonymous user"
+    "anonymous_user": "Anonymous user",
+    "select_suggestion_guide": "Emotion regulation tips"
   },
   "DAILY_EMOTION_JOURNAL": {
     "no_entries": "No journal entries found",
@@ -362,7 +364,8 @@
     "progress_result": "Progress",
     "result_description": "Result description",
     "capture": "capture",
-    "gallery": "gallery"
+    "gallery": "gallery",
+    "documents": "documents"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",
@@ -415,7 +418,10 @@
     "executing": "Executing",
     "no_execution": "No execution",
     "ignore": "Ignore",
-    "end": "End"
+    "end": "End",
+    "submit": "Submit",
+    "delete": "Delete",
+    "edit": "Edit"
   },
   "TOAST": {
     "error_header": "Error",
@@ -439,7 +445,9 @@
     "accept_request_success": "Friend request accepted successfully.",
     "accept_request_failed": "Failed to accept friend request. Please try again.",
     "checkin_emotion_failed": "Failed to checkin emotion. Please try again.",
-    "checkin_emotion_success": "Checkin emotion successfully."
+    "checkin_emotion_success": "Checkin emotion successfully.",
+    "send_emotion_tops_success": "Your tips were sent successfully.",
+    "send_emotion_tops_failed": "Something went wrong. Please try sending your tips again."
   },
   "ERROR": {
     "network": "Network error. Please check your internet connection.",
@@ -540,5 +548,50 @@
     "medium": "Your family has a medium level of conflict. You may need to improve communication and conflict resolution within the family. Try to understand the causes and work together to find solutions.",
     "high": "Your family has a high level of conflict. This may affect mental health and family relationships. Consider seeking support from a psychologist or participating in family communication skills courses.",
     "unknown": "Not enough information to evaluate."
+  },
+  "SHARE_EXPERIENCE": {
+    "title": "Share Experience",
+    "caption": "Share your experience for everyone to know",
+    "detail_title": "Experience Detail",
+    "no_posts": "No experience posts yet",
+    "status_wait_accept": "Waiting for approval",
+    "status_accepted": "Approved",
+    "status_rejected": "Rejected",
+    "tab_community": "Community News",
+    "tab_family": "Family News",
+    "like_count": "likes",
+    "love_count": "loves",
+    "like_button": "Like",
+    "love_button": "Love",
+    "area_of_expertise": "Aspect",
+    "author": "Author",
+    "content": "Content"
+  },
+  "CREATE_EXPERIENCE": {
+    "title": "Create Experience Review",
+    "name_label": "Title",
+    "name_placeholder": "Enter review title...",
+    "area_label": "Area of Expertise",
+    "area_placeholder": "Select area of expertise",
+    "content_label": "Share Content",
+    "content_placeholder": "Share your experience and insights...",
+    "preview_label": "Preview",
+    "submit": "Submit Review",
+    "attachment_label": "Attached Files (Optional)",
+    "attachment_placeholder": "Tap to select file",
+    "attachment_hint": "Supported: PDF, Word, Images (max 10MB)",
+    "confirm_submit_header": "Confirm",
+    "confirm_submit_message": "Are you sure you want to share this experience?",
+    "confirm_cancel_header": "Confirm",
+    "confirm_cancel_message": "You have unsaved changes. Are you sure you want to exit?",
+    "stay_button": "Stay",
+    "exit_button": "Exit",
+    "success_message": "Experience post has been created successfully and is awaiting approval",
+    "error_auth": "Unable to authenticate user",
+    "error_create": "An error occurred while creating the post"
+  },
+  "VALIDATION": {
+    "required": "This field is required",
+    "min_length": "Minimum {{min}} characters required"
   }
 }

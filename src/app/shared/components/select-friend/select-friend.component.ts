@@ -106,7 +106,7 @@ export class SelectFriendComponent implements OnInit {
     }
 
     // No more
-    if (this.listFriends?.length < ((this.paged - 1) * this.limit + 1)) {
+    if (this.listFriends?.length < ((this.paged - 1) * this.limit)) {
       event.target.complete();
       return;
     }
@@ -129,7 +129,7 @@ export class SelectFriendComponent implements OnInit {
     if (!this.authData || this.isLoading) return;
     this.isLoading = true;
 
-    const offset = (this.paged - 1) * this.limit + 1;
+    const offset = (this.paged - 1) * this.limit;
     const results = await this.friendService.getFriends(
       this.searchTerm, this.authData.id, FriendStatus.ACCEPTED, offset, this.limit
     );

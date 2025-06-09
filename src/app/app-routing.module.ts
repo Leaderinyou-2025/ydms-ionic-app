@@ -79,11 +79,6 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: PageRoutes.FAMILY_ACTIONS,
-    loadChildren: () => import('./pages/parent/family-actions/family-actions.module').then(m => m.FamilyActionsPageModule),
-    canActivate: [AuthGuard],
-  },
-  {
     path: PageRoutes.EXPERT_GUIDE,
     loadChildren: () => import('./pages/teacher/expert-guide/expert-guide.module').then(m => m.ExpertGuidePageModule),
     canActivate: [AuthGuard],
@@ -123,7 +118,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/task-executing/task-executing.module').then(m => m.TaskExecutingPageModule),
     canActivate: [AuthGuard],
   },
-    {
+  {
+    path: PageRoutes.SHARE_EXPERIENCE,
+    loadChildren: () => import('./pages/parent/share-experience/share-experience.module').then(m => m.ShareExperiencePageModule),
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'class-management',
     loadChildren: () => import('./pages/teacher/class-management/class-management.module').then(m => m.ClassManagementPageModule),
     canActivate: [AuthGuard],

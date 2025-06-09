@@ -75,6 +75,11 @@ export class EmotionCheckinComponent implements OnInit {
       question_id: this.emotionQuestion.id,
       answer_id: this.selectedAnswer.id,
       teenager_id: this.authData.id
+    };
+
+    if (!body.public_emotional) {
+      delete body.public_emotional_to;
+      delete body.public_user_ids;
     }
 
     this.loadingController.create({mode: NativePlatform.IOS}).then(loading => {
@@ -138,7 +143,7 @@ export class EmotionCheckinComponent implements OnInit {
       icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
       side: Position.END,
       role: BtnRoles.CANCEL,
-    }
+    };
     const toastOption: ToastOptions = {
       message,
       duration: 3000,
@@ -149,7 +154,7 @@ export class EmotionCheckinComponent implements OnInit {
       icon: (color === IonicColors.DANGER || color === IonicColors.WARNING) ? IonicIcons.WARNING_OUTLINE : IonicIcons.CHECKMARK_CIRCLE_OUTLINE,
       color,
       keyboardClose: false
-    }
+    };
     this.toastController.create(toastOption).then(toast => toast.present());
   }
 }

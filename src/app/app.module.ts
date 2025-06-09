@@ -1,25 +1,25 @@
-import {CUSTOM_ELEMENTS_SCHEMA, enableProdMode, LOCALE_ID, NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {RouteReuseStrategy} from '@angular/router';
-import {registerLocaleData} from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA, enableProdMode, LOCALE_ID, NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
+import { registerLocaleData } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import localeVi from '@angular/common/locales/vi';
 
-import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
-import {IonicStorageModule} from '@ionic/storage-angular';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {provideLottieOptions} from 'ngx-lottie';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicStorageModule } from '@ionic/storage-angular';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
-import {QuillModule} from 'ngx-quill';
+import { QuillModule } from 'ngx-quill';
 
-import {AppComponent} from './app.component';
-import {AppRoutingModule} from './app-routing.module';
-import {DEFAULT_TIMEOUT, TimeoutInterceptorService} from './core/services/timeout-interceptor.service';
-import {defaultAnimation} from './core/animations/default.animaton';
-import {SharedModule} from './shared/shared.module';
-import {NativePlatform} from './shared/enums/native-platform';
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { DEFAULT_TIMEOUT, TimeoutInterceptorService } from './core/services/timeout-interceptor.service';
+import { defaultAnimation } from './core/animations/default.animaton';
+import { SharedModule } from './shared/shared.module';
+import { NativePlatform } from './shared/enums/native-platform';
 
 registerLocaleData(localeVi);
 enableProdMode();
@@ -51,7 +51,16 @@ export function playerFactory() {
     QuillModule.forRoot({
       modules: {
         syntax: false,
-        toolbar: true,
+        toolbar: [
+          [{'header': 1}, {'header': 2}, {'header': 3}],
+          ['bold', 'italic', 'underline'],
+          [{'color': []}, {'background': []}],
+          [{'script': 'sub'}, {'script': 'super'}],
+          ['blockquote', 'code-block'],
+          [{'list': 'ordered'}, {'list': 'bullet'}],
+          [{'indent': '-1'}, {'indent': '+1'}],
+          [{'align': []}],
+        ],
       }
     }),
     SharedModule

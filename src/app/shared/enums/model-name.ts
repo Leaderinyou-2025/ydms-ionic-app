@@ -24,4 +24,6 @@ export enum ModelName {
   EMOTIONAL_ANSWER_OPTION = 'liy.ydms.emotional.answer.option',
   GUIDE = 'liy.ydms.guide',
   CATEGORY = 'liy.ydms.category',
+  EXPERIENCE = 'liy.ydms.experience',
+  EXPERIENCE_REVIEW = 'liy.ydms.experience.review'
 }

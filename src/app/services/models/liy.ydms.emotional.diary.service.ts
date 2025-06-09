@@ -7,6 +7,7 @@ import { ModelName } from '../../shared/enums/model-name';
 import { CommonConstants } from '../../shared/classes/common-constants';
 import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
 import { IEmotionJournal } from '../../shared/interfaces/function-data/emtion-journal';
+import { PublicEmotionalOption } from '../../shared/enums/public-emotional-option';
 
 @Injectable({
   providedIn: 'root'
@@ -67,7 +68,38 @@ export class LiyYdmsEmotionalDiaryService {
     order: OrderBy = OrderBy.CREATE_AT_DESC,
   ): Promise<ILiyYdmsEmotionalDiary[]> {
     return this.getEmotionalDiaryList(
-      [['teenager_id', OdooDomainOperator.EQUAL, teenagerId]],
+      [
+        ['teenager_id', OdooDomainOperator.EQUAL, teenagerId],
+        ['public_emotional', OdooDomainOperator.EQUAL, true],
+      ],
+      offset,
+      limit,
+      order
+    );
+  }
+
+  /**
+   * Lấy danh sách các nhật ký được bạn bè chia sẻ
+   * @param teenagerId
+   * @param offset
+   * @param limit
+   * @param order
+   */
+  public async getTeenagerSharedEmotionDiaryList(
+    teenagerId: number,
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.CREATE_AT_DESC,
+  ): Promise<ILiyYdmsEmotionalDiary[]> {
+    return this.getEmotionalDiaryList(
+      [
+        OdooDomainOperator.OR,
+        OdooDomainOperator.OR,
+        ['public_emotional_to', OdooDomainOperator.EQUAL, PublicEmotionalOption.ALL],
+        ['public_emotional_to', OdooDomainOperator.EQUAL, PublicEmotionalOption.ALL_FRIENDS],
+        ['public_user_ids', OdooDomainOperator.IN, [teenagerId]],
+        ['public_emotional', OdooDomainOperator.EQUAL, true],
+      ],
       offset,
       limit,
       order

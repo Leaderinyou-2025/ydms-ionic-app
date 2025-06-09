@@ -123,3 +123,23 @@ ion-modal.select-date-modal ion-content {
   --offset-top: 100 !important;
   --offset-bottom: 0px !important;
 }
+
+/*------------------- Customs ------------ */
+
+ion-content.custom-page-bg-light {
+  --background: var(--custom-page-bg-light);
+}
+
+.dark ion-content.custom-page-bg-light {
+  --background: var(--ion-backdrop-color);
+}
+
+.line-clamp-5-custom {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}

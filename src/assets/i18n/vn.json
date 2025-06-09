@@ -71,9 +71,10 @@
     "badge_new": "MỚI"
   },
   "PERSONAL_DIARY": {
-    "title": "Trang cá nhân",
-    "my_entries": "Nhật ký của tôi",
-    "shared_entries": "Nhật ký được chia sẻ",
+    "title": "Chia sẻ cảm xúc",
+    "title_welcome": "Cảm xúc cũng cần được lắng nghe, bạn xứng đáng được thấu hiểu",
+    "my_entries": "Đã chia sẻ",
+    "shared_entries": "Được chia sẻ",
     "new_entry": "Tạo nhật ký mới",
     "content_placeholder": "Bạn đang nghĩ gì?",
     "emotion_type": "Bạn đang cảm thấy thế nào?",
@@ -92,7 +93,8 @@
     "total_reactions": "Tổng số cảm xúc",
     "no_entries": "Không có bài viết nào",
     "no_suggestions": "Không có gợi ý nào cho loại cảm xúc này",
-    "anonymous_user": "Người dùng ẩn danh"
+    "anonymous_user": "Người dùng ẩn danh",
+    "select_suggestion_guide": "Gợi ý cách điều tiết cảm xúc"
   },
   "DAILY_EMOTION_JOURNAL": {
     "no_entries": "Không tìm thấy nhật ký cảm xúc nào",
@@ -363,7 +365,8 @@
     "progress_result": "Tiến độ hoàn thành",
     "result_description": "Mô tả kết quả tiến độ",
     "capture": "chụp ảnh",
-    "gallery": "thư viện"
+    "gallery": "thư viện",
+    "documents": "documents"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",
@@ -415,7 +418,10 @@
     "executing": "Tham gia",
     "no_execution": "Không tham gia",
     "ignore": "Bỏ qua",
-    "end": "Kết thúc"
+    "end": "Kết thúc",
+    "submit": "Gửi",
+    "delete": "Xoá",
+    "edit": "Sửa"
   },
   "TOAST": {
     "error_header": "Lỗi",
@@ -430,7 +436,7 @@
     "task_complete_success": "Nhiệm vụ hoàn thành thành công!",
     "task_complete_error": "Không thể hoàn thành nhiệm vụ. Vui lòng thử lại.",
     "answer_all_questions": "Vui lòng trả lời tất cả các câu hỏi trước khi gửi.",
-    "update_failed": "Có lỗi sảy ra khi cập nhật thông tin. Vui long thử lại sau.",
+    "update_failed": "Có lỗi sảy ra khi cập nhật thông tin. Vui lòng thử lại sau.",
     "update_success": "Cập nhật thông tin thành công.",
     "send_request_failed": "Không gửi được yêu cầu. Vui lòng thử lại sau.",
     "send_request_success": "Gửi yêu cầu thành công.",
@@ -438,8 +444,10 @@
     "cancel_request_failed": "Hủy yêu cầu kết bạn thất bại. Vui lòng thử lại.",
     "accept_request_success": "Chấp nhận yêu cầu kết bạn thành công.",
     "accept_request_failed": "Chấp nhận yêu cầu kết bạn thất bại. Vui lòng thử lại.",
-    "checkin_emotion_failed": "Có lỗi sảy ra khi checkin cảm xúc. Vui long thử lại sau.",
-    "checkin_emotion_success": "Checkin cảm xúc thành công. Hãy tiếp tục duy trì chuỗi để nhận thêm nhiều phần thường nhé."
+    "checkin_emotion_failed": "Có lỗi sảy ra khi checkin cảm xúc. Vui lòng thử lại sau.",
+    "checkin_emotion_success": "Checkin cảm xúc thành công. Hãy tiếp tục duy trì chuỗi để nhận thêm nhiều phần thường nhé.",
+    "send_emotion_tops_success": "Gửi gợi ý điều tiết cảm xúc thành công.",
+    "send_emotion_tops_failed": "Có lỗi sảy ra khi gửi gợi ý điều tiết cảm xúc. Vui lòng thử lại sau."
   },
   "ERROR": {
     "network": "Lỗi mạng. Vui lòng kiểm tra kết nối mạng của bạn và thử lại.",
@@ -490,10 +498,10 @@
     "chatbot": "Hôm nay bạn cảm thấy thế nào? Chia sẻ với mình nhé!"
   },
   "AREA_OF_EXPERTISE": {
-    "emotion": "Cảm xúc",
+    "emotion": "Điều tiết cảm xúc",
     "conflict": "Giảm mâu thuẫn gia đình",
-    "communication": "Cải thiện giao tiếp",
-    "discovery": "Khám phá bản thân"
+    "communication": "Cải thiện giao tiếp gia đình",
+    "discovery": "Khám phá và phát triển bản thân"
   },
   "ACHIEVEMENT": {
     "badge_no_achievements_yet": "Chưa có huy hiệu nào trong danh mục này"
@@ -540,5 +548,50 @@
     "medium": "Gia đình bạn có mức độ mâu thuẫn ở mức trung bình. Có thể cần cải thiện cách giao tiếp và giải quyết xung đột trong gia đình. Hãy thử tìm hiểu nguyên nhân và cùng nhau tìm giải pháp.",
     "high": "Gia đình bạn có mức độ mâu thuẫn cao. Điều này có thể ảnh hưởng đến sức khỏe tinh thần và mối quan hệ gia đình. Nên tìm kiếm sự hỗ trợ từ chuyên gia tâm lý hoặc tham gia các khóa học về kỹ năng giao tiếp gia đình.",
     "unknown": "Không có đủ thông tin để đánh giá."
+  },
+  "SHARE_EXPERIENCE": {
+    "title": "Chia sẻ kinh nghiệm",
+    "caption": "Hãy chia sẻ kinh nghiệm cho mọi người cùng biết nhé",
+    "detail_title": "Chi tiết kinh nghiệm",
+    "no_posts": "Chưa có bài chia sẻ kinh nghiệm nào",
+    "status_wait_accept": "Chờ phê duyệt",
+    "status_accepted": "Đã phê duyệt",
+    "status_rejected": "Đã từ chối",
+    "tab_community": "Tin cộng đồng",
+    "tab_family": "Tin gia đình",
+    "like_count": "lượt thích",
+    "love_count": "lượt yêu thích",
+    "like_button": "Thích",
+    "love_button": "Yêu thích",
+    "area_of_expertise": "Khía cạnh",
+    "author": "Tác giả",
+    "content": "Nội dung"
+  },
+  "CREATE_EXPERIENCE": {
+    "title": "Tạo đánh giá chia sẻ kinh nghiệm",
+    "name_label": "Tiêu đề",
+    "name_placeholder": "Nhập tên đánh giá...",
+    "area_label": "Khía cạnh",
+    "area_placeholder": "Chọn khía cạnh",
+    "content_label": "Nội dung chia sẻ",
+    "content_placeholder": "Chia sẻ kinh nghiệm và hiểu biết của bạn...",
+    "preview_label": "Xem trước",
+    "submit": "Gửi đánh giá",
+    "attachment_label": "File đính kèm (Tùy chọn)",
+    "attachment_placeholder": "Nhấn để chọn file",
+    "attachment_hint": "Hỗ trợ: PDF, Word, Hình ảnh (tối đa 10MB)",
+    "confirm_submit_header": "Xác nhận",
+    "confirm_submit_message": "Bạn có chắc chắn muốn chia sẻ kinh nghiệm này không?",
+    "confirm_cancel_header": "Xác nhận",
+    "confirm_cancel_message": "Bạn có thay đổi chưa được lưu. Bạn có chắc chắn muốn thoát không?",
+    "stay_button": "Ở lại",
+    "exit_button": "Thoát",
+    "success_message": "Bài chia sẻ kinh nghiệm đã được tạo thành công và đang chờ phê duyệt",
+    "error_auth": "Không thể xác thực người dùng",
+    "error_create": "Có lỗi xảy ra khi tạo bài chia sẻ"
+  },
+  "VALIDATION": {
+    "required": "Trường này là bắt buộc",
+    "min_length": "Yêu cầu tối thiểu {{min}} ký tự"
   }
 }
