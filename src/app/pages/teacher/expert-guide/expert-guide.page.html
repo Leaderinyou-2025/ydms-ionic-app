@@ -10,7 +10,7 @@
 <ion-toolbar class="filter-form ion-no-padding">
   <div class="flex space-x-5 overflow-x-auto p-2">
     <!-- Area of expertise filter -->
-    <ion-item lines="none" class="select-type w-52">
+    <ion-item lines="none" detail="false" class="select-type">
       <ion-select interface="action-sheet" (ionChange)="onAreaFilterChange($event)"
                   [value]="selectedAreaOfExpertise"
                   placeholder="{{ TranslateKeys.EXPERT_GUIDE_FILTER_AREA | translate }}">

@@ -428,6 +428,15 @@ export enum TranslateKeys {
   TITLE_CAPTURE = 'TITLE.capture',
   TITLE_GALLERY = 'TITLE.gallery',
   TITLE_DOCUMENTS = 'TITLE.documents',
+  TITLE_TEENAGER_SHARED_EMOTION_DIARY = 'TITLE.teenager_shared_emotion_diary',
+  TITLE_NEW_NOTIFICATION = 'TITLE.new_notification',
+  TITLE_NEW_NOTIFICATION_DETAIL = 'TITLE.new_notification_detail',
+  TITLE_GROUP_TASKS = 'TITLE.group_tasks',
+  TITLE_GROUP_TASKS_DETAIL = 'TITLE.group_tasks_detail',
+  TITLE_EXPERT_GUIDE_DETAILS = 'TITLE.expert_guide_details',
+  TITLE_CREATE_GROUP_TASKS = 'TITLE.create_group_task',
+  TITLE_TASK_NAME = 'TITLE.task_name',
+  TITLE_TASK_GUIDE = 'TITLE.task_guide',
 
   // VALIDATE
   VALIDATE_PHONE_REQUIRED = 'VALIDATE.phone_required',
@@ -454,6 +463,7 @@ export enum TranslateKeys {
   ALERT_APP_UPDATE_SUCCESSFUL = 'ALERT.app_update_successful',
   ALERT_CONFIRM_UN_PUBLIC = 'ALERT.confirm_un_public_alert',
   ALERT_CONFIRM_END_TASK = 'ALERT.confirm_end_task',
+  ALERT_CONFIRM_DELETE_TASK = 'ALERT.confirm_delete_task',
   ALERT_FEATURE_DEVELOPING = 'ALERT.feature_developing',
 
   // BUTTON TITLES
@@ -508,6 +518,8 @@ export enum TranslateKeys {
   TOAST_CHECKIN_EMOTION_SUCCESS = 'TOAST.checkin_emotion_success',
   TOAST_SEND_EMOTION_TIPS_SUCCESS = 'TOAST.send_emotion_tops_success',
   TOAST_SEND_EMOTION_TIPS_FAILED = 'TOAST.send_emotion_tops_failed',
+  TOAST_CREATE_GROUP_TASK_SUCCESS = 'TOAST.create_group_task_success',
+  TOAST_CREATE_GROUP_TASK_FAILED = 'TOAST.create_group_task_failed',
 
   // ERROR
   ERROR_NETWORK = 'ERROR.network',

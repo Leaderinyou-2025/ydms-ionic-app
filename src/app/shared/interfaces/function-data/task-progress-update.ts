@@ -5,4 +5,5 @@ export interface TaskProgressUpdate {
   task_image_result?: string;
   task_text_result?: string;
   status?: TaskStatus;
+  active?: boolean;
 }

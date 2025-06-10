@@ -1,27 +1,28 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {AlertButton, AlertController, LoadingController, ToastButton, ToastController} from '@ionic/angular';
-import {TranslateService} from '@ngx-translate/core';
-import {CameraSource} from "@capacitor/camera";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AlertButton, AlertController, LoadingController, ToastButton, ToastController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
+import { CameraSource } from '@capacitor/camera';
 
-import {PhotoService} from "../../../services/photo/photo.service";
-import {TaskService} from '../../../services/task/task.service';
-import {PageRoutes} from '../../../shared/enums/page-routes';
-import {TranslateKeys} from '../../../shared/enums/translate-keys';
-import {IAuthData} from '../../../shared/interfaces/auth/auth-data';
-import {IHeaderAnimation, IHeaderAnimeImage} from '../../../shared/interfaces/header/header';
-import {GuideType} from '../../../shared/enums/guide-type';
-import {ITaskDetail} from '../../../shared/interfaces/function-data/task-detail';
-import {DateFormat} from '../../../shared/enums/date-format';
-import {TaskStatus} from '../../../shared/enums/task-status';
-import {IonicColors} from '../../../shared/enums/ionic-colors';
-import {IonicIcons} from '../../../shared/enums/ionic-icons';
-import {Position} from '../../../shared/enums/position';
-import {NativePlatform} from '../../../shared/enums/native-platform';
-import {BtnRoles} from '../../../shared/enums/btn-roles';
-import {StyleClass} from '../../../shared/enums/style-class';
-import {TaskProgressUpdate} from "../../../shared/interfaces/function-data/task-progress-update";
-import {CommonConstants} from "../../../shared/classes/common-constants";
+import { PhotoService } from '../../../services/photo/photo.service';
+import { TaskService } from '../../../services/task/task.service';
+import { AuthService } from '../../../services/auth/auth.service';
+import { PageRoutes } from '../../../shared/enums/page-routes';
+import { TranslateKeys } from '../../../shared/enums/translate-keys';
+import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
+import { IHeaderAnimation, IHeaderAnimeImage } from '../../../shared/interfaces/header/header';
+import { GuideType } from '../../../shared/enums/guide-type';
+import { ITaskDetail } from '../../../shared/interfaces/function-data/task-detail';
+import { DateFormat } from '../../../shared/enums/date-format';
+import { TaskStatus } from '../../../shared/enums/task-status';
+import { IonicColors } from '../../../shared/enums/ionic-colors';
+import { IonicIcons } from '../../../shared/enums/ionic-icons';
+import { Position } from '../../../shared/enums/position';
+import { NativePlatform } from '../../../shared/enums/native-platform';
+import { BtnRoles } from '../../../shared/enums/btn-roles';
+import { StyleClass } from '../../../shared/enums/style-class';
+import { TaskProgressUpdate } from '../../../shared/interfaces/function-data/task-progress-update';
+import { CommonConstants } from '../../../shared/classes/common-constants';
 
 @Component({
   selector: 'app-task-executing-detail',
@@ -36,7 +37,7 @@ export class TaskExecutingDetailComponent implements OnInit {
   animeImage!: IHeaderAnimeImage;
   animation!: IHeaderAnimation;
   task?: ITaskDetail;
-  taskProgressUpdate!: TaskProgressUpdate
+  taskProgressUpdate!: TaskProgressUpdate;
 
   protected readonly PageRoutes = PageRoutes;
   protected readonly TranslateKeys = TranslateKeys;
@@ -51,6 +52,7 @@ export class TaskExecutingDetailComponent implements OnInit {
     private taskService: TaskService,
     private toastController: ToastController,
     private loadingController: LoadingController,
+    private authService: AuthService,
     private translate: TranslateService,
     private photoService: PhotoService,
     private alertController: AlertController
@@ -61,9 +63,9 @@ export class TaskExecutingDetailComponent implements OnInit {
     const id = this.activeRoute.snapshot.paramMap.get('id');
     if (!id) return history.back();
     this.initHeader();
+    this.authService.getAuthData().then(authData => this.authData = authData);
     this.loadTaskDetail(+id);
   }
-
 
   /**
    * Cập nhật trạng thái task
@@ -137,6 +139,43 @@ export class TaskExecutingDetailComponent implements OnInit {
   }
 
   /**
+   * Xoá group task dành cho giáo viên
+   */
+  public onCLickDelete(): void {
+    const buttons: Array<AlertButton> = [
+      {text: this.translate.instant(TranslateKeys.BUTTON_CANCEL)},
+      {
+        text: this.translate.instant(TranslateKeys.BUTTON_CONFIRM),
+        handler: () => this.handleDeactivate()
+      },
+    ];
+    this.alertController.create({
+      mode: NativePlatform.IOS,
+      header: this.translate.instant(TranslateKeys.ALERT_DEFAULT_HEADER),
+      message: this.translate.instant(TranslateKeys.ALERT_CONFIRM_DELETE_TASK),
+      buttons: buttons
+    }).then(alertItem => alertItem.present());
+  }
+
+  /**
+   * Thực hiện deactivate task
+   * @private
+   */
+  private handleDeactivate(): void {
+    this.loadingController.create({mode: NativePlatform.IOS}).then(loading => {
+      loading.present();
+      this.taskService.deactivateTask((this.task?.id || -1)).then((result) => {
+        if (result) {
+          this.showToast(this.translate.instant(TranslateKeys.TOAST_UPDATE_SUCCESS), IonicColors.SUCCESS);
+          history.back();
+        } else {
+          this.showToast(this.translate.instant(TranslateKeys.TOAST_UPDATE_FAILED), IonicColors.DANGER);
+        }
+      }).finally(() => loading.dismiss());
+    });
+  }
+
+  /**
    * Load task detail
    * @param id
    * @private
@@ -150,7 +189,7 @@ export class TaskExecutingDetailComponent implements OnInit {
         this.getPageTitle();
         this.initTaskProgressUpdateParams();
       }
-    })
+    });
   }
 
   /**
@@ -179,7 +218,7 @@ export class TaskExecutingDetailComponent implements OnInit {
       icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
       side: Position.END,
       role: BtnRoles.CANCEL,
-    }
+    };
     const toast = await this.toastController.create({
       message,
       duration: 5000,
@@ -240,6 +279,6 @@ export class TaskExecutingDetailComponent implements OnInit {
       task_percentage_result: this.task.task_percentage_result ? (this.task.task_percentage_result / 100) : 0,
       task_text_result: this.task.task_text_result || '',
       task_image_result: this.task.task_image_result || '',
-    }
+    };
   }
 }

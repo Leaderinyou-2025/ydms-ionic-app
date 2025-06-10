@@ -1,0 +1,55 @@
+<ion-header class="select-user-header">
+  <ion-toolbar class="bg-transparent">
+    <ion-buttons slot="start">
+      <ion-icon name="chevron-back" class="text-2xl pr-2" (click)="cancel()"></ion-icon>
+    </ion-buttons>
+    <ion-title class="ion-text-center">
+      {{ TranslateKeys.PERSONAL_SELECT_SUGGESTION_GUIDE | translate }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">{{ TranslateKeys.BUTTON_OK | translate }}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <!-- Search bar -->
+  <div class="flex flex-wrap items-end justify-items-center w-full">
+    <ion-searchbar placeholder="{{TranslateKeys.NOTIFICATIONS_SEARCH | translate}}"
+                   [debounce]="1000" (ionInput)="onSearchChange($event)"></ion-searchbar>
+  </div>
+</ion-header>
+
+<ion-content class="ion-padding-top ion-padding-bottom">
+  <!-- Loading skeleton -->
+  <div *ngIf="isLoading && !isLoadMore" class="mt-3">
+    <ion-skeleton-text animated="true" class="w-full h-28 rounded-lg mb-3" *ngFor="let i of Array(10)"></ion-skeleton-text>
+  </div>
+
+  <!-- Guide list -->
+  <ion-list class="friend-list bg-transparent" *ngIf="listGuides?.length">
+    <ion-radio-group [(ngModel)]="selectedGuideId">
+      @for (item of listGuides; track item.id) {
+        <ion-item detail="false" (click)="selectedGuideId = item.id">
+          <ion-radio slot="start" mode="md" labelPlacement="end" [value]="item.id"></ion-radio>
+          <ion-label>
+            {{ item.name }}
+            <span *ngIf="item.desciption"
+                  class="text-xs italic text-gray-400">
+              <br>{{ item.desciption }}
+            </span>
+          </ion-label>
+        </ion-item>
+      }
+    </ion-radio-group>
+  </ion-list>
+
+  <!-- Empty state -->
+  <div *ngIf="isLoading === false && !listGuides?.length" class="flex flex-col items-center justify-center py-10">
+    <ion-icon name="library" class="text-6xl text-gray-400 mb-4"></ion-icon>
+    <p class="text-center text-gray-500">{{ TranslateKeys.TITLE_NO_RESULT_FOUND | translate }}</p>
+  </div>
+
+  <!-- Infinite scroll for pagination -->
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

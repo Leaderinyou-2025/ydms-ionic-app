@@ -72,4 +72,28 @@ export class LiyYdmsNotificationService {
     if (!notificationIds) return true;
     return this.odooService.write<ILiyYdmsNotification>(ModelName.NOTIFICATION, notificationIds, {is_viewed: true});
   }
+
+  /**
+   * Get count notifications
+   * @param searchDomain
+   */
+  public async getCountNotifications(
+    searchDomain: SearchDomain = []
+  ): Promise<number> {
+    return this.odooService.searchCount(
+      ModelName.NOTIFICATION, searchDomain
+    );
+  }
+
+  /**
+   * Lấy danh sách các thông báo chưa đọc của user
+   * @param partnerId
+   */
+  public async getCountUserUnreadNotification(partnerId: number): Promise<number> {
+    if (!partnerId) return 0;
+    return this.getCountNotifications([
+      ['recipient_ids', OdooDomainOperator.IN, [partnerId]],
+      ['is_viewed', OdooDomainOperator.EQUAL, false],
+    ]);
+  }
 }

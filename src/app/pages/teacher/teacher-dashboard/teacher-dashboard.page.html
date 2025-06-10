@@ -1,4 +1,9 @@
 <ion-content [fullscreen]="true" class="custom-page-bg-light ion-padding">
+  <!-- Refresh data -->
+  <ion-refresher slot="fixed" mode="md" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ng-container *ngIf="authData">
 
     <!-- Teacher info -->
@@ -37,20 +42,97 @@
            routerLink="/{{PageRoutes.CLASS_MANAGEMENT}}/{{authData.classroom_id?.id}}/{{PageRoutes.STUDENTS}}">
         <div class="flex items-center justify-between">
           <div class="flex items-center">
-            <div class="bg-blue-100 p-3 rounded-full mr-4">
+            <div class="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mr-4">
               <ion-icon name="school" class="text-2xl text-blue-600"></ion-icon>
             </div>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-800">{{ 'CLASS_MANAGEMENT.title' | translate }}</h3>
+            <div class="flex-col">
+              <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.CLASS_MANAGEMENT_TITLE | translate }}</h3>
               <p class="text-sm text-gray-500">
                 {{ authData.classroom_id?.name }}
                 <span *ngIf="totalStudents">({{ totalStudents }} {{ TranslateKeys.CLASS_MANAGEMENT_STUDENTS | translate }})</span>
               </p>
             </div>
           </div>
-          <ion-icon name="chevron-forward" class="text-gray-400"></ion-icon>
+          <ion-icon name="chevron-forward" class="text-2xl text-gray-400"></ion-icon>
         </div>
       </div>
+
+      <!-- Chia sẻ cảm xúc -->
+      <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md" routerLink="/{{PageRoutes.TEENAGER_SHARED_EMOTION}}">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="flex items-center justify-center w-12 h-12 bg-teal-100 rounded-full mr-4">
+              <ion-icon name="happy" class="text-2xl text-teal-500"></ion-icon>
+            </div>
+            <div class="flex-col">
+              <div class="flex items-center justify-start">
+                <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.TITLE_EMOTION_SHARE | translate }}</h3>
+                <ion-badge class="ml-3 bg-teal-500">{{ totalSharedEmotions || 0 }}</ion-badge>
+              </div>
+              <p class="text-sm text-gray-500"> {{ TranslateKeys.TITLE_TEENAGER_SHARED_EMOTION_DIARY | translate }} </p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward" class="text-2xl text-gray-400"></ion-icon>
+        </div>
+      </div>
+
+      <!-- Thông báo mới -->
+      <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md" routerLink="/{{PageRoutes.NOTIFICATIONS}}">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="flex items-center justify-center w-12 h-12 bg-amber-100 rounded-full mr-4">
+              <ion-icon name="notifications" class="text-2xl text-amber-500"></ion-icon>
+            </div>
+            <div class="flex-col">
+              <div class="flex items-center justify-start">
+                <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.TITLE_NEW_NOTIFICATION | translate }}</h3>
+                <ion-badge class="ml-3 bg-amber-500">{{ totalNotifications || 0 }}</ion-badge>
+              </div>
+              <p class="text-sm text-gray-500"> {{ TranslateKeys.TITLE_NEW_NOTIFICATION_DETAIL | translate }} </p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward" class="text-2xl text-gray-400"></ion-icon>
+        </div>
+      </div>
+
+      <!-- Hoạt động nhóm -->
+      <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md" routerLink="/{{PageRoutes.GROUP_TASK}}">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="flex items-center justify-center w-12 h-12 bg-fuchsia-100 rounded-full mr-4">
+              <ion-icon name="flash" class="text-2xl text-fuchsia-500"></ion-icon>
+            </div>
+            <div class="flex-col">
+              <div class="flex items-center justify-start">
+                <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.TITLE_GROUP_TASKS | translate }}</h3>
+                <ion-badge class="ml-3 bg-fuchsia-500">{{ totalTasks || 0 }}</ion-badge>
+              </div>
+              <p class="text-sm text-gray-500"> {{ TranslateKeys.TITLE_GROUP_TASKS_DETAIL | translate }} </p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward" class="text-2xl text-gray-400"></ion-icon>
+        </div>
+      </div>
+
+      <!-- Kỹ năng chuyên gia -->
+      <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md" routerLink="/{{PageRoutes.EXPERT_GUIDE}}">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="flex items-center justify-center w-12 h-12 bg-orange-100 rounded-full mr-4">
+              <ion-icon name="book" class="text-2xl text-orange-500"></ion-icon>
+            </div>
+            <div class="flex-col">
+              <div class="flex items-center justify-start">
+                <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.TITLE_EXPERT_GUIDE_DETAIL | translate }}</h3>
+                <ion-badge class="ml-3 bg-orange-500">{{ totalGuide || 0 }}</ion-badge>
+              </div>
+              <p class="text-sm text-gray-500"> {{ TranslateKeys.TITLE_EXPERT_GUIDE_DETAILS | translate }} </p>
+            </div>
+          </div>
+          <ion-icon name="chevron-forward" class="text-2xl text-gray-400"></ion-icon>
+        </div>
+      </div>
+
     </div>
   </ng-container>
 </ion-content>

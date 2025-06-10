@@ -1,0 +1,65 @@
+<app-header
+  [pageTitle]="TranslateKeys.TITLE_CREATE_GROUP_TASKS"
+  defaultBackHref="/{{PageRoutes.GROUP_TASK}}"
+  backgroundColor="linear-gradient(to bottom, #9333ea, #4c1d95)">
+</app-header>
+<ion-content class="ion-padding custom-page-bg-light">
+  <div class="py-4 px-3 rounded-xl bg-gray-50 dark:bg-gray-800" *ngIf="groupTaskForm">
+    <form [formGroup]="groupTaskForm" (ngSubmit)="onSubmit()">
+      <ion-grid>
+        <!-- Tên hoạt động -->
+        <ion-row>
+          <ion-col>
+            <ion-label position="stacked">
+              {{ TranslateKeys.TITLE_TASK_NAME | translate }}<span class="text-red-600 ps-1">*</span>
+            </ion-label>
+            <ion-input formControlName="name" type="text" inputmode="text"></ion-input>
+            <div *ngIf="hasError('name', 'required')" class="error-text text-red-600 text-sm pt-1 ps-1">
+              {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <!-- Guide -->
+        <ion-row>
+          <ion-col>
+            <ion-label position="stacked">
+              {{ TranslateKeys.TITLE_TASK_GUIDE | translate }}<span class="text-red-600 ps-1">*</span>
+            </ion-label>
+            <ion-input formControlName="guide" type="text" readonly="readonly" (click)="onSelectGuide()"></ion-input>
+            <div *ngIf="hasError('guide', 'required')" class="error-text text-red-600 text-sm pt-1 ps-1">
+              {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <!-- Khía cạnh -->
+        <ion-row>
+          <ion-col>
+            <ion-label position="stacked">
+              {{ TranslateKeys.CREATE_EXPERIENCE_AREA_LABEL | translate }}<span class="text-red-600 ps-1">*</span>
+            </ion-label>
+            <ion-select interface="action-sheet" formControlName="area_of_expertise" class="border">
+              <ion-select-option *ngFor="let option of AreaOfExpertiseData"
+                                 [value]="option.area">
+                {{ option.title | translate }}
+              </ion-select-option>
+            </ion-select>
+            <div *ngIf="hasError('area_of_expertise', 'required')" class="error-text text-red-600 text-sm pt-1 ps-1">
+              {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <!-- Submit Button -->
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" type="submit">
+              {{ TranslateKeys.BUTTON_CONFIRM | translate }}
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </div>
+</ion-content>

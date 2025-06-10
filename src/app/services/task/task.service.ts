@@ -227,4 +227,15 @@ export class TaskService {
   public async createTask(body: CreateTaskBody): Promise<number | undefined> {
     return this.liyYdmsTaskService.createTask(body);
   }
+
+  /**
+   * inactive task
+   * @param taskId
+   */
+  public async deactivateTask(taskId: number): Promise<number | boolean> {
+    if (!taskId) return false;
+    return this.liyYdmsTaskService.updateTask(
+      taskId, {active: false}
+    );
+  }
 }

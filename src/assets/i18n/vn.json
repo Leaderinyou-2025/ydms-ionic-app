@@ -368,7 +368,17 @@
     "result_description": "Mô tả kết quả tiến độ",
     "capture": "chụp ảnh",
     "gallery": "thư viện",
-    "documents": "documents"
+    "documents": "tài liệu",
+    "teenager_shared_emotion_diary": "Nhật ký chia sẻ cảm xúc của học sinh",
+    "new_notification": "Thông báo mới",
+    "new_notification_detail": "Các thông tin thông báo mới nhất",
+    "group_tasks": "Hoạt động nhóm",
+    "group_tasks_detail": "Các hoạt động nhóm đang diễn ra",
+    "expert_guide_details": "Các kỹ năng được đưa ra từ chuyên gia",
+    "create_group_task": "Tạo mới hoạt động nhóm",
+    "update_group_task": "Cập nhật hoạt động nhóm",
+    "task_name": "Tên hoạt động",
+    "task_guide": "Bài tập/Hướng dẫn"
   },
   "VALIDATE": {
     "phone_required": "Vui lòng nhập vào số điện thoại.",
@@ -395,7 +405,8 @@
     "confirm_unfriend_alert": "Bạn có chắc chắn muốn hủy kết bạn?",
     "confirm_un_public_alert": "Bạn có chắc chắn muốn tắt chia sẻ?",
     "confirm_end_task": "Bạn chắc chắn muốn kết thúc nhiệm vụ này? Việc kết thúc nhiệm vụ đồng nghĩa bạn đã không hoàn thành nó.",
-    "feature_developing": "Tính năng này hiện đang được phát triển. Vui lòng quay lại sau nhé!"
+    "feature_developing": "Tính năng này hiện đang được phát triển. Vui lòng quay lại sau nhé!",
+    "confirm_delete_task": "Bạn chắc chắn muốn xoá hoạt động này?"
   },
   "BUTTON_TITLES": {
     "confirm": "Xác nhận",
@@ -434,22 +445,24 @@
     "auth_by_password": "Không thể xác thực. Vui lòng đăng nhập bằng mật khẩu.",
     "network_online": "Đã có kết nối mạng trở lại.",
     "network_offline": "Mất kết nối. Vui lòng kiểm tra lại kết nối mạng của bạn.",
-    "password_changed_success": "Đổi mật khẩu thành công.",
+    "password_changed_success": "Đổi mật khẩu thành công!",
     "task_complete_success": "Nhiệm vụ hoàn thành thành công!",
     "task_complete_error": "Không thể hoàn thành nhiệm vụ. Vui lòng thử lại.",
     "answer_all_questions": "Vui lòng trả lời tất cả các câu hỏi trước khi gửi.",
     "update_failed": "Có lỗi sảy ra khi cập nhật thông tin. Vui lòng thử lại sau.",
-    "update_success": "Cập nhật thông tin thành công.",
+    "update_success": "Cập nhật thông tin thành công!",
     "send_request_failed": "Không gửi được yêu cầu. Vui lòng thử lại sau.",
-    "send_request_success": "Gửi yêu cầu thành công.",
-    "cancel_request_success": "Hủy yêu cầu kết bạn thành công.",
+    "send_request_success": "Gửi yêu cầu thành công!",
+    "cancel_request_success": "Hủy yêu cầu kết bạn thành công!",
     "cancel_request_failed": "Hủy yêu cầu kết bạn thất bại. Vui lòng thử lại.",
-    "accept_request_success": "Chấp nhận yêu cầu kết bạn thành công.",
+    "accept_request_success": "Chấp nhận yêu cầu kết bạn thành công!",
     "accept_request_failed": "Chấp nhận yêu cầu kết bạn thất bại. Vui lòng thử lại.",
     "checkin_emotion_failed": "Có lỗi sảy ra khi checkin cảm xúc. Vui lòng thử lại sau.",
     "checkin_emotion_success": "Checkin cảm xúc thành công. Hãy tiếp tục duy trì chuỗi để nhận thêm nhiều phần thường nhé.",
-    "send_emotion_tops_success": "Gửi gợi ý điều tiết cảm xúc thành công.",
-    "send_emotion_tops_failed": "Có lỗi sảy ra khi gửi gợi ý điều tiết cảm xúc. Vui lòng thử lại sau."
+    "send_emotion_tops_success": "Gửi gợi ý điều tiết cảm xúc thành công!",
+    "send_emotion_tops_failed": "Có lỗi sảy ra khi gửi gợi ý điều tiết cảm xúc. Vui lòng thử lại sau.",
+    "create_group_task_success": "Tạo mới hoạt động nhóm thành công!",
+    "create_group_task_failed": "ó lỗi sảy ra khi tạo hoạt động nhóm. Vui lòng thử lại sau."
   },
   "ERROR": {
     "network": "Lỗi mạng. Vui lòng kiểm tra kết nối mạng của bạn và thử lại.",
