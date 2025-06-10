@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
-import { NativeAudio } from '@capacitor-community/native-audio'
+import { NativeAudio } from '@capacitor-community/native-audio';
 
 import { AuthService } from '../auth/auth.service';
 import { SoundKeys } from '../../shared/enums/sound-keys';
@@ -8,8 +8,6 @@ import { CommonConstants } from '../../shared/classes/common-constants';
 import { ISoundResource } from '../../shared/interfaces/settings/assets-resource';
 import { AssetResourceCategory } from '../../shared/enums/asset-resource-category';
 import { NativePlatform } from '../../shared/enums/native-platform';
-import { StorageKey } from '../../shared/enums/storage-key';
-import { LocalStorageService } from '../local-storage/local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +19,7 @@ export class SoundService {
 
   constructor(
     private authService: AuthService,
-    private platform: Platform,
-    private localStorageService: LocalStorageService,
+    private platform: Platform
   ) {
   }
 
@@ -39,18 +36,22 @@ export class SoundService {
    * Preload sound music on user config
    */
   public async loadUserSounds(): Promise<void> {
-    for (const sound of CommonConstants.sound_gallery) {
-      const prefixUrl = `${!this.platform.is(NativePlatform.CAPACITOR) ? '' : 'public/'}`;
-      try {
-        await NativeAudio.preload({
-          assetId: sound.id.toString(),
-          assetPath: prefixUrl + sound.resource_url,
-          audioChannelNum: 1,
-          isUrl: false
-        });
-        if (sound['key']) this.soundsManager.set(sound['key'], sound.id.toString());
-      } catch (e: any) {
-        console.error(e.message);
+    const authData = await this.authService.getAuthData();
+
+    if (!authData?.is_teacher && !authData?.is_parent) {
+      for (const sound of CommonConstants.sound_gallery) {
+        const prefixUrl = `${!this.platform.is(NativePlatform.CAPACITOR) ? '' : 'public/'}`;
+        try {
+          await NativeAudio.preload({
+            assetId: sound.id.toString(),
+            assetPath: prefixUrl + sound.resource_url,
+            audioChannelNum: 1,
+            isUrl: false
+          });
+          if (sound['key']) this.soundsManager.set(sound['key'], sound.id.toString());
+        } catch (e: any) {
+          console.error(e.message);
+        }
       }
     }
 

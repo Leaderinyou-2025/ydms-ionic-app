@@ -1,13 +1,54 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>teenager-shared-emotion</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header
+  [pageTitle]="TranslateKeys.PERSONAL_DIARY_TITLE"
+  backgroundColor="linear-gradient(to bottom, #9333ea, #4c1d95)"
+  defaultBackHref="/{{PageRoutes.TEACHER_DASHBOARD}}">
+</app-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">teenager-shared-emotion</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="custom-page-bg-light ion-padding">
+  <!-- Refresh -->
+  <ion-refresher slot="fixed" mode="md" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Loading skeleton -->
+  <div *ngIf="isLoading && !isLoadMore">
+    <ion-skeleton-text animated="true" class="w-full h-32 rounded-lg mb-4" *ngFor="let i of Array(10)"></ion-skeleton-text>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="isLoading === false && emotionalDiaryList.length === 0" class="flex flex-col items-center justify-center py-10">
+    <ion-icon name="document-text-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+    <p class="text-center text-gray-500">{{ TranslateKeys.TITLE_NO_DATA | translate }}</p>
+  </div>
+
+  <!-- Diary list  -->
+  <div *ngIf="emotionalDiaryList?.length">
+    <div *ngFor="let emotionDiary of emotionalDiaryList"
+         class="bg-white dark:bg-gray-800 rounded-xl shadow-md mb-4 overflow-hidden relative">
+
+      <!-- Card header with avatar and name -->
+      <div class="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex-1">
+          <h3 class="text-base font-medium text-gray-800 dark:text-gray-200">{{ emotionDiary.nickname }}</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            {{ emotionDiary['create_time'] }} {{ emotionDiary.create_date | date: DateFormat.DATE_ONLY }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Card content -->
+      <div class="p-4">
+        <div class="flex flex-col items-center justify-center">
+          <ion-img [src]="CommonConstants.formatBase64ImageUrl(emotionDiary.answer_icon || '')" class="w-20 h-20" alt="Avatar"></ion-img>
+          <p class="py-2 text-2xl text-sky-500 font-bold">{{ emotionDiary.answer_id?.name }}</p>
+          <p class="italic text-sm">{{ emotionDiary.question_id.name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Infinite scroll -->
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
