@@ -367,7 +367,17 @@
     "result_description": "Result description",
     "capture": "capture",
     "gallery": "gallery",
-    "documents": "documents"
+    "documents": "documents",
+    "teenager_shared_emotion_diary": "Emotional diary of teenager",
+    "new_notification": "New notification",
+    "new_notification_detail": "Newsletter notifications",
+    "group_tasks": "Group task",
+    "group_tasks_detail": "Group task in progressing",
+    "expert_guide_details": "Guides given by experts",
+    "create_group_task": "Create a new group task",
+    "update_group_task": "Update the group task",
+    "task_name": "Task name",
+    "task_guide": "Task guide"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",
@@ -394,7 +404,8 @@
     "confirm_unfriend_alert": "Are you sure you want to unfriend?",
     "confirm_un_public_alert": "Are you sure you want to stop sharing?",
     "confirm_end_task": "Are you sure you want to end this task? Doing so will mark it as incomplete.",
-    "feature_developing": "We're working on this feature. Please come back soon!"
+    "feature_developing": "We're working on this feature. Please come back soon!",
+    "confirm_delete_task": "Are you sure you want to delete this task?"
   },
   "BUTTON_TITLES": {
     "confirm": "Confirm",
@@ -449,7 +460,9 @@
     "checkin_emotion_failed": "Failed to checkin emotion. Please try again.",
     "checkin_emotion_success": "Checkin emotion successfully.",
     "send_emotion_tops_success": "Your tips were sent successfully.",
-    "send_emotion_tops_failed": "Something went wrong. Please try sending your tips again."
+    "send_emotion_tops_failed": "Something went wrong. Please try sending your tips again.",
+    "create_group_task_success": "Create task successfully!",
+    "create_group_task_failed": "Something went wrong. Please try sending your tips again."
   },
   "ERROR": {
     "network": "Network error. Please check your internet connection.",

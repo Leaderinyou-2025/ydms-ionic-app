@@ -55,24 +55,24 @@
       <!--   Teacher   -->
       <ng-container *ngIf="userRole === UserRoles.TEACHER">
         <a [routerLink]="'/' + PageRoutes.TEACHER_DASHBOARD" routerLinkActive="active" class="flex flex-col items-center justify-center text-gray-500">
-          <ion-img src="/assets/icons/footer/ico_home.svg" class="w-8 h-8"></ion-img>
+          <ion-icon name="home" class="text-3xl min-h-8" [ngClass]="{'text-blue-500': isActive(PageRoutes.TEACHER_DASHBOARD), 'text-gray-500': !isActive(PageRoutes.TEACHER_DASHBOARD)}"></ion-icon>
           <span class="pt-1" [class.text-blue-500]="isActive(PageRoutes.TEACHER_DASHBOARD)">{{ TranslateKeys.TITLE_HOME | translate }}</span>
         </a>
-        <a [routerLink]="'/' + PageRoutes.CLASS_GROUP" routerLinkActive="active" class="flex flex-col items-center justify-center text-gray-500">
-          <ion-img src="/assets/icons/footer/icon_classroom_activity.svg" class="w-8 h-8"></ion-img>
-          <span class="pt-1" [class.text-blue-500]="isActive(PageRoutes.CLASS_GROUP)">{{ TranslateKeys.TITLE_ACTIONS | translate }}</span>
+        <a [routerLink]="'/' + PageRoutes.GROUP_TASK" routerLinkActive="active" class="flex flex-col items-center justify-center text-gray-500">
+          <ion-icon name="flash" class="text-3xl min-h-8" [ngClass]="{'text-fuchsia-500': isActive(PageRoutes.GROUP_TASK), 'text-gray-500': !isActive(PageRoutes.GROUP_TASK)}"></ion-icon>
+          <span class="pt-1" [class.text-fuchsia-500]="isActive(PageRoutes.GROUP_TASK)">{{ TranslateKeys.TITLE_ACTIONS | translate }}</span>
         </a>
         <a [routerLink]="'/' + PageRoutes.NOTIFICATIONS" routerLinkActive="active" class="flex flex-col items-center justify-center text-gray-500">
-          <ion-img src="/assets/icons/footer/ico_notificationsl.svg" class="w-8 h-8"></ion-img>
-          <span class="pt-1" [class.text-blue-500]="isActive(PageRoutes.NOTIFICATIONS)">{{ TranslateKeys.TITLE_NOTIFICATION | translate }}</span>
+          <ion-icon name="notifications" class="text-3xl min-h-8" [ngClass]="{'text-amber-500': isActive(PageRoutes.NOTIFICATIONS), 'text-gray-500': !isActive(PageRoutes.NOTIFICATIONS)}"></ion-icon>
+          <span class="pt-1" [class.text-amber-500]="isActive(PageRoutes.NOTIFICATIONS)">{{ TranslateKeys.TITLE_NOTIFICATION | translate }}</span>
         </a>
         <a [routerLink]="'/' + PageRoutes.EXPERT_GUIDE" routerLinkActive="active" class="flex flex-col items-center justify-center text-gray-500">
-          <ion-img src="/assets/icons/footer/ico_review.svg" class="w-8 h-8"></ion-img>
-          <span class="pt-1" [class.text-blue-500]="isActive(PageRoutes.EXPERT_GUIDE)">{{ TranslateKeys.TITLE_EXPERT_GUIDE | translate }}</span>
+          <ion-icon name="book" class="text-3xl min-h-8" [ngClass]="{'text-orange-500': isActive(PageRoutes.EXPERT_GUIDE), 'text-gray-500': !isActive(PageRoutes.EXPERT_GUIDE)}"></ion-icon>
+          <span class="pt-1" [class.text-orange-500]="isActive(PageRoutes.EXPERT_GUIDE)">{{ TranslateKeys.TITLE_EXPERT_GUIDE | translate }}</span>
         </a>
         <a [routerLink]="'/' + PageRoutes.PROFILE" routerLinkActive="active" class="flex flex-col items-center justify-center text-gray-500">
-          <ion-img src="/assets/icons/footer/ico_more.svg" class="w-8 h-8"></ion-img>
-          <span class="pt-1" [class.text-blue-500]="isActive(PageRoutes.PROFILE)">{{ TranslateKeys.TITLE_MENU | translate }}</span>
+          <ion-icon name="ellipsis-horizontal-circle-sharp" class="text-3xl min-h-8" [ngClass]="{'text-teal-500': isActive(PageRoutes.PROFILE), 'text-gray-500': !isActive(PageRoutes.PROFILE)}"></ion-icon>
+          <span class="pt-1" [class.text-teal-500]="isActive(PageRoutes.PROFILE)">{{ TranslateKeys.TITLE_MENU | translate }}</span>
         </a>
       </ng-container>
 

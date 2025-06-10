@@ -519,19 +519,9 @@ export class CommonConstants {
     const lastDay = new Date(y, m + 1, 0, 23, 59, 59);
 
     // Convert to UTC and format
-    const formatUTC = (date: Date): string => {
-      const yyyy = date.getUTCFullYear();
-      const MM = ('0' + (date.getUTCMonth() + 1)).slice(-2);
-      const dd = ('0' + date.getUTCDate()).slice(-2);
-      const HH = ('0' + date.getUTCHours()).slice(-2);
-      const mm = ('0' + date.getUTCMinutes()).slice(-2);
-      const ss = ('0' + date.getUTCSeconds()).slice(-2);
-      return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
-    };
-
     return {
-      firstDate: formatUTC(firstDay),
-      lastDate: formatUTC(lastDay),
+      firstDate: CommonConstants.formatUTC(firstDay),
+      lastDate: CommonConstants.formatUTC(lastDay),
     };
   }
 
@@ -549,6 +539,20 @@ export class CommonConstants {
    */
   public static getCurrentDateFormated(): string {
     return formatDate(new Date(), 'yyyy-MM-dd', 'en').toString();
+  }
+
+  /**
+   * Convert datetime to utc and formated (yyyy-MM-dd HH:mm:ss)
+   * @param date
+   */
+  public static formatUTC(date: Date): string {
+    const yyyy = date.getUTCFullYear();
+    const MM = ('0' + (date.getUTCMonth() + 1)).slice(-2);
+    const dd = ('0' + date.getUTCDate()).slice(-2);
+    const HH = ('0' + date.getUTCHours()).slice(-2);
+    const mm = ('0' + date.getUTCMinutes()).slice(-2);
+    const ss = ('0' + date.getUTCSeconds()).slice(-2);
+    return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
   }
 
   /**

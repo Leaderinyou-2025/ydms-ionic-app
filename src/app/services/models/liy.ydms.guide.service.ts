@@ -94,19 +94,24 @@ export class LiyYdmsGuideService {
 
   /**
    * Get guide list by guide_type
+   * @param searchTerm
    * @param guideType
    * @param offset
    * @param limit
    * @param order
    */
   public async getGuideListByGuideType(
+    searchTerm: string = '',
     guideType: GuideType,
     offset: number = 0,
     limit: number = 20,
     order: OrderBy = OrderBy.CREATE_AT_DESC,
   ): Promise<ILiyYdmsGuide[]> {
     return this.getGuideList(
-      [['guide_type', OdooDomainOperator.EQUAL, guideType]], offset, limit, order,
+      [
+        ['name', OdooDomainOperator.ILIKE, searchTerm.trim()],
+        ['guide_type', OdooDomainOperator.EQUAL, guideType],
+      ], offset, limit, order,
     );
   }
 
@@ -114,7 +119,6 @@ export class LiyYdmsGuideService {
    * Get guide list with search and filters
    * @param searchTerm
    * @param areaOfExpertise
-   * @param categoryIds
    * @param offset
    * @param limit
    * @param order
@@ -141,5 +145,39 @@ export class LiyYdmsGuideService {
     }
 
     return this.getGuideList(searchDomain, offset, limit, order);
+  }
+
+  /**
+   * Get count guide
+   * @param searchDomain
+   */
+  public async getCountGuide(searchDomain: SearchDomain = []): Promise<number> {
+    return this.odooService.searchCount(
+      ModelName.GUIDE, searchDomain
+    );
+  }
+
+  /**
+   * Đếm số lượng guide trong tháng
+   * @param guideType
+   * @param areaOfExpertise
+   * @param month
+   * @param year
+   */
+  public async getCountGuideInMonth(
+    guideType?: GuideType,
+    areaOfExpertise?: AreaOfExpertise,
+    month?: number,
+    year?: number,
+  ): Promise<number> {
+    const rangeDateMonth = CommonConstants.getFirstAndLastDateInMonth(month, year);
+    const searchDomain: SearchDomain = [
+      ['create_date', OdooDomainOperator.GREATER_EQUAL, rangeDateMonth.firstDate],
+      ['create_date', OdooDomainOperator.LESS_EQUAL, rangeDateMonth.lastDate],
+    ];
+
+    if (guideType) searchDomain.push(['guide_type', OdooDomainOperator.EQUAL, guideType]);
+    if (areaOfExpertise) searchDomain.push(['area_of_expertise', OdooDomainOperator.EQUAL, areaOfExpertise]);
+    return this.getCountGuide(searchDomain);
   }
 }

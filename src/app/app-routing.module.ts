@@ -113,7 +113,15 @@ const routes: Routes = [
     path: PageRoutes.CLASS_MANAGEMENT,
     loadChildren: () => import('./pages/teacher/class-management/class-management.module').then(m => m.ClassManagementPageModule),
     canActivate: [AuthGuard],
+  },  {
+    path: 'teenager-shared-emotion',
+    loadChildren: () => import('./pages/teacher/teenager-shared-emotion/teenager-shared-emotion.module').then( m => m.TeenagerSharedEmotionPageModule)
   },
+  {
+    path: 'group-tasks',
+    loadChildren: () => import('./pages/teacher/group-tasks/group-tasks.module').then( m => m.GroupTasksPageModule)
+  },
+
 ];
 
 @NgModule({

@@ -68,8 +68,9 @@ ion-textarea {
   border-color: var(--ion-color-danger) !important;
 }
 
-ion-select::part(text) {
-  padding-inline-end: 4px;
+ion-select::part(text),
+ion-select::part(placeholder) {
+  padding-inline-end: 30px;
 }
 
 ion-select::part(icon) {

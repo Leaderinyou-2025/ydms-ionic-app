@@ -229,4 +229,27 @@ export class LiyYdmsEmotionalDiaryService {
     );
     return CommonConstants.convertArr2ListItem(results)?.[0];
   }
+
+  /**
+   * Lấy số lượng lượt chia sẻ cảm xúc cho userId trong ngày
+   * @param userId
+   */
+  public async getCountNewEmotionSharedWithUserId(userId: number): Promise<number> {
+    if (!userId) return 0;
+
+    const currentDate = new Date();
+    const y = currentDate.getFullYear();
+    const m = currentDate.getMonth();
+    const d = currentDate.getDate();
+
+    // Create local dates first
+    const startDatetime = new Date(y, m, d, 0, 0, 0);
+    const endDatetime = new Date(y, m, d, 23, 59, 59);
+
+    return this.getCountEmotionDiaryList([
+      ['public_user_ids', OdooDomainOperator.IN, [userId]],
+      ['create_date', OdooDomainOperator.GREATER_EQUAL, CommonConstants.formatUTC(startDatetime)],
+      ['create_date', OdooDomainOperator.LESS_EQUAL, CommonConstants.formatUTC(endDatetime)],
+    ]);
+  }
 }

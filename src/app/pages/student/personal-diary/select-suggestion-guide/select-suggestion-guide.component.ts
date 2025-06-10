@@ -2,12 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   InfiniteScrollCustomEvent,
   ModalController,
-  RadioGroupCustomEvent,
   SearchbarCustomEvent,
   ToastButton,
   ToastController,
   ToastOptions
 } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 import { TranslateKeys } from '../../../../shared/enums/translate-keys';
 import { IEmotionalDiary } from '../../../../shared/interfaces/personal-diary/personal-diary.interfaces';
@@ -27,7 +27,6 @@ import { Position } from '../../../../shared/enums/position';
 import { BtnRoles } from '../../../../shared/enums/btn-roles';
 import { StyleClass } from '../../../../shared/enums/style-class';
 import { NativePlatform } from '../../../../shared/enums/native-platform';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-select-suggestion-guide',

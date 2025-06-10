@@ -132,4 +132,20 @@ export class ResUserService {
       ['is_teenager', OdooDomainOperator.EQUAL, true],
     ]);
   }
+
+  /**
+   * Lấy danh sách id của tất cả học sinh trong lớp
+   * @param classroomId
+   * @private
+   */
+  public async getTeenagerIdsByClassroomId(classroomId: number): Promise<IAuthData[]> {
+    return this.odooService.searchRead<IAuthData>(
+      ModelName.RES_USERS,
+      [
+        ['classroom_id', OdooDomainOperator.EQUAL, classroomId],
+        ['is_teenager', OdooDomainOperator.EQUAL, true],
+      ],
+      ['id', 'nickname'], 0, 0
+    );
+  }
 }
