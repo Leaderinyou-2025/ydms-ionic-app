@@ -252,4 +252,24 @@ export class LiyYdmsEmotionalDiaryService {
       ['create_date', OdooDomainOperator.LESS_EQUAL, CommonConstants.formatUTC(endDatetime)],
     ]);
   }
+
+  /**
+   * Lấy cảm xúc mới nhất của nhiều học sinh
+   * @param childrenIds
+   * @param limit
+   */
+  public async getLatestEmotionsForChildren(
+    childrenIds: number[],
+    limit: number = 1
+  ): Promise<ILiyYdmsEmotionalDiary[]> {
+    if (!childrenIds?.length) return [];
+
+    const searchDomain: SearchDomain = [
+      ['teenager_id', OdooDomainOperator.IN, childrenIds],
+      ['public_emotional_to', OdooDomainOperator.EQUAL, PublicEmotionalOption.PARENT],
+      ['public_emotional', OdooDomainOperator.EQUAL, true],
+    ];
+
+    return this.getEmotionalDiaryList(searchDomain, 0, limit * childrenIds.length, OrderBy.CREATE_AT_DESC);
+  }
 }

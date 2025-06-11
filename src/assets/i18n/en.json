@@ -621,5 +621,25 @@
   "VALIDATION": {
     "required": "This field is required",
     "min_length": "Minimum {{min}} characters required"
+  },
+  "PARENT_DASHBOARD": {
+    "title": "Parent Dashboard",
+    "select_child": "Select Child",
+    "emotions": "Emotions",
+    "new_notifications": "New Notifications",
+    "family_activities": "Family Activities",
+    "expert_skills": "Expert Skills",
+    "view_all": "View All",
+    "no_children": "No children information",
+    "no_emotions": "No emotions shared yet",
+    "no_notifications": "No new notifications",
+    "no_activities": "No family activities",
+    "no_expert_guides": "No expert guides available",
+    "parent_role": "Parent",
+    "children": "children",
+    "emotions_detail": "View children's emotions",
+    "notifications_detail": "Check new notifications",
+    "family_activities_detail": "Manage family activities",
+    "expert_skills_detail": "Access expert guidance"
   }
 }

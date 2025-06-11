@@ -196,4 +196,28 @@ export class LiyYdmsTaskService {
       ModelName.TASK, body,
     );
   }
+
+  /**
+   * Get pending family activities for children
+   * @param childrenIds Array of children user IDs
+   * @param offset
+   * @param limit
+   * @param order
+   */
+  public async getPendingFamilyActivitiesForChildren(
+    childrenIds: number[],
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.CREATE_AT_DESC
+  ): Promise<ILiyYdmsTask[]> {
+    if (!childrenIds?.length) return [];
+
+    const searchDomain: SearchDomain = [
+      ['guide_type', OdooDomainOperator.EQUAL, GuideType.FAMILY_ACTIVITY],
+      ['status', OdooDomainOperator.IN, [TaskStatus.PENDING, TaskStatus.IN_PROGRESS]],
+      ['assignee_ids', OdooDomainOperator.IN, childrenIds]
+    ];
+
+    return this.getTaskList(searchDomain, offset, limit, order);
+  }
 }
