@@ -1,27 +1,23 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {formatDate} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { formatDate } from '@angular/common';
 
-import {AuthService} from '../../../services/auth/auth.service';
-import {ResUserService} from '../../../services/models/res.user.service';
-import {LiyYdmsEmotionalDiaryService} from '../../../services/models/liy.ydms.emotional.diary.service';
-import {LiyYdmsNotificationService} from '../../../services/models/liy.ydms.notification.service';
-import {LiyYdmsTaskService} from '../../../services/models/liy.ydms.task.service';
-import {LiyYdmsGuideService} from '../../../services/models/liy.ydms.guide.service';
+import { AuthService } from '../../../services/auth/auth.service';
+import { ResUserService } from '../../../services/models/res.user.service';
+import { LiyYdmsEmotionalDiaryService } from '../../../services/models/liy.ydms.emotional.diary.service';
+import { LiyYdmsNotificationService } from '../../../services/models/liy.ydms.notification.service';
+import { LiyYdmsGuideService } from '../../../services/models/liy.ydms.guide.service';
 
-import {IAuthData} from '../../../shared/interfaces/auth/auth-data';
-import {ILiyYdmsEmotionalDiary} from '../../../shared/interfaces/models/liy.ydms.emotional.diary';
-import {ILiyYdmsNotification} from '../../../shared/interfaces/models/liy.ydms.notification';
-import {ILiyYdmsTask} from '../../../shared/interfaces/models/liy.ydms.task';
-import {ILiyYdmsGuide} from '../../../shared/interfaces/models/liy.ydms.guide';
+import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
+import { ILiyYdmsEmotionalDiary } from '../../../shared/interfaces/models/liy.ydms.emotional.diary';
 
-import {TranslateKeys} from '../../../shared/enums/translate-keys';
-import {PageRoutes} from '../../../shared/enums/page-routes';
-import {GuideType} from '../../../shared/enums/guide-type';
-import {AreaOfExpertise} from '../../../shared/enums/area-of-expertise';
-import {TaskStatus} from '../../../shared/enums/task-status';
-import {CommonConstants} from '../../../shared/classes/common-constants';
-import {TaskService} from "../../../services/task/task.service";
+import { TranslateKeys } from '../../../shared/enums/translate-keys';
+import { PageRoutes } from '../../../shared/enums/page-routes';
+import { GuideType } from '../../../shared/enums/guide-type';
+import { AreaOfExpertise } from '../../../shared/enums/area-of-expertise';
+import { TaskStatus } from '../../../shared/enums/task-status';
+import { CommonConstants } from '../../../shared/classes/common-constants';
+import { TaskService } from '../../../services/task/task.service';
 
 @Component({
   selector: 'app-parent-dashboard',
@@ -171,12 +167,12 @@ export class ParentDashboardPage implements OnInit {
    * @private
    */
   private async getCountNotifications(): Promise<void> {
-    if (!this.authData?.id) {
+    if (!this.authData?.id || !this.authData?.partner_id?.id) {
       this.totalNotifications = 0;
       return;
     }
     try {
-      this.totalNotifications = await this.notificationService.getCountUserUnreadNotification(this.authData.id);
+      this.totalNotifications = await this.notificationService.getCountUserUnreadNotification(this.authData.partner_id?.id);
     } catch (error) {
       console.error('ERROR counting notifications:', error);
       this.totalNotifications = 0;
