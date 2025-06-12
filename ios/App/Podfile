@@ -27,6 +27,7 @@ def capacitor_pods
   pod 'CapacitorPushNotifications', :path => '../../node_modules/@capacitor/push-notifications'
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
   pod 'CapacitorTextZoom', :path => '../../node_modules/@capacitor/text-zoom'
+  pod 'CapawesomeCapacitorFilePicker', :path => '../../node_modules/@capawesome/capacitor-file-picker'
   pod 'CapawesomeCapacitorLiveUpdate', :path => '../../node_modules/@capawesome/capacitor-live-update'
   pod 'CapacitorNativeBiometric', :path => '../../node_modules/capacitor-native-biometric'
   pod 'CapacitorNativeSettings', :path => '../../node_modules/capacitor-native-settings'
