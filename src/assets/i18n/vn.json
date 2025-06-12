@@ -621,5 +621,25 @@
   "VALIDATION": {
     "required": "Trường này là bắt buộc",
     "min_length": "Yêu cầu tối thiểu {{min}} ký tự"
+  },
+  "PARENT_DASHBOARD": {
+    "title": "Trang chủ phụ huynh",
+    "select_child": "Chọn con",
+    "emotions": "Cảm xúc",
+    "new_notifications": "Thông báo mới",
+    "family_activities": "Hoạt động gia đình",
+    "expert_skills": "Kỹ năng chuyên gia",
+    "view_all": "Xem tất cả",
+    "no_children": "Không có thông tin con em",
+    "no_emotions": "Chưa có cảm xúc được chia sẻ",
+    "no_notifications": "Không có thông báo mới",
+    "no_activities": "Không có hoạt động gia đình nào",
+    "no_expert_guides": "Không có hướng dẫn chuyên gia nào",
+    "parent_role": "Phụ huynh",
+    "children": "con",
+    "emotions_detail": "Xem cảm xúc của con",
+    "notifications_detail": "Kiểm tra thông báo mới",
+    "family_activities_detail": "Quản lý hoạt động gia đình",
+    "expert_skills_detail": "Truy cập hướng dẫn chuyên gia"
   }
 }

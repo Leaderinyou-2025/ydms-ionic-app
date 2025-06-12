@@ -148,4 +148,24 @@ export class ResUserService {
       ['id', 'nickname'], 0, 0
     );
   }
+
+  /**
+   * Lấy danh sách học sinh theo cha mẹ
+   * @param parentId
+   * @param offset
+   * @param limit
+   * @param order
+   */
+  public async getChildrenByParentId(
+    parentId: number,
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.NAME_ASC
+  ): Promise<IAuthData[]> {
+    const searchDomain: SearchDomain = [
+      ['parent_id', OdooDomainOperator.EQUAL, parentId],
+      ['is_teenager', OdooDomainOperator.EQUAL, true],
+    ];
+    return this.getUserList(searchDomain, offset, limit, order);
+  }
 }
