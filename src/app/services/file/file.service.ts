@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { LoadingController, Platform } from '@ionic/angular';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FileOpener } from '@capacitor-community/file-opener';
+import { FilePicker } from '@capawesome/capacitor-file-picker';
 
 import { IFileData } from '../../shared/interfaces/function-data/file-data';
 import { FileMimeType } from '../../shared/enums/file-mime-type';
@@ -23,43 +24,69 @@ export class FileService {
    */
   public async selectFile(): Promise<IFileData | undefined> {
     try {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx';
+      // Trường hợp chạy trong ứng dụng Capacitor (iOS/Android)
+      if (this.platform.is('capacitor')) {
+        const result = await FilePicker.pickFiles({
+          types: [
+            FileMimeType.PDF,
+            FileMimeType.DOC,
+            FileMimeType.DOCX,
+            FileMimeType.XLS,
+            FileMimeType.XLSX,
+            FileMimeType.PPT,
+            FileMimeType.PPTX
+          ],
+          limit: 1,
+          readData: true
+        });
 
-      return new Promise((resolve) => {
+        if (!result.files.length) return;
+
+        const file = result.files[0];
+
+        // Kiểm tra dung lượng (base64 dài hơn khoảng 1.37 lần binary)
+        const estimatedSize = (file.data?.length ?? 0) * 3 / 4;
+        if (estimatedSize > 10 * 1024 * 1024) return;
+
+        return {
+          base64: file.data ?? '',
+          mimeType: file.mimeType as FileMimeType,
+          fileName: file.name
+        };
+      }
+
+      // Trường hợp PWA / Web
+      return await new Promise<IFileData | undefined>((resolve) => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx';
+
         input.onchange = () => {
           const file = input.files?.[0];
-          if (!file) {
-            resolve(undefined);
-            return;
-          }
+          if (!file) return resolve(undefined);
 
-          // Kiểm tra dung lượng
-          if (file.size > 10_485_760) {
-            resolve(undefined);
-            return;
-          }
+          if (file.size > 10 * 1024 * 1024) return resolve(undefined);
 
-          // Kiểm tra định dạng
           const allowedTypes = Object.values(FileMimeType);
-          if (!allowedTypes.includes(file.type as FileMimeType)) {
-            resolve(undefined);
-            return;
-          }
+          if (!allowedTypes.includes(file.type as FileMimeType)) return resolve(undefined);
 
           const reader = new FileReader();
           reader.onload = () => {
             const base64 = (reader.result as string).split(',')[1];
-            resolve({base64, mimeType: file.type as FileMimeType, fileName: file.name});
+            resolve({
+              base64,
+              mimeType: file.type as FileMimeType,
+              fileName: file.name
+            });
           };
           reader.onerror = () => resolve(undefined);
           reader.readAsDataURL(file);
         };
+
         input.click();
       });
     } catch (error) {
-      console.error('Error selecting file:', error);
+      console.error('selectFile error:', error);
       return;
     }
   }
@@ -75,8 +102,8 @@ export class FileService {
 
     const {base64, mimeType, fileName} = fileData;
 
+    // Mobile (Capacitor)
     if (!this.platform.is('mobileweb')) {
-      // Mobile (Capacitor)
       const blob = CommonConstants.b64toBlob(base64, mimeType);
       const loading = await this.loadingController.create();
       await loading.present();
