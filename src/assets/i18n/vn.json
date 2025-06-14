@@ -448,7 +448,8 @@
     "end": "Kết thúc",
     "submit": "Gửi",
     "delete": "Xoá",
-    "edit": "Sửa"
+    "edit": "Sửa",
+    "detail": "Xem chi tiết"
   },
   "TOAST": {
     "error_header": "Lỗi",

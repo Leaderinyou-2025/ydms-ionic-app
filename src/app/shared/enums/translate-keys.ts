@@ -507,6 +507,7 @@ export enum TranslateKeys {
   BUTTON_SUBMIT = 'BUTTON_TITLES.submit',
   BUTTON_DELETE = 'BUTTON_TITLES.delete',
   BUTTON_EDIT = 'BUTTON_TITLES.edit',
+  BUTTON_DETAIL = 'BUTTON_TITLES.detail',
 
   // TOAST
   TOAST_ERROR_HEADER = 'TOAST.error_header',

@@ -9,20 +9,21 @@ import { NotificationsPage } from './notifications.page';
 import { SharedModule } from '../../shared/shared.module';
 import { NotificationDetailComponent } from './notification-detail/notification-detail.component';
 import { CreateNotificationComponent } from './create-notification/create-notification.component';
-import { QuillEditorComponent } from 'ngx-quill';
+import { QuillEditorComponent, QuillViewComponent } from 'ngx-quill';
 import { SelectRecipientsComponent } from './select-recipients/select-recipients.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    NotificationsPageRoutingModule,
-    TranslateModule,
-    SharedModule,
-    ReactiveFormsModule,
-    QuillEditorComponent
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        NotificationsPageRoutingModule,
+        TranslateModule,
+        SharedModule,
+        ReactiveFormsModule,
+        QuillEditorComponent,
+        QuillViewComponent
+    ],
   declarations: [
     NotificationsPage,
     NotificationDetailComponent,

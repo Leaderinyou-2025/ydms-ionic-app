@@ -451,7 +451,8 @@
     "end": "End",
     "submit": "Submit",
     "delete": "Delete",
-    "edit": "Edit"
+    "edit": "Edit",
+    "detail": "Detail"
   },
   "TOAST": {
     "error_header": "Error",
