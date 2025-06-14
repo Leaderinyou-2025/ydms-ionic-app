@@ -1,11 +1,10 @@
-<ion-content [fullscreen]="true" class="custom-page-bg-light ion-padding">
+<ion-content [fullscreen]="true" class="custom-page-bg-light native-padding-content">
   <!-- Refresh data -->
   <ion-refresher slot="fixed" mode="md" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ng-container *ngIf="authData">
-
+  <div class="ion-padding" *ngIf="authData">
     <!-- Teacher info -->
     <div routerLink="/{{PageRoutes.PROFILE}}/{{PageRoutes.PERSONAL_INFO}}"
          class="flex items-center justify-between bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-6 mb-6 shadow-2xl">
@@ -134,7 +133,7 @@
       </div>
 
     </div>
-  </ng-container>
+  </div>
 </ion-content>
 
 <app-footer></app-footer>

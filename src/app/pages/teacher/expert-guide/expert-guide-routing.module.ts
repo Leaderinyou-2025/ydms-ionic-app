@@ -10,7 +10,7 @@ const routes: Routes = [
     component: ExpertGuidePage
   },
   {
-    path: 'detail/:id',
+    path: ':id',
     component: ExpertGuideDetailComponent
   }
 ];

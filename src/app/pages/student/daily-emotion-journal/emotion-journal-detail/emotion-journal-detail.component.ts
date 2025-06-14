@@ -5,8 +5,10 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../../../../services/auth/auth.service';
 import { LiyYdmsEmotionalDiaryService } from '../../../../services/models/liy.ydms.emotional.diary.service';
-import { LiyYdmsEmotionalAnswerOptionService } from '../../../../services/models/liy.ydms.emotional.answer.option.service';
-import { ResUserService } from '../../../../services/models/res.user.service';
+import {
+  LiyYdmsEmotionalAnswerOptionService
+} from '../../../../services/models/liy.ydms.emotional.answer.option.service';
+import { ResUsersService } from '../../../../services/models/res.users.service';
 import { TranslateKeys } from '../../../../shared/enums/translate-keys';
 import { IAuthData } from '../../../../shared/interfaces/auth/auth-data';
 import { PageRoutes } from '../../../../shared/enums/page-routes';
@@ -58,7 +60,7 @@ export class EmotionJournalDetailComponent implements OnInit {
     private liyYdmsEmotionalAnswerOptionService: LiyYdmsEmotionalAnswerOptionService,
     private liyYdmsGuideService: LiyYdmsGuideService,
     private liyYdmsCategoryService: LiyYdmsCategoryService,
-    private resUserService: ResUserService,
+    private resUsersService: ResUsersService,
     private alertController: AlertController,
     private translate: TranslateService,
     private loadingController: LoadingController,
@@ -106,7 +108,8 @@ export class EmotionJournalDetailComponent implements OnInit {
    * @param guide
    */
   public onClickExecuteEmotionGuide(guide: ILiyYdmsGuide): void {
-    // TODO: Redirect to guide detail
+    if (!guide?.id) return;
+    this.router.navigateByUrl(`${PageRoutes.EXPERT_GUIDE}/${guide.id}`);
   }
 
   /**
@@ -117,7 +120,7 @@ export class EmotionJournalDetailComponent implements OnInit {
     if (!this.authData?.id || !entryId) return;
     this.emotionalDiary = await this.liyYdmsEmotionalDiaryService.getEmotionDiary(entryId);
     if (this.emotionalDiary?.public_emotional && this.emotionalDiary?.public_user_ids?.length) {
-      this.resUserService.getFriendListByIds(this.emotionalDiary.public_user_ids).then(friendList => this.sharedFriends = friendList);
+      this.resUsersService.getFriendListByIds(this.emotionalDiary.public_user_ids).then(friendList => this.sharedFriends = friendList);
     }
     await this.loadInstructions();
   }
@@ -187,7 +190,7 @@ export class EmotionJournalDetailComponent implements OnInit {
       icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
       side: Position.END,
       role: BtnRoles.CANCEL,
-    }
+    };
     const toast = await this.toastController.create({
       message,
       duration: 5000,

@@ -77,7 +77,7 @@
           <!-- Footer: Timestamp and Type -->
           <div class="flex justify-between items-center">
             <div class="text-xs text-gray-500 dark:text-gray-400">
-              {{ notification['create_time']}} {{ notification.create_date | date: DateFormat.DATE_ONLY }}
+              {{ notification['create_time'] }} {{ notification.create_date | date: DateFormat.DATE_ONLY }}
             </div>
 
             <div class="notification-type px-2 py-1 text-xs text-white border rounded-full shadow-md"
@@ -102,5 +102,12 @@
     <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
+
+<!-- Nút floating để tạo thông báo dành cho giáo viên -->
+<ion-fab vertical="bottom" horizontal="end" slot="fixed" class="mb-24" *ngIf="authData?.is_teacher">
+  <ion-fab-button color="primary" routerLink="{{PageRoutes.CREATE_NOTIFICATION}}">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
 
 <app-footer></app-footer>

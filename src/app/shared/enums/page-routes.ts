@@ -25,6 +25,7 @@ export enum PageRoutes {
   RANK = 'rank',
   TASK = 'task',
   NOTIFICATIONS = 'notifications',
+  CREATE_NOTIFICATION = 'create-notification',
   LIBRARY = 'library',
   PARENT_DASHBOARD = 'parent-dashboard',
   TEACHER_DASHBOARD = 'teacher-dashboard',

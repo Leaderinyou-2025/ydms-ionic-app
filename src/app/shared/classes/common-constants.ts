@@ -624,6 +624,20 @@ export class CommonConstants {
   }
 
   /**
+   * Removes Vietnamese diacritical marks (tones) from the given string.
+   *
+   * @param {string} str - The input string that may contain Vietnamese tones.
+   * @return {string} The resultant string with Vietnamese tones removed.
+   */
+  public static removeVietnameseTones(str: string): string {
+    return str
+      .normalize('NFD') // Tách dấu khỏi ký tự
+      .replace(/[\u0300-\u036f]/g, '') // Xoá dấu
+      .replace(/đ/g, 'd')
+      .replace(/Đ/g, 'D');
+  }
+
+  /**
    * Weekday names
    */
   public get weekdays(): string[] {

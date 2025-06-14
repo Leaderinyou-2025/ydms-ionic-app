@@ -91,6 +91,8 @@ ion-select::part(icon) {
 .ql-container.ql-snow {
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
+  font-size: inherit;
+  font-family: inherit;
 }
 
 .ql-container.ngx-quill-view {

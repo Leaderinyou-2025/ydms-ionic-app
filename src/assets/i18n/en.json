@@ -27,6 +27,7 @@
   },
   "NOTIFICATIONS": {
     "title": "Notifications",
+    "create_title": "Create new notification",
     "unread": "Unread",
     "read": "Read",
     "no_unread": "No new notifications",
@@ -55,7 +56,20 @@
     "loading": "Loading notifications...",
     "loading_more": "Loading more notifications...",
     "sender": "Sender",
-    "attach_file": "Attach file"
+    "recipient": "Recipient",
+    "attach_file": "Attach file",
+    "notification_title": "Notification title",
+    "notification_description": "Description",
+    "notification_body": "Notification content",
+    "send_all": "Everybody",
+    "send_all_description": "All parents and students in your classroom",
+    "send_parents": "Parents",
+    "send_parents_description": "All parents of students in your classroom",
+    "send_students": "Students",
+    "send_students_description": "All students in your classroom",
+    "send_specific_users": "Specific people",
+    "send_specific_users_description": "Send to specific people",
+    "select_recipients": "Select recipients"
   },
   "HOME": {
     "welcome_title": "Welcome back",
@@ -377,7 +391,10 @@
     "create_group_task": "Create a new group task",
     "update_group_task": "Update the group task",
     "task_name": "Task name",
-    "task_guide": "Task guide"
+    "task_guide": "Task guide",
+    "parents": "Parents",
+    "students": "Students",
+    "specific_user": "Specific user"
   },
   "VALIDATE": {
     "phone_required": "Please input your phone number.",
@@ -462,7 +479,8 @@
     "send_emotion_tops_success": "Your tips were sent successfully.",
     "send_emotion_tops_failed": "Something went wrong. Please try sending your tips again.",
     "create_group_task_success": "Create task successfully!",
-    "create_group_task_failed": "Something went wrong. Please try sending your tips again."
+    "create_group_task_failed": "Something went wrong. Please try sending your tips again.",
+    "send_notification_success": "Your notification has been sent."
   },
   "ERROR": {
     "network": "Network error. Please check your internet connection.",

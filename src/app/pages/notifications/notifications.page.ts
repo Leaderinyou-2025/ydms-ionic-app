@@ -24,6 +24,7 @@ import { IAuthData } from '../../shared/interfaces/auth/auth-data';
 export class NotificationsPage implements OnInit {
 
   // Search form states
+  authData?: IAuthData;
   searchForm!: SearchNotificationParams;
   paged!: number;
   limit: number = 20;
@@ -59,8 +60,6 @@ export class NotificationsPage implements OnInit {
     {value: NotificationTypes.ASSESSMENT, label: this.translate.instant(TranslateKeys.NOTIFICATIONS_TYPE_ASSESSMENT)},
     {value: NotificationTypes.OTHER, label: this.translate.instant(TranslateKeys.NOTIFICATIONS_TYPE_OTHER)}
   ];
-
-  private authData?: IAuthData;
 
   protected readonly TranslateKeys = TranslateKeys;
   protected readonly PageRoutes = PageRoutes;

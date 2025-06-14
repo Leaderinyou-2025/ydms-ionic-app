@@ -7,6 +7,7 @@ import { OrderBy } from '../../shared/enums/order-by';
 import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
 import { ModelName } from '../../shared/enums/model-name';
 import { CommonConstants } from '../../shared/classes/common-constants';
+import { CreateNotificationBody } from '../../shared/interfaces/function-data/create-notification-body';
 
 @Injectable({
   providedIn: 'root'
@@ -95,5 +96,15 @@ export class LiyYdmsNotificationService {
       ['recipient_ids', OdooDomainOperator.IN, [partnerId]],
       ['is_viewed', OdooDomainOperator.EQUAL, false],
     ]);
+  }
+
+  /**
+   * Creates a new notification in the system.
+   *
+   * @param {CreateNotificationBody} body - The data required to create the notification, encapsulated in an object.
+   * @return {Promise<number | undefined>} A promise that resolves to the ID of the created notification if successful, or undefined if the creation fails.
+   */
+  public async createNotification(body: CreateNotificationBody): Promise<number | undefined> {
+    return this.odooService.create<ILiyYdmsNotification>(ModelName.NOTIFICATION, body);
   }
 }

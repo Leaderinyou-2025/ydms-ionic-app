@@ -1,0 +1,160 @@
+<app-header
+  [pageTitle]="TranslateKeys.NOTIFICATIONS_CREATE_TITLE"
+  backgroundColor="linear-gradient(to bottom, #3b82f6, #1e40af)"
+  defaultBackHref="/{{PageRoutes.NOTIFICATIONS}}">
+</app-header>
+
+<ion-content [fullscreen]="true" class="ion-padding custom-page-bg-light">
+  <div class="py-4 px-3 w-full rounded-xl bg-gray-50 dark:bg-gray-800" *ngIf="createNotificationForm">
+    <form class="w-full create-notification-form" [formGroup]="createNotificationForm" (submit)="onSubmitForm()">
+      <ion-grid>
+        <!--    Tiêu đề thông báo    -->
+        <ion-row>
+          <ion-col size="12">
+            <ion-label>{{ TranslateKeys.NOTIFICATIONS_CREATE_LABEL | translate }}<span class="text-red-600 ps-1">*</span></ion-label>
+            <ion-input formControlName="name" type="text" inputmode="text" required="required" [clearInput]="true"></ion-input>
+            <div *ngIf="hasError('name', 'required')" class="error-text text-red-600 text-sm pt-1 ps-1">
+              {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <!--    Mô tả ngắn    -->
+        <ion-row>
+          <ion-col size="12">
+            <ion-label>{{ TranslateKeys.NOTIFICATIONS_CREATE_DESCRIPTION | translate }}<span class="text-red-600 ps-1">*</span></ion-label>
+            <ion-textarea formControlName="description" class="w-full px-3 border" rows="2"></ion-textarea>
+            <div *ngIf="hasError('description', 'required')" class="error-text text-red-600 text-sm pt-1 ps-1">
+              {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <!--    Nội dung thông báo    -->
+        <ion-row>
+          <ion-col size="12">
+            <ion-col size="12">
+              <ion-label>{{ TranslateKeys.NOTIFICATIONS_CREATE_BODY | translate }}<span class="text-red-600 ps-1">*</span></ion-label>
+
+              <!-- Quill Editor cho viết nội dung rich text -->
+              <quill-editor formControlName="body"
+                            [ngClass]="{'ion-touched ion-invalid': hasError('body', 'required')}"
+                            placeholder="" class="h-52" format="html" theme="snow"></quill-editor>
+
+              <!-- Hiển thị lỗi validation cho nội dung -->
+              <div *ngIf="hasError('body', 'required')"
+                   class="text-red-500 text-sm ml-1">
+                {{ TranslateKeys.VALIDATION_REQUIRED | translate }}
+              </div>
+            </ion-col>
+          </ion-col>
+        </ion-row>
+
+        <!-- Trường đính kèm file -->
+        <ion-row>
+          <ion-col size="12" class="mb-5">
+            <ion-label position="stacked">
+              {{ TranslateKeys.CREATE_EXPERIENCE_ATTACHMENT_LABEL | translate }}
+            </ion-label>
+            <div class="attached-files flex items-center justify-center flex-wrap gap-1">
+              <ion-button shape="round" fill="outline" color="dark" class="min-h-0"
+                          (click)="onClickSelectAttachedFile(AttachedFileType.DOCUMENTS)">
+                <ion-icon name="attach" class="py-1 text-lg"></ion-icon>
+                <span class="text-sm pl-2">{{ TranslateKeys.TITLE_DOCUMENTS | translate }}</span>
+              </ion-button>
+              <ion-button shape="round" fill="outline" color="dark" class="min-h-0"
+                          (click)="onClickSelectAttachedFile(AttachedFileType.GALLERY)">
+                <ion-icon name="images" class="py-1 text-lg"></ion-icon>
+                <span class="text-sm pl-2">{{ TranslateKeys.TITLE_GALLERY | translate }}</span>
+              </ion-button>
+              <ion-button shape="round" fill="outline" color="dark" class="min-h-0"
+                          (click)="onClickSelectAttachedFile(AttachedFileType.CAMERA)">
+                <ion-icon name="camera" class="py-1 text-lg"></ion-icon>
+                <span class="text-sm pl-2">{{ TranslateKeys.TITLE_CAPTURE | translate }}</span>
+              </ion-button>
+            </div>
+
+            <!--     Image preview       -->
+            <div class="mt-5 relative w-full border rounded-xl overflow-hidden group"
+                 *ngIf="attachedImage">
+              <ion-icon
+                class="absolute top-2 right-2 text-2xl text-red-500 opacity-0 group-hover:opacity-100 transition duration-200 cursor-pointer"
+                name="close-circle"
+                (click)="attachedImage = undefined">
+              </ion-icon>
+
+              <ion-img [src]="CommonConstants.formatBase64ImageUrl(attachedImage)" class="w-full h-auto">
+              </ion-img>
+            </div>
+
+            <!--     File list      -->
+            <div class="mt-5 w-full border rounded-xl overflow-hidden group" *ngIf="attachedFile">
+              <ion-item lines="none" detail="false" class="bg-transparent">
+                <ion-icon slot="start" name="document-attach" class="text-xl"></ion-icon>
+                <ion-label>{{ attachedFile.fileName }}</ion-label>
+                <ion-icon slot="end" name="close-circle" class="text-xl text-red-500"
+                          (click)="attachedFile = undefined"></ion-icon>
+              </ion-item>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <!--    Người nhận    -->
+        <ion-row>
+          <ion-col size="12">
+            <ion-label>{{ TranslateKeys.NOTIFICATIONS_CREATE_RECIPIENT | translate }}</ion-label>
+            <ion-list class="share-type-radio-group bg-transparent">
+              <ion-radio-group formControlName="recipientType" (ionChange)="onRecipientTypeChange($event)">
+                <ion-item detail="false">
+                  <ion-radio [value]="RecipientTypes.ALL" mode="md" labelPlacement="end" justify="start">
+                    {{ TranslateKeys.NOTIFICATIONS_CREATE_SEND_ALL | translate }}<br>
+                    <span class="pr-2 text-sm italic text-gray-500 dark:text-gray-400">{{ TranslateKeys.NOTIFICATIONS_CREATE_SEND_ALL_DESCRIPTION | translate }}</span>
+                  </ion-radio>
+                </ion-item>
+
+                <ion-item detail="false">
+                  <ion-radio [value]="RecipientTypes.PARENTS" mode="md" labelPlacement="end" justify="start">
+                    {{ TranslateKeys.NOTIFICATIONS_CREATE_SEND_PARENTS | translate }}<br>
+                    <span class="pr-2 text-sm italic text-gray-500 dark:text-gray-400">{{ TranslateKeys.NOTIFICATIONS_CREATE_SEND_PARENTS_DESCRIPTION | translate }}</span>
+                  </ion-radio>
+                </ion-item>
+
+                <ion-item detail="false">
+                  <ion-radio [value]="RecipientTypes.STUDENTS" mode="md" labelPlacement="end" justify="start">
+                    {{ TranslateKeys.NOTIFICATIONS_CREATE_SEND_STUDENTS | translate }}<br>
+                    <span class="pr-2 text-sm italic text-gray-500 dark:text-gray-400">{{ TranslateKeys.NOTIFICATIONS_CREATE_SEND_STUDENTS_DESCRIPTION | translate }}</span>
+                  </ion-radio>
+                </ion-item>
+
+                <ion-item detail="false">
+                  <ion-radio [value]="RecipientTypes.SPECIFIC_USERS" mode="md" labelPlacement="end" justify="start">
+                    {{ TranslateKeys.NOTIFICATIONS_CREATE_SEND_SPECIFIC_USERS | translate }}<br>
+                    <span class="pr-2 text-sm italic text-gray-500 dark:text-gray-400">{{ TranslateKeys.NOTIFICATIONS_CREATE_SEND_SPECIFIC_USERS_DESCRIPTION | translate }}</span>
+                  </ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+
+            <!-- Users Selected -->
+            <div *ngIf="selectedRecipients?.length && recipientType === RecipientTypes.SPECIFIC_USERS"
+                 class="flex items-center justify-start flex-wrap gap-2 p-2">
+              <div *ngFor="let user of selectedRecipients;"
+                   class="flex items-center justify-center gap-2 flex-nowrap px-2 py-1 border rounded-3xl">
+                <p class="text-sm">{{ user.nickname ||  user.name }}</p>
+                <ion-icon name="close-circle" class="text-xl" color="danger" (click)="onClickRemoveRecipient(user)"></ion-icon>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col class="ion-text-center">
+            <ion-button class="m-auto w-1/2 submit-btn" type="submit">
+              {{ TranslateKeys.BUTTON_SUBMIT | translate }}
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </div>
+</ion-content>
