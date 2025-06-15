@@ -5,7 +5,7 @@ import { LoadingController, ModalController, ToastButton, ToastController, Toast
 
 import { AuthService } from '../../../../services/auth/auth.service';
 import { TaskService } from '../../../../services/task/task.service';
-import { ResUserService } from '../../../../services/models/res.user.service';
+import { ResUsersService } from '../../../../services/models/res.users.service';
 import { TranslateKeys } from '../../../../shared/enums/translate-keys';
 import { PageRoutes } from '../../../../shared/enums/page-routes';
 import { IAuthData } from '../../../../shared/interfaces/auth/auth-data';
@@ -51,7 +51,7 @@ export class GroupTaskCreateFormComponent implements OnInit {
     private modalController: ModalController,
     private authService: AuthService,
     private taskService: TaskService,
-    private resUserService: ResUserService,
+    private resUsersService: ResUsersService,
     private toastController: ToastController,
     private loadingController: LoadingController,
     private translate: TranslateService,
@@ -173,7 +173,7 @@ export class GroupTaskCreateFormComponent implements OnInit {
    */
   private loadAllClassroomTeenagerIds(): void {
     if (!this.authData?.classroom_id?.id) return;
-    this.resUserService.getTeenagerIdsByClassroomId(this.authData.classroom_id.id)
+    this.resUsersService.getTeenagerIdsByClassroomId(this.authData.classroom_id.id)
       .then((teenagers) => {
         if (teenagers?.length) {
           this.teenagerIds = teenagers.map(u => u.id);

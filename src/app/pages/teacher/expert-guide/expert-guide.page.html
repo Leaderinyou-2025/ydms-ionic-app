@@ -39,7 +39,7 @@
   <div *ngIf="!isLoading && guideList.length > 0" class="ion-padding">
     <div class="space-y-3">
       <ion-card *ngFor="let guide of guideList"
-                routerLink="/{{PageRoutes.EXPERT_GUIDE}}/detail/{{guide.id}}"
+                routerLink="/{{PageRoutes.EXPERT_GUIDE}}/{{guide.id}}"
                 class="shadow-md border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-lg transition-shadow">
         <ion-card-content>
           <!-- Title -->

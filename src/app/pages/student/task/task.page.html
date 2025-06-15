@@ -61,7 +61,7 @@
         </h3>
         <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto">
           <ng-container *ngFor="let survey of surveyList">
-            <div class="flex flex-col p-4 h-full" (click)="onClickDoSurvey(survey)">
+            <div class="flex flex-col p-4" (click)="onClickDoSurvey(survey)">
               <div class="flex items-center justify-center text-2xl text-orange-500 mb-2">
                 <ng-container *ngIf="!survey.is_posted">
                   <ion-img src="assets/icons/svg/ico_top_mission.svg" alt="icon"
@@ -104,7 +104,7 @@
       <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto"
            appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreGroupTask($event)">
         <div *ngFor="let task of groupTaskList"
-             class="flex flex-col p-4 h-full border-2 rounded-2xl"
+             class="flex flex-col p-4 border-2 rounded-2xl"
              routerLink="/{{PageRoutes.TASK_EXECUTING}}/{{task.id}}">
           <div class="flex items-center justify-center text-2xl text-orange-500 mb-2">
             <ng-container *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS">
@@ -134,7 +134,7 @@
       <!--   Family task list   -->
       <div class="flex flex-nowrap gap-4 items-stretch justify-start pb-5 w-full overflow-x-auto"
            appIonInfiniteHorizontal [threshold]="50" (ionInfinite)="loadMoreFamilyTask($event)">
-        <div class="flex flex-col p-4 h-full border-2 rounded-2xl" *ngFor="let task of familyTaskList"
+        <div class="flex flex-col p-4 border-2 rounded-2xl" *ngFor="let task of familyTaskList"
              routerLink="/{{PageRoutes.TASK_EXECUTING}}/{{task.id}}">
           <div class="flex items-center justify-center text-2xl text-orange-500 mb-2">
             <ng-container *ngIf="task.status === TaskStatus.PENDING || task.status === TaskStatus.IN_PROGRESS">
@@ -174,6 +174,8 @@
             </ng-container>
             <ion-icon name="checkmark-circle" color="success" class="text-3xl w-full"
                       *ngIf="task.status === TaskStatus.COMPLETED"></ion-icon>
+            <ion-icon name="ban" color="black" class="text-3xl w-full"
+                      *ngIf="task.status === TaskStatus.IGNORE"></ion-icon>
           </div>
           <p class="text-base text-center w-48" [class.text-teal-500]="task.status === TaskStatus.COMPLETED">
             {{ task.name }}

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { formatDate } from '@angular/common';
 
 import { AuthService } from '../../../services/auth/auth.service';
-import { ResUserService } from '../../../services/models/res.user.service';
+import { ResUsersService } from '../../../services/models/res.users.service';
 import { LiyYdmsEmotionalDiaryService } from '../../../services/models/liy.ydms.emotional.diary.service';
 import { LiyYdmsNotificationService } from '../../../services/models/liy.ydms.notification.service';
 import { LiyYdmsGuideService } from '../../../services/models/liy.ydms.guide.service';
@@ -53,7 +53,7 @@ export class ParentDashboardPage implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private resUserService: ResUserService,
+    private resUsersService: ResUsersService,
     private emotionalDiaryService: LiyYdmsEmotionalDiaryService,
     private notificationService: LiyYdmsNotificationService,
     private taskService: TaskService,
@@ -80,7 +80,7 @@ export class ParentDashboardPage implements OnInit {
   private async loadChildren(): Promise<void> {
     if (!this.authData?.id) return;
 
-    this.children = await this.resUserService.getChildrenByParentId(this.authData.id);
+    this.children = await this.resUsersService.getChildrenByParentId(this.authData.id);
 
     if (this.children.length > 0) {
       this.selectedChild = this.children[0];

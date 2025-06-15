@@ -1,203 +1,205 @@
-<ion-content [fullscreen]="true" class="custom-page-bg-light ion-padding">
+<ion-content [fullscreen]="true" class="custom-page-bg-light native-padding-content">
   <!-- Refresh data -->
   <ion-refresher slot="fixed" mode="md" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Loading state -->
-  <div *ngIf="isLoading" class="flex justify-center items-center h-64">
-    <ion-spinner name="crescent" class="text-blue-500"></ion-spinner>
-  </div>
-
-  <ng-container *ngIf="!isLoading && authData">
-
-    <!-- Parent info -->
-    <div routerLink="/{{PageRoutes.PROFILE}}/{{PageRoutes.PERSONAL_INFO}}"
-         class="flex items-center justify-between bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-6 mb-6 shadow-2xl">
-      <div class="flex-col">
-        <h1 class="text-xl font-bold mb-2">{{ authData.name }}</h1>
-        <div class="flex items-center gap-2 mb-1">
-          <ion-icon name="people" class="text-xl"></ion-icon>
-          <span>{{ TranslateKeys.PARENT_DASHBOARD_PARENT_ROLE | translate }}</span>
-        </div>
-        <div class="flex items-center gap-2 mb-1" *ngIf="children.length > 0">
-          <ion-icon name="heart" class="text-xl"></ion-icon>
-          <span>{{ children.length }} {{ TranslateKeys.PARENT_DASHBOARD_CHILDREN | translate }}</span>
-        </div>
-        <div class="flex items-center gap-3 mb-1">
-          <div class="flex items-center gap-2">
-            <ion-icon name="call" class="text-xl"></ion-icon>
-            <span>{{ authData.phone }}</span>
-          </div>
-          <span>-</span>
-          <div class="flex items-center gap-2">
-            <ion-icon name="mail" class="text-xl"></ion-icon>
-            <span>{{ authData.email }}</span>
-          </div>
-        </div>
-      </div>
-      <ion-icon name="chevron-forward" class="text-xl text-gray-400"></ion-icon>
+  <div class="ion-padding">
+    <!-- Loading state -->
+    <div *ngIf="isLoading" class="flex justify-center items-center h-64">
+      <ion-spinner name="crescent" class="text-blue-500"></ion-spinner>
     </div>
 
-    <!-- Child selector (only show if parent has multiple children) -->
-    <div *ngIf="children.length > 1" class="p-6 bg-white border border-gray-200 rounded-xl shadow-md mb-6">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <div class="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-full mr-4">
-            <ion-icon name="people" class="text-2xl text-purple-600"></ion-icon>
+    <ng-container *ngIf="!isLoading && authData">
+
+      <!-- Parent info -->
+      <div routerLink="/{{PageRoutes.PROFILE}}/{{PageRoutes.PERSONAL_INFO}}"
+           class="flex items-center justify-between bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-6 mb-6 shadow-2xl">
+        <div class="flex-col">
+          <h1 class="text-xl font-bold mb-2">{{ authData.name }}</h1>
+          <div class="flex items-center gap-2 mb-1">
+            <ion-icon name="people" class="text-xl"></ion-icon>
+            <span>{{ TranslateKeys.PARENT_DASHBOARD_PARENT_ROLE | translate }}</span>
           </div>
-          <div class="flex-col">
-            <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.PARENT_DASHBOARD_SELECT_CHILD | translate }}</h3>
-            <ion-select
-              [value]="selectedChild?.id"
-              (ionChange)="onChildSelectionChange($event)"
-              [placeholder]="TranslateKeys.PARENT_DASHBOARD_SELECT_CHILD | translate"
-              interface="action-sheet"
-              class="text-sm text-gray-500">
-              <ion-select-option *ngFor="let child of children" [value]="child.id">
-                {{ getChildDisplayName(child) }}
-              </ion-select-option>
-            </ion-select>
+          <div class="flex items-center gap-2 mb-1" *ngIf="children.length > 0">
+            <ion-icon name="heart" class="text-xl"></ion-icon>
+            <span>{{ children.length }} {{ TranslateKeys.PARENT_DASHBOARD_CHILDREN | translate }}</span>
+          </div>
+          <div class="flex items-center gap-3 mb-1">
+            <div class="flex items-center gap-2">
+              <ion-icon name="call" class="text-xl"></ion-icon>
+              <span>{{ authData.phone }}</span>
+            </div>
+            <span>-</span>
+            <div class="flex items-center gap-2">
+              <ion-icon name="mail" class="text-xl"></ion-icon>
+              <span>{{ authData.email }}</span>
+            </div>
+          </div>
+        </div>
+        <ion-icon name="chevron-forward" class="text-xl text-gray-400"></ion-icon>
+      </div>
+
+      <!-- Child selector (only show if parent has multiple children) -->
+      <div *ngIf="children.length > 1" class="p-6 bg-white border border-gray-200 rounded-xl shadow-md mb-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-full mr-4">
+              <ion-icon name="people" class="text-2xl text-purple-600"></ion-icon>
+            </div>
+            <div class="flex-col">
+              <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.PARENT_DASHBOARD_SELECT_CHILD | translate }}</h3>
+              <ion-select
+                [value]="selectedChild?.id"
+                (ionChange)="onChildSelectionChange($event)"
+                [placeholder]="TranslateKeys.PARENT_DASHBOARD_SELECT_CHILD | translate"
+                interface="action-sheet"
+                class="text-sm text-gray-500">
+                <ion-select-option *ngFor="let child of children" [value]="child.id">
+                  {{ getChildDisplayName(child) }}
+                </ion-select-option>
+              </ion-select>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Emotions Section -->
-    <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md mb-6">
-      <div class="flex items-center justify-between mb-4">
-        <div class="flex items-center">
-          <div class="flex items-center justify-center w-12 h-12 bg-teal-100 rounded-full mr-4">
-            <ion-icon name="happy" class="text-2xl text-teal-500"></ion-icon>
+      <!-- Emotions Section -->
+      <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center">
+            <div class="flex items-center justify-center w-12 h-12 bg-teal-100 rounded-full mr-4">
+              <ion-icon name="happy" class="text-2xl text-teal-500"></ion-icon>
+            </div>
+            <div class="flex-col">
+              <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.PARENT_DASHBOARD_EMOTIONS | translate }}</h3>
+              <p class="text-sm text-gray-500">{{ TranslateKeys.PARENT_DASHBOARD_EMOTIONS_DETAIL | translate }}</p>
+            </div>
           </div>
-          <div class="flex-col">
-            <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.PARENT_DASHBOARD_EMOTIONS | translate }}</h3>
-            <p class="text-sm text-gray-500">{{ TranslateKeys.PARENT_DASHBOARD_EMOTIONS_DETAIL | translate }}</p>
-          </div>
+          <ion-badge class="bg-teal-500">{{ totalEmotions || 0 }}</ion-badge>
         </div>
-        <ion-badge class="bg-teal-500">{{ totalEmotions || 0 }}</ion-badge>
-      </div>
 
-      <!-- Loading emotions -->
-      <div *ngIf="isLoadingEmotions" class="flex justify-center py-4">
-        <ion-spinner name="dots" class="text-teal-500"></ion-spinner>
-      </div>
+        <!-- Loading emotions -->
+        <div *ngIf="isLoadingEmotions" class="flex justify-center py-4">
+          <ion-spinner name="dots" class="text-teal-500"></ion-spinner>
+        </div>
 
-      <!-- Emotions Slider -->
-      <div *ngIf="!isLoadingEmotions && latestEmotions.length > 0"
-           class="emotions-slider-container"
-           [class.single-emotion]="latestEmotions.length === 1">
-        <swiper-container
-          #emotionSwiper
-          slides-per-view="1"
-          space-between="20"
-          centered-slides="true"
-          loop="false"
-          pagination="true"
-          pagination-clickable="true"
-          autoplay="true"
-          autoplay-delay="3000"
-          autoplay-disable-on-interaction="true"
-        >
-          <swiper-slide *ngFor="let emotion of latestEmotions" class="pb-6">
-            <div
-              class="w-full min-h-[140px] flex flex-col items-center justify-center text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm">
-              <!-- Emotion icon image -->
-              <div class="w-12 h-12 flex items-center justify-center mb-2">
-                <ion-img *ngIf="hasEmotionIcon(emotion)"
-                         [src]="getEmotionIcon(emotion)"
-                         [alt]="getEmotionText(emotion)"></ion-img>
-              </div>
+        <!-- Emotions Slider -->
+        <div *ngIf="!isLoadingEmotions && latestEmotions.length > 0"
+             class="emotions-slider-container"
+             [class.single-emotion]="latestEmotions.length === 1">
+          <swiper-container
+            #emotionSwiper
+            slides-per-view="1"
+            space-between="20"
+            centered-slides="true"
+            loop="false"
+            pagination="true"
+            pagination-clickable="true"
+            autoplay="true"
+            autoplay-delay="3000"
+            autoplay-disable-on-interaction="true"
+          >
+            <swiper-slide *ngFor="let emotion of latestEmotions" class="pb-6">
+              <div
+                class="w-full min-h-[140px] flex flex-col items-center justify-center text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm">
+                <!-- Emotion icon image -->
+                <div class="w-12 h-12 flex items-center justify-center mb-2">
+                  <ion-img *ngIf="hasEmotionIcon(emotion)"
+                           [src]="getEmotionIcon(emotion)"
+                           [alt]="getEmotionText(emotion)"></ion-img>
+                </div>
 
-              <!-- Emotion text -->
-              <span class="text-base font-medium text-gray-700 dark:text-gray-300 mb-1 text-center block">
+                <!-- Emotion text -->
+                <span class="text-base font-medium text-gray-700 dark:text-gray-300 mb-1 text-center block">
                 {{ getEmotionText(emotion) }}
               </span>
 
-              <!-- Child name - always show -->
-              <span class="text-base text-blue-600 dark:text-blue-400 font-medium mb-1 text-center block">
+                <!-- Child name - always show -->
+                <span class="text-base text-blue-600 dark:text-blue-400 font-medium mb-1 text-center block">
                 {{ getChildNameForEmotion(emotion) }}
               </span>
 
-              <!-- Date -->
-              <span class="text-xs text-gray-400 dark:text-gray-500 text-center block">
+                <!-- Date -->
+                <span class="text-xs text-gray-400 dark:text-gray-500 text-center block">
                 {{ formatDate(emotion.create_date!) }}
               </span>
-            </div>
-          </swiper-slide>
-        </swiper-container>
-      </div>
-
-      <!-- No emotions -->
-      <div *ngIf="!isLoadingEmotions && latestEmotions.length === 0"
-           class="text-center py-4">
-        <ion-icon name="heart-outline" class="text-3xl text-gray-400 dark:text-gray-500 mb-2"></ion-icon>
-        <p class="text-gray-500 dark:text-gray-400 text-sm">{{ TranslateKeys.PARENT_DASHBOARD_NO_EMOTIONS | translate }}</p>
-      </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-
-      <!-- Thông báo mới -->
-      <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md" (click)="goToNotifications()">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div class="flex items-center justify-center w-12 h-12 bg-amber-100 rounded-full mr-4">
-              <ion-icon name="notifications" class="text-2xl text-amber-500"></ion-icon>
-            </div>
-            <div class="flex-col">
-              <div class="flex items-center justify-start">
-                <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.PARENT_DASHBOARD_NEW_NOTIFICATIONS | translate }}</h3>
-                <ion-badge class="ml-3 bg-amber-500">{{ totalNotifications || 0 }}</ion-badge>
               </div>
-              <p class="text-sm text-gray-500">{{ TranslateKeys.PARENT_DASHBOARD_NOTIFICATIONS_DETAIL | translate }}</p>
-            </div>
-          </div>
-          <ion-icon name="chevron-forward" class="text-2xl text-gray-400"></ion-icon>
+            </swiper-slide>
+          </swiper-container>
+        </div>
+
+        <!-- No emotions -->
+        <div *ngIf="!isLoadingEmotions && latestEmotions.length === 0"
+             class="text-center py-4">
+          <ion-icon name="heart-outline" class="text-3xl text-gray-400 dark:text-gray-500 mb-2"></ion-icon>
+          <p class="text-gray-500 dark:text-gray-400 text-sm">{{ TranslateKeys.PARENT_DASHBOARD_NO_EMOTIONS | translate }}</p>
         </div>
       </div>
 
-      <!-- Hoạt động gia đình -->
-      <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md" (click)="goToFamilyActivities()">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div class="flex items-center justify-center w-12 h-12 bg-fuchsia-100 rounded-full mr-4">
-              <ion-icon name="home" class="text-2xl text-fuchsia-500"></ion-icon>
-            </div>
-            <div class="flex-col">
-              <div class="flex items-center justify-start">
-                <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.PARENT_DASHBOARD_FAMILY_ACTIVITIES | translate }}</h3>
-                <ion-badge class="ml-3 bg-fuchsia-500">{{ totalFamilyActivities || 0 }}</ion-badge>
-              </div>
-              <p class="text-sm text-gray-500">{{ TranslateKeys.PARENT_DASHBOARD_FAMILY_ACTIVITIES_DETAIL | translate }}</p>
-            </div>
-          </div>
-          <ion-icon name="chevron-forward" class="text-2xl text-gray-400"></ion-icon>
-        </div>
-      </div>
+      <!-- Quick Actions -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 
-      <!-- Kỹ năng chuyên gia -->
-      <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md" (click)="goToExpertGuide()">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div class="flex items-center justify-center w-12 h-12 bg-orange-100 rounded-full mr-4">
-              <ion-icon name="book" class="text-2xl text-orange-500"></ion-icon>
-            </div>
-            <div class="flex-col">
-              <div class="flex items-center justify-start">
-                <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.PARENT_DASHBOARD_EXPERT_SKILLS | translate }}</h3>
-                <ion-badge class="ml-3 bg-orange-500">{{ totalExpertGuides || 0 }}</ion-badge>
+        <!-- Thông báo mới -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md" (click)="goToNotifications()">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="flex items-center justify-center w-12 h-12 bg-amber-100 rounded-full mr-4">
+                <ion-icon name="notifications" class="text-2xl text-amber-500"></ion-icon>
               </div>
-              <p class="text-sm text-gray-500">{{ TranslateKeys.PARENT_DASHBOARD_EXPERT_SKILLS_DETAIL | translate }}</p>
+              <div class="flex-col">
+                <div class="flex items-center justify-start">
+                  <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.PARENT_DASHBOARD_NEW_NOTIFICATIONS | translate }}</h3>
+                  <ion-badge class="ml-3 bg-amber-500">{{ totalNotifications || 0 }}</ion-badge>
+                </div>
+                <p class="text-sm text-gray-500">{{ TranslateKeys.PARENT_DASHBOARD_NOTIFICATIONS_DETAIL | translate }}</p>
+              </div>
             </div>
+            <ion-icon name="chevron-forward" class="text-2xl text-gray-400"></ion-icon>
           </div>
-          <ion-icon name="chevron-forward" class="text-2xl text-gray-400"></ion-icon>
         </div>
-      </div>
 
-    </div>
-  </ng-container>
+        <!-- Hoạt động gia đình -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md" (click)="goToFamilyActivities()">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="flex items-center justify-center w-12 h-12 bg-fuchsia-100 rounded-full mr-4">
+                <ion-icon name="home" class="text-2xl text-fuchsia-500"></ion-icon>
+              </div>
+              <div class="flex-col">
+                <div class="flex items-center justify-start">
+                  <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.PARENT_DASHBOARD_FAMILY_ACTIVITIES | translate }}</h3>
+                  <ion-badge class="ml-3 bg-fuchsia-500">{{ totalFamilyActivities || 0 }}</ion-badge>
+                </div>
+                <p class="text-sm text-gray-500">{{ TranslateKeys.PARENT_DASHBOARD_FAMILY_ACTIVITIES_DETAIL | translate }}</p>
+              </div>
+            </div>
+            <ion-icon name="chevron-forward" class="text-2xl text-gray-400"></ion-icon>
+          </div>
+        </div>
+
+        <!-- Kỹ năng chuyên gia -->
+        <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-md" (click)="goToExpertGuide()">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div class="flex items-center justify-center w-12 h-12 bg-orange-100 rounded-full mr-4">
+                <ion-icon name="book" class="text-2xl text-orange-500"></ion-icon>
+              </div>
+              <div class="flex-col">
+                <div class="flex items-center justify-start">
+                  <h3 class="text-lg font-semibold text-gray-800">{{ TranslateKeys.PARENT_DASHBOARD_EXPERT_SKILLS | translate }}</h3>
+                  <ion-badge class="ml-3 bg-orange-500">{{ totalExpertGuides || 0 }}</ion-badge>
+                </div>
+                <p class="text-sm text-gray-500">{{ TranslateKeys.PARENT_DASHBOARD_EXPERT_SKILLS_DETAIL | translate }}</p>
+              </div>
+            </div>
+            <ion-icon name="chevron-forward" class="text-2xl text-gray-400"></ion-icon>
+          </div>
+        </div>
+
+      </div>
+    </ng-container>
+  </div>
 </ion-content>
 
 <app-footer></app-footer>

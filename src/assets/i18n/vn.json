@@ -27,6 +27,7 @@
   },
   "NOTIFICATIONS": {
     "title": "Thông báo",
+    "create_title": "Tạo mới thông báo",
     "unread": "Chưa đọc",
     "read": "Đã đọc",
     "no_unread": "Không có thông báo mới",
@@ -55,7 +56,20 @@
     "loading": "Đang tải thông báo...",
     "loading_more": "Đang tải thêm thông báo...",
     "sender": "Người gửi",
-    "attach_file": "Tệp đính kèm"
+    "recipient": "Người nhận",
+    "attach_file": "Tệp đính kèm",
+    "notification_title": "Tiêu đề thông báo",
+    "notification_description": "Mô tả ngắn",
+    "notification_body": "Nội dung thông báo",
+    "send_all": "Tất cả mọi người",
+    "send_all_description": "Toàn bộ phụ huynh và học sinh trong lớp",
+    "send_parents": "Phụ huynh",
+    "send_parents_description": "Toàn bộ phụ huynh của lớp",
+    "send_students": "Học sinh",
+    "send_students_description": "Toàn bộ học sinh trong lớp",
+    "send_specific_users": "Những người cụ thể",
+    "send_specific_users_description": "Gửi thông báo đến một số người cụ thể",
+    "select_recipients": "Chọn người nhận"
   },
   "HOME": {
     "welcome_title": "Chào mừng trở lại",
@@ -434,7 +448,8 @@
     "end": "Kết thúc",
     "submit": "Gửi",
     "delete": "Xoá",
-    "edit": "Sửa"
+    "edit": "Sửa",
+    "detail": "Xem chi tiết"
   },
   "TOAST": {
     "error_header": "Lỗi",
@@ -462,7 +477,8 @@
     "send_emotion_tops_success": "Gửi gợi ý điều tiết cảm xúc thành công!",
     "send_emotion_tops_failed": "Có lỗi sảy ra khi gửi gợi ý điều tiết cảm xúc. Vui lòng thử lại sau.",
     "create_group_task_success": "Tạo mới hoạt động nhóm thành công!",
-    "create_group_task_failed": "ó lỗi sảy ra khi tạo hoạt động nhóm. Vui lòng thử lại sau."
+    "create_group_task_failed": "ó lỗi sảy ra khi tạo hoạt động nhóm. Vui lòng thử lại sau.",
+    "send_notification_success": "Thông báo đã được gửi đi."
   },
   "ERROR": {
     "network": "Lỗi mạng. Vui lòng kiểm tra kết nối mạng của bạn và thử lại.",

@@ -24,10 +24,11 @@ import { IAuthData } from '../../shared/interfaces/auth/auth-data';
 export class NotificationsPage implements OnInit {
 
   // Search form states
+  authData?: IAuthData;
   searchForm!: SearchNotificationParams;
   paged!: number;
   limit: number = 20;
-  notifications: ILiyYdmsNotification[] = [];
+  notifications!: ILiyYdmsNotification[];
 
   // Infinite scroll state
   isLoading!: boolean | undefined;
@@ -60,8 +61,6 @@ export class NotificationsPage implements OnInit {
     {value: NotificationTypes.OTHER, label: this.translate.instant(TranslateKeys.NOTIFICATIONS_TYPE_OTHER)}
   ];
 
-  private authData?: IAuthData;
-
   protected readonly TranslateKeys = TranslateKeys;
   protected readonly PageRoutes = PageRoutes;
   protected readonly NotificationTypes = NotificationTypes;
@@ -78,6 +77,10 @@ export class NotificationsPage implements OnInit {
     this.authData = await this.authService.getAuthData();
     this.initParams();
     await this.loadNotifications();
+  }
+
+  ionViewDidEnter() {
+    if (this.notifications) setTimeout(() => this.doRefresh());
   }
 
   /**
@@ -156,13 +159,13 @@ export class NotificationsPage implements OnInit {
    * Handle pull-to-refresh event
    * @param event The refresh event
    */
-  public doRefresh(event: RefresherCustomEvent): void {
+  public doRefresh(event?: RefresherCustomEvent): void {
     if (this.isRefresh) return;
     this.isRefresh = true;
     this.resetSearch();
     this.loadNotifications().finally(() => {
       this.isRefresh = false;
-      event.detail.complete();
+      event?.detail.complete();
     });
   }
 
@@ -215,7 +218,7 @@ export class NotificationsPage implements OnInit {
       start_date: undefined,
       end_date: undefined,
       user_id: this.authData?.partner_id?.id
-    }
+    };
     this.resetSearch();
   }
 

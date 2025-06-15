@@ -11,31 +11,15 @@ import { OdooDomainOperator } from '../../shared/enums/odoo-domain-operator';
   providedIn: 'root'
 })
 export class ResUsersService {
-  public readonly fields = ['nickname', 'avatar', 'avatar_512', 'edu_id', 'school_id', 'classroom_id', 'social_id'];
-
-  public readonly teenagerFields = [
-    'name',
-    'nickname',
-    'avatar',
-    'avatar_512',
-    'email',
-    'phone',
-    'edu_id',
-    'school_id',
-    'classroom_id',
-    'classroom_ids',
-    'social_id',
-    'gender',
-    'dob',
-    'is_teenager',
+  public readonly fields = [
+    'name', 'nickname', 'avatar', 'avatar_512', 'image_128',
+    'email', 'phone', 'gender', 'dob',
+    'edu_id', 'school_id', 'classroom_id', 'classroom_ids', 'social_id',
+    'is_teenager', 'is_parent', 'is_teacher',
     'total_friendly_points',
-    'street',
-    'precint_id',
-    'district_id',
-    'state_id',
-    'parent_id',
-    'create_date',
-    'write_date'
+    'street', 'precint_id', 'district_id', 'state_id',
+    'parent_id', 'partner_id',
+    'create_date', 'write_date'
   ];
 
   constructor(
@@ -63,6 +47,71 @@ export class ResUsersService {
   }
 
   /**
+   * Get count of users with filters
+   * @param searchDomain
+   */
+  public async getCountUser(searchDomain: SearchDomain = []): Promise<number> {
+    const results = await this.odooService.searchCount(ModelName.RES_USERS, searchDomain);
+    return results || 0;
+  }
+
+  /**
+   * Get friends list by ids
+   * @param ids
+   */
+  public async getFriendListByIds(ids: Array<number>): Promise<Partial<IAuthData>[]> {
+    const results = await this.odooService.read<IAuthData>(ModelName.RES_USERS, ids, ['nickname', 'avatar_512', 'school_id', 'classroom_id']);
+    return CommonConstants.convertArr2ListItem(results);
+  }
+
+  /**
+   * Get count teenager by classroom id
+   * @param classroomId
+   */
+  public async getCountTeenagerByClassroomId(classroomId: number): Promise<number> {
+    return this.getCountUser([
+      ['classroom_id', OdooDomainOperator.EQUAL, classroomId],
+      ['is_teenager', OdooDomainOperator.EQUAL, true],
+    ]);
+  }
+
+  /**
+   * Lấy danh sách id của tất cả học sinh trong lớp
+   * @param classroomId
+   * @private
+   */
+  public async getTeenagerIdsByClassroomId(classroomId: number): Promise<IAuthData[]> {
+    return this.odooService.searchRead<IAuthData>(
+      ModelName.RES_USERS,
+      [
+        ['classroom_id', OdooDomainOperator.EQUAL, classroomId],
+        ['is_teenager', OdooDomainOperator.EQUAL, true],
+      ],
+      ['id', 'nickname'], 0, 0
+    );
+  }
+
+  /**
+   * Lấy danh sách học sinh theo cha mẹ
+   * @param parentId
+   * @param offset
+   * @param limit
+   * @param order
+   */
+  public async getChildrenByParentId(
+    parentId: number,
+    offset: number = 0,
+    limit: number = 20,
+    order: OrderBy = OrderBy.NAME_ASC
+  ): Promise<IAuthData[]> {
+    const searchDomain: SearchDomain = [
+      ['parent_id', OdooDomainOperator.EQUAL, parentId],
+      ['is_teenager', OdooDomainOperator.EQUAL, true],
+    ];
+    return this.getUserList(searchDomain, offset, limit, order);
+  }
+
+  /**
    * Get user by school and classroom
    * @param nickname
    * @param schoolId
@@ -72,7 +121,7 @@ export class ResUsersService {
    * @param order
    */
   public async searchUserListBySchoolId(
-    nickname: string,
+    nickname: string = '',
     schoolId?: number,
     classroomId?: number,
     offset: number = 0,
@@ -106,7 +155,7 @@ export class ResUsersService {
     ];
 
     const results = await this.odooService.searchRead<IAuthData>(
-      ModelName.RES_USERS, searchDomain, this.teenagerFields, offset, limit, order
+      ModelName.RES_USERS, searchDomain, this.fields, offset, limit, order
     );
     return CommonConstants.convertArr2ListItem(results);
   }
@@ -132,11 +181,21 @@ export class ResUsersService {
   public async getUserById(userId: number): Promise<IAuthData | undefined> {
     if (!userId) return undefined;
     const results = await this.odooService.read<IAuthData>(
-      ModelName.RES_USERS, [userId], this.teenagerFields
+      ModelName.RES_USERS, [userId], this.fields
     );
     if (!results?.length) return undefined;
     const convertedResults = CommonConstants.convertArr2ListItem(results);
     return convertedResults[0];
+  }
+
+  /**
+   * Get user by ID
+   * @param userIds
+   */
+  public async getListUserByIds(userIds: number[]): Promise<IAuthData[]> {
+    return this.getUserList(
+      [['id', OdooDomainOperator.IN, userIds]], 0, 0
+    );
   }
 
   /**
@@ -165,7 +224,7 @@ export class ResUsersService {
     ];
 
     const results = await this.odooService.searchRead<IAuthData>(
-      ModelName.RES_USERS, searchDomain, this.teenagerFields, offset, limit, order
+      ModelName.RES_USERS, searchDomain, this.fields, offset, limit, order
     );
     return CommonConstants.convertArr2ListItem(results);
   }

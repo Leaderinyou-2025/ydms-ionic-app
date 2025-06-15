@@ -15,7 +15,7 @@ import { IAuthData } from '../../shared/interfaces/auth/auth-data';
 export class FriendService {
   constructor(
     private liyYdmsFriendService: LiyYdmsFriendService,
-    private resUserService: ResUsersService
+    private resUsersService: ResUsersService
   ) {
   }
 
@@ -68,7 +68,7 @@ export class FriendService {
     offset: number = 0,
     limit: number = 20
   ): Promise<IAuthData[]> {
-    const results = await this.resUserService.searchUserListBySchoolId(
+    const results = await this.resUsersService.searchUserListBySchoolId(
       nickname, schoolId, classroomId, offset, limit
     );
     if (!results?.length) return [];

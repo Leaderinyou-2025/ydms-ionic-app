@@ -5,7 +5,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { IAuthData } from '../../../shared/interfaces/auth/auth-data';
 import { CommonConstants } from '../../../shared/classes/common-constants';
 import { PageRoutes } from '../../../shared/enums/page-routes';
-import { ResUserService } from '../../../services/models/res.user.service';
+import { ResUsersService } from '../../../services/models/res.users.service';
 import { TranslateKeys } from '../../../shared/enums/translate-keys';
 import { LiyYdmsEmotionalDiaryService } from '../../../services/models/liy.ydms.emotional.diary.service';
 import { LiyYdmsNotificationService } from '../../../services/models/liy.ydms.notification.service';
@@ -38,7 +38,7 @@ export class TeacherDashboardPage implements OnInit {
     private router: Router,
     private authService: AuthService,
     private classService: LiyYdmsClassService,
-    private resUserService: ResUserService,
+    private resUsersService: ResUsersService,
     private liyYdmsEmotionalDiaryService: LiyYdmsEmotionalDiaryService,
     private liyYdmsNotificationService: LiyYdmsNotificationService,
     private taskService: TaskService,
@@ -82,7 +82,7 @@ export class TeacherDashboardPage implements OnInit {
    */
   private getCountStudentsByClassroomId(): void {
     if (!this.authData || !this.authData?.classroom_id) return;
-    this.resUserService.getCountTeenagerByClassroomId(this.authData.classroom_id.id)
+    this.resUsersService.getCountTeenagerByClassroomId(this.authData.classroom_id.id)
       .then(totalStudents => this.totalStudents = totalStudents);
   }
 
