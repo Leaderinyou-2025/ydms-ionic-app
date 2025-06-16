@@ -63,6 +63,7 @@ export class AuthService {
    */
   public isAuthenticated(): boolean {
     const authToken = this.localStorageService.get<string>(StorageKey.AUTH_TOKEN_SESSION);
+    console.log('Auth token: ', authToken);
     return authToken !== undefined;
   }
 

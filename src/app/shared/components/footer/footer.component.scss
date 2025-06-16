@@ -1,7 +1,16 @@
 ion-footer {
+  --border-width: 0;
+
   ion-toolbar {
     --padding-start: 0;
     --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    --border-width: 0;
+  }
+
+  ion-toolbar.ios-padding-button {
+    padding-bottom: 1rem;
   }
 
   a {
