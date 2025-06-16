@@ -69,7 +69,14 @@
     "send_students_description": "Toàn bộ học sinh trong lớp",
     "send_specific_users": "Những người cụ thể",
     "send_specific_users_description": "Gửi thông báo đến một số người cụ thể",
-    "select_recipients": "Chọn người nhận"
+    "select_recipients": "Chọn người nhận",
+    "send_to_parent": "Gửi thông báo cho phụ huynh",
+    "send_to_parent_confirm": "Bạn có muốn gửi thông báo cho phụ huynh về cảm xúc này không?",
+    "send_to_parent_success": "Đã gửi thông báo cho phụ huynh thành công",
+    "send_to_parent_error": "Gửi thông báo cho phụ huynh thất bại",
+    "emotion_title": "Thông báo về cảm xúc của {{childName}}",
+    "emotion_description": "Cảm xúc: {{emotionName}}",
+    "emotion_body": "Con của bạn ({{childName}}) đã chia sẻ cảm xúc \"{{emotionName}}\" vào ngày {{date}}. Hãy quan tâm và trò chuyện với con để hiểu rõ hơn về tâm trạng của con."
   },
   "HOME": {
     "welcome_title": "Chào mừng trở lại",
