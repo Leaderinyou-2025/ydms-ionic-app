@@ -1,0 +1,10 @@
+ion-content {
+  --background: transparent;
+
+  .splash-page-bg-image {
+    background-image: url('/assets/images/splash-9x16.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+}

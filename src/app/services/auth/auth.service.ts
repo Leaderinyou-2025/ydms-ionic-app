@@ -427,7 +427,7 @@ export class AuthService {
     this.loadingController.create({mode: NativePlatform.IOS}).then(loading => {
       loading.present().finally(() => {
         this.clearStorageUserData()
-          .then(() => this.navCtrl.navigateRoot(`/${PageRoutes.LOGIN}}`, {replaceUrl: true}))
+          .then(() => this.navCtrl.navigateRoot(`/${PageRoutes.LOGIN}`, {replaceUrl: true}))
           .finally(() => this.router.navigateByUrl(PageRoutes.LOGIN).finally(() => loading.dismiss()));
       });
     });

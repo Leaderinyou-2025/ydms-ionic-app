@@ -5,11 +5,6 @@
   </ion-refresher>
 
   <div class="ion-padding">
-    <!-- Loading state -->
-    <div *ngIf="isLoading" class="flex justify-center items-center h-64">
-      <ion-spinner name="crescent" class="text-blue-500"></ion-spinner>
-    </div>
-
     <ng-container *ngIf="!isLoading && authData">
 
       <!-- Parent info -->
