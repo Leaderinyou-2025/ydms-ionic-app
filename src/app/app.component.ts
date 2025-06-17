@@ -13,8 +13,6 @@ import { TextZoomService } from './services/text-zoom/text-zoom.service';
 import { BiometricService } from './services/biometric/biometric.service';
 import { StorageKey } from './shared/enums/storage-key';
 import { LanguageKeys } from './shared/enums/language-keys';
-import { PageRoutes } from './shared/enums/page-routes';
-import { NativePlatform } from './shared/enums/native-platform';
 
 @Component({
   selector: 'app-root',
@@ -42,8 +40,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Redirect to login page on native device
-    if (this.platform.is(NativePlatform.CAPACITOR)) this.router.navigateByUrl(PageRoutes.LOGIN);
     // Set text zoom
     this.textZoomService.initZoom();
     // Check available biometric

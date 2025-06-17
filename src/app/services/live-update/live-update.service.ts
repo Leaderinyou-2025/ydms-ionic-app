@@ -66,11 +66,16 @@ export class LiveUpdateService {
       return false;
     }
 
-    await LiveUpdate.downloadBundle({url: latestVersion.public_url, bundleId: latestVersion.version_build,});
-    await LiveUpdate.setBundle({bundleId: latestVersion.version_build});
-    await this.storageService.set<ILiyYdmsAppVersion>(StorageKey.CURRENT_APP_VERSION, latestVersion);
-    await LiveUpdate.reload();
-    return true;
+    try {
+      await LiveUpdate.downloadBundle({url: latestVersion.public_url, bundleId: latestVersion.version_build,});
+      await LiveUpdate.setBundle({bundleId: latestVersion.version_build});
+      await this.storageService.set<ILiyYdmsAppVersion>(StorageKey.CURRENT_APP_VERSION, latestVersion);
+      await LiveUpdate.reload();
+      return true;
+    } catch (e: any) {
+      console.error(e.message);
+      return false;
+    }
   }
 
   /**
@@ -116,6 +121,6 @@ export class LiveUpdateService {
     }
 
     const appInfo = await App.getInfo();
-    return appInfo?.version;
+    return appInfo?.version || '1.0.0';
   }
 }

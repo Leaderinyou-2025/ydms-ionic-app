@@ -1,4 +1,5 @@
 export enum PageRoutes {
+  SPLASH = 'splash',
   LOGIN = 'login',
   HOME = 'home',
   PROFILE = 'profile',

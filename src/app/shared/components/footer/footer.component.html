@@ -1,8 +1,7 @@
 <ion-footer *ngIf="!isKeyboardShowing">
-  <ion-toolbar class="flex items-center h-auto bg-white border-t border-gray-200">
-    <div class="flex justify-between items-center pt-2 h-full ion-padding-start ion-padding-end"
-         [class.pb-2]="!(platform.is(NativePlatform.CAPACITOR) && platform.is(NativePlatform.IOS))"
-         [style]="platform.is(NativePlatform.CAPACITOR) && platform.is(NativePlatform.IOS) ? 'margin-button: -8px;' : ''">
+  <ion-toolbar class="flex items-center h-auto bg-white border-t border-gray-200"
+               [class.ios-padding-button]="platform.is(NativePlatform.CAPACITOR) && platform.is(NativePlatform.IOS)">
+    <div class="flex justify-between items-center py-2 h-full ion-padding-start ion-padding-end">
 
       <!--   Student   -->
       <ng-container *ngIf="userRole === UserRoles.STUDENT">

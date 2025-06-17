@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true">
-  <div *ngIf="deviceHeight" [style.min-height]="deviceHeight"
-       class="flex relative w-full bg-[url(assets/images/login-background.png)] native-padding-content bg-bottom bg-no-repeat bg-cover">
+  <div *ngIf="deviceHeight" class="flex items-center relative w-full h-screen bg-[url(assets/images/login-background.png)] native-padding-content bg-bottom bg-no-repeat bg-cover"
+       [style.min-height]="deviceHeight">
     <!-- Chuyển đổi ngôn ngữ -->
     <div class="switch-lang-container absolute top-3 right-3 p-0 bg-gray-200 rounded-full" *ngIf="defaultLang">
       <ion-select interface="action-sheet" class="switch-lang" mode="ios" (ionChange)="switchLanguage($event.detail.value)"
@@ -12,25 +12,26 @@
 
     <!-- Form đăng nhập -->
     <ng-container *ngIf="loginForm && isReady">
-      <form class="w-full mt-6 login-form" [formGroup]="loginForm" (submit)="onClickLogin()">
+      <form class="w-full login-form" [formGroup]="loginForm" (submit)="onClickLogin()">
         <ion-grid>
           <ion-row>
             <!-- App logo -->
             <ion-col size="12" class="ion-text-center">
-              <ion-img class="w-[40%] mx-auto px-3" src="assets/images/app-logo.png"></ion-img>
-              <h1 class="pt-3 pb-8 text-lg text-sky-900 font-bold">{{ TranslateKeys.COMMON_APP_NAME | translate }}</h1>
+              <ion-img class="w-[55%] max-w-64 mx-auto px-3" src="assets/images/me-plush-logo.png"></ion-img>
+              <h1 class="pt-3 pb-8 text-3xl text-white font-normal font-roboto">{{ TranslateKeys.COMMON_APP_SLOGAN | translate }}</h1>
             </ion-col>
 
             <!-- Login form content -->
-            <ion-col size="12">
-              <div class="w-full px-5 py-6 bg-gray-100/20 border border-solid border-gray-400 rounded-[20px]">
+            <ion-col size="12" class="mb-24">
+              <div class="w-full px-5 py-6">
                 <ion-row>
                   <!-- Nhập tên tài khoản -->
                   <ion-col size="12" class="pb-5">
-                    <ion-label>{{ TranslateKeys.TITLE_ACCOUNT | translate }}<span class="text-red-600 ps-1">*</span></ion-label>
+                    <ion-label class="text-white text-lg">{{ TranslateKeys.TITLE_ACCOUNT | translate }}</ion-label>
                     <ion-input formControlName="username" type="text" inputmode="text" required="required" (ionInput)="onUsernameInput($event)"
                                (ionBlur)="onBlurUsernameInput()" [clearInput]="true"></ion-input>
-                    <div *ngIf="hasError('username', 'required')" class="error-text text-red-600 text-sm pt-2 ps-1">
+
+                    <div *ngIf="hasError('username', 'required')" class="error-text bg-[#ff2a00] text-white text-sm mt-1 py-1 ps-1 rounded-md">
                       {{ TranslateKeys.VALIDATE_ACCOUNT_REQUIRED | translate }}
                     </div>
 
@@ -46,33 +47,33 @@
 
                   <!-- Nhập mật khẩu -->
                   <ion-col size="12" class="pb-5" *ngIf="!(isEnableBiometric && biometricAvailable?.isAvailable && hasCredentials)">
-                    <ion-label>{{ TranslateKeys.TITLE_PASSWORD | translate }}<span class="text-red-600 ps-1">*</span></ion-label>
+                    <ion-label class="text-white text-lg">{{ TranslateKeys.TITLE_PASSWORD | translate }}</ion-label>
                     <ion-input formControlName="password" type="password" inputmode="text"
                                class="input-password border border-solid border-[#6b7280] rounded">
                       <ion-input-password-toggle slot="end" color="medium"></ion-input-password-toggle>
                     </ion-input>
-                    <div *ngIf="hasError('password', 'required')" class="error-text text-red-600 text-sm pt-2 ps-1">
+                    <div *ngIf="hasError('password', 'required')" class="error-text bg-[#ff2a00] text-white text-sm mt-1 py-1 ps-1 rounded-md">
                       {{ TranslateKeys.VALIDATE_PASS_REQUIRED | translate }}
                     </div>
                   </ion-col>
 
                   <!-- Chọn ghi nhớ đăng nhập -->
                   <ion-col size="12" class="pb-4" *ngIf="!(isEnableBiometric && biometricAvailable?.isAvailable && hasCredentials)">
-                    <ion-checkbox mode="md" formControlName="remember" labelPlacement="end">
-                      {{ TranslateKeys.TITLE_REMEMBER_ME | translate }}
+                    <ion-checkbox mode="md" formControlName="remember" labelPlacement="end" color="light">
+                      <span class="text-white text-lg">{{ TranslateKeys.TITLE_REMEMBER_ME | translate }}</span>
                     </ion-checkbox>
                   </ion-col>
 
                   <!-- Nút submit form đăng nhập -->
                   <ion-col size="12">
                     <div class="flex items-center justify-between w-full">
-                      <ion-button color="primary" type="submit" class="w-full" [appSoundClick]="true"
+                      <ion-button type="submit" class="w-full uppercase font-medium text-lg" [appSoundClick]="true"
                                   *ngIf="!(isEnableBiometric && biometricAvailable?.isAvailable && hasCredentials)">
                         {{ TranslateKeys.TITLE_LOGIN | translate }}
                       </ion-button>
 
                       <!-- Đăng nhập bằng sinh trắc học-->
-                      <ion-button color="primary" type="button" class="w-full" [appSoundClick]="true"
+                      <ion-button type="button" class="w-full uppercase font-medium text-lg" [appSoundClick]="true"
                                   *ngIf="isEnableBiometric && biometricAvailable?.isAvailable && hasCredentials" (click)="onClickLoginBiometric()">
                         <ion-img *ngIf="isFaceID" src="assets/icons/svg/face-id-svgrepo-com.svg" class="w-8 h-8"></ion-img>
                         <ion-img *ngIf="!isFaceID" src="assets/icons/svg/fingerprint-scan-svgrepo-com.svg" class="w-8 h-8"></ion-img>
@@ -89,7 +90,7 @@
     </ng-container>
 
     <!--  Phiên bản live update  -->
-    <p class="absolute bottom-3 w-full text-center text-sm text-gray-500 font-normal italic">
+    <p class="absolute bottom-3 w-full text-center text-sm text-gray-200 font-normal italic">
       {{ TranslateKeys.COMMON_COPYRIGHT | translate }}. {{ TranslateKeys.TITLE_VERSION | translate }}: {{ appVersion }}<br>
     </p>
   </div>

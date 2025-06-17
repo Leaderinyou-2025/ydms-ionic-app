@@ -46,7 +46,8 @@
             "allowedCommonJsDependencies": [
               "localforage",
               "crypto-js",
-              "lottie-web"
+              "lottie-web",
+              "quill-delta"
             ]
           },
           "configurations": {

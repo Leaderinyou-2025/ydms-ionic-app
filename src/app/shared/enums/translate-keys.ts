@@ -1,6 +1,7 @@
 export enum TranslateKeys {
   // COMMON
   COMMON_APP_NAME = 'COMMON.app_name',
+  COMMON_APP_SLOGAN = 'COMMON.app_slogan',
   COMMON_COPYRIGHT = 'COMMON.copyright',
   COMMON_ENGLISH = 'COMMON.english',
   COMMON_VIETNAMESE = 'COMMON.vietnamese',

@@ -1,9 +1,18 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IonContent, LoadingController, NavController, Platform, ToastButton, ToastController, ToastOptions } from '@ionic/angular';
+import {
+  IonContent,
+  LoadingController,
+  NavController,
+  Platform,
+  ToastButton,
+  ToastController,
+  ToastOptions
+} from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { debounceTime, Subject, Subscription } from 'rxjs';
 import { AvailableResult } from 'capacitor-native-biometric';
+import { StatusBar } from '@capacitor/status-bar';
 
 import { AuthService } from '../../services/auth/auth.service';
 import { LiveUpdateService } from '../../services/live-update/live-update.service';
@@ -28,6 +37,7 @@ import { PageRoutes } from '../../shared/enums/page-routes';
 import { LanguageKeys } from '../../shared/enums/language-keys';
 import { ThemeService } from '../../services/theme/theme.service';
 import { TextZoomService } from '../../services/text-zoom/text-zoom.service';
+import { Theme } from '../../shared/enums/theme';
 
 @Component({
   selector: 'app-login',
@@ -84,7 +94,16 @@ export class LoginPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isReady = false;
-    this.platform.ready().then(() => this.deviceHeight = `${this.platform.height()}px`);
+
+    // Statusbar on android
+    if (this.platform.is(NativePlatform.CAPACITOR) && this.platform.is(NativePlatform.ANDROID)) {
+      StatusBar.setBackgroundColor({color: '#07a281'});
+    }
+
+    this.platform.ready().then(() => {
+      setTimeout(() => this.deviceHeight = `${this.platform.height()}px`, 500);
+    });
+
     this.initializeTranslation();
     this.onKeyboardChangeState();
   }
@@ -108,10 +127,7 @@ export class LoginPage implements OnInit, OnDestroy {
    */
   private async initApp(): Promise<void> {
     // Create loading
-    const loading = await this.loadingController.create({
-      mode: NativePlatform.IOS,
-      message: this.translate.instant(TranslateKeys.TITLE_DATA_UPDATING)
-    });
+    const loading = await this.loadingController.create({mode: NativePlatform.IOS});
     await loading.present();
 
     try {
@@ -120,10 +136,7 @@ export class LoginPage implements OnInit, OnDestroy {
       this.handleAccountAutocomplete();
 
       // Check network is online
-      const isOnline = await this.networkService.isReallyOnline();
-      if (isOnline) {
-        // Live update checking
-        await this.liveUpdateService.checkUpdateApp();
+      if (this.networkService.isOnline()) {
         // Init firebase
         await this.pushNotificationService.init();
 
@@ -136,6 +149,16 @@ export class LoginPage implements OnInit, OnDestroy {
 
           // Sync user firebase device token to server
           this.pushNotificationService.updateUserFirebaseToken();
+
+          // Set default statusbar
+          if (this.platform.is(NativePlatform.CAPACITOR) && this.platform.is(NativePlatform.ANDROID)) {
+            const theme = await this.themeService.getTheme();
+            if (theme === Theme.DARK) {
+              await StatusBar.setBackgroundColor({color: '#000000'});
+            } else {
+              await StatusBar.setBackgroundColor({color: '#ffffff'});
+            }
+          }
 
           // Check user role and redirect to home page
           this.authService.getAuthData().then(authData => {
@@ -241,12 +264,22 @@ export class LoginPage implements OnInit, OnDestroy {
           username: this.loginForm.value.username,
           created_at: Date.now(),
           updated_at: Date.now()
-        }
+        };
         await this.accountHistoryService.addAccount(accountHistory);
       }
 
       // Sync user firebase device token to server
       await this.pushNotificationService.updateUserFirebaseToken();
+
+      // Set default statusbar
+      if (this.platform.is(NativePlatform.CAPACITOR) && this.platform.is(NativePlatform.ANDROID)) {
+        const theme = await this.themeService.getTheme();
+        if (theme === Theme.DARK) {
+          await StatusBar.setBackgroundColor({color: '#000000'});
+        } else {
+          await StatusBar.setBackgroundColor({color: '#ffffff'});
+        }
+      }
 
       // Login success check role to redirect home page
       this.authService.getAuthData().then(authData => {
@@ -271,7 +304,7 @@ export class LoginPage implements OnInit, OnDestroy {
         icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
         side: Position.END,
         role: BtnRoles.CANCEL,
-      }
+      };
       const toastOption: ToastOptions = {
         header: this.translate.instant(TranslateKeys.TOAST_WARNING_HEADER),
         message: this.translate.instant(TranslateKeys.TOAST_AUTH_FAILED),
@@ -283,13 +316,13 @@ export class LoginPage implements OnInit, OnDestroy {
         icon: IonicIcons.WARNING_OUTLINE,
         color: IonicColors.WARNING,
         keyboardClose: false
-      }
+      };
 
       if (!popover) {
         this.toastController.create(toastOption).then(toast => toast.present());
       } else {
         // Close current toast before show new toast
-        this.toastController.dismiss().then(() => this.toastController.create(toastOption).then(toast => toast.present()))
+        this.toastController.dismiss().then(() => this.toastController.create(toastOption).then(toast => toast.present()));
       }
     });
   }
@@ -481,7 +514,7 @@ export class LoginPage implements OnInit, OnDestroy {
       icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
       side: Position.END,
       role: BtnRoles.CANCEL,
-    }
+    };
     const toastOption: ToastOptions = {
       header: this.translate.instant(TranslateKeys.TOAST_ERROR_HEADER),
       message: this.translate.instant(TranslateKeys.TOAST_AUTH_BY_PASSWORD),
@@ -493,7 +526,7 @@ export class LoginPage implements OnInit, OnDestroy {
       icon: IonicIcons.WARNING_OUTLINE,
       color: IonicColors.DANGER,
       keyboardClose: false
-    }
+    };
     this.toastController.create(toastOption).then(toast => toast.present());
   }
 }

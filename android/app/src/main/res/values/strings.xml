@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">YDMS</string>
-    <string name="title_activity_main">YDMS</string>
+    <string name="app_name">Me+</string>
+    <string name="title_activity_main">Me+</string>
     <string name="package_name">ydms.leaderinyou.vn</string>
     <string name="custom_url_scheme">ydms.leaderinyou.vn</string>
 </resources>

@@ -96,7 +96,7 @@ export class NetworkService {
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 1000);
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
 
       const response = await fetch(environment.checkInternetConnectionUrl, {
         method: HttpClientMethods.GET,
