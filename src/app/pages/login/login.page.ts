@@ -149,6 +149,11 @@ export class LoginPage implements OnInit, OnDestroy {
           // Sync user firebase device token to server
           this.pushNotificationService.updateUserFirebaseToken();
 
+          // Set default statusbar
+          if (this.platform.is(NativePlatform.CAPACITOR) && this.platform.is(NativePlatform.ANDROID)) {
+            await StatusBar.setBackgroundColor({color: '#00000000'});
+          }
+
           // Check user role and redirect to home page
           this.authService.getAuthData().then(authData => {
             this.navCtrl.navigateRoot(
