@@ -1,5 +1,6 @@
 <ion-content [fullscreen]="true">
-  <div class="flex items-center relative w-full h-screen bg-[url(assets/images/login-background.png)] native-padding-content bg-bottom bg-no-repeat bg-cover">
+  <div *ngIf="deviceHeight" class="flex items-center relative w-full h-screen bg-[url(assets/images/login-background.png)] native-padding-content bg-bottom bg-no-repeat bg-cover"
+       [style.min-height]="deviceHeight">
     <!-- Chuyển đổi ngôn ngữ -->
     <div class="switch-lang-container absolute top-3 right-3 p-0 bg-gray-200 rounded-full" *ngIf="defaultLang">
       <ion-select interface="action-sheet" class="switch-lang" mode="ios" (ionChange)="switchLanguage($event.detail.value)"

@@ -12,6 +12,7 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { debounceTime, Subject, Subscription } from 'rxjs';
 import { AvailableResult } from 'capacitor-native-biometric';
+import { StatusBar } from '@capacitor/status-bar';
 
 import { AuthService } from '../../services/auth/auth.service';
 import { LiveUpdateService } from '../../services/live-update/live-update.service';
@@ -92,7 +93,16 @@ export class LoginPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isReady = false;
-    this.platform.ready().then(() => this.deviceHeight = `${this.platform.height()}px`);
+
+    // Statusbar on android
+    if (this.platform.is(NativePlatform.CAPACITOR) && this.platform.is(NativePlatform.ANDROID)) {
+      StatusBar.setBackgroundColor({color: '#07a281'});
+    }
+
+    this.platform.ready().then(() => {
+      setTimeout(() => this.deviceHeight = `${this.platform.height()}px`, 500);
+    });
+
     this.initializeTranslation();
     this.onKeyboardChangeState();
   }
@@ -249,6 +259,11 @@ export class LoginPage implements OnInit, OnDestroy {
 
       // Sync user firebase device token to server
       await this.pushNotificationService.updateUserFirebaseToken();
+
+      // Set default statusbar
+      if (this.platform.is(NativePlatform.CAPACITOR) && this.platform.is(NativePlatform.ANDROID)) {
+        await StatusBar.setBackgroundColor({color: '#00000000'});
+      }
 
       // Login success check role to redirect home page
       this.authService.getAuthData().then(authData => {
