@@ -34,6 +34,16 @@
             {{ emotionDiary['create_time'] }} {{ emotionDiary.create_date | date: DateFormat.DATE_ONLY }}
           </p>
         </div>
+        <!-- Send notification button -->
+        <ion-button
+          fill="clear"
+          size="small"
+          color="primary"
+          (click)="sendNotificationToParent(emotionDiary)"
+          [disabled]="isLoading"
+          [title]="TranslateKeys.NOTIFICATIONS_SEND_TO_PARENT | translate">
+          <ion-icon name="notifications-outline" slot="icon-only"></ion-icon>
+        </ion-button>
       </div>
 
       <!-- Card content -->

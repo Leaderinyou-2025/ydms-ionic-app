@@ -70,7 +70,14 @@
     "send_students_description": "All students in your classroom",
     "send_specific_users": "Specific people",
     "send_specific_users_description": "Send to specific people",
-    "select_recipients": "Select recipients"
+    "select_recipients": "Select recipients",
+    "send_to_parent": "Send notification to parent",
+    "send_to_parent_confirm": "Do you want to send a notification to the parent about this emotion?",
+    "send_to_parent_success": "Notification sent to parent successfully",
+    "send_to_parent_error": "Failed to send notification to parent",
+    "emotion_title": "Notification about {{childName}}'s emotion",
+    "emotion_description": "Emotion: {{emotionName}}",
+    "emotion_body": "Your child ({{childName}}) shared the emotion \"{{emotionName}}\" on {{date}}. Please pay attention and talk to your child to better understand their mood."
   },
   "HOME": {
     "welcome_title": "Welcome back",
