@@ -36,6 +36,24 @@ ion-content {
     background-size: cover;
     top: calc(env(safe-area-inset-top) + 12px);
   }
+
+  .font-roboto {
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0;
+  }
+
+  .login-form {
+    ion-button {
+      --border-radius: 50px;
+      --background: #ff2a00;
+      --background-activated: #df2700;
+      --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+      --box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+      color: #fffb00;
+      min-height: 0;
+    }
+  }
 }
 
 :host-context(.dark) {

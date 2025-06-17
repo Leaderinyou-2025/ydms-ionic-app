@@ -1,6 +1,7 @@
 {
   "COMMON": {
     "app_name": "Youth Development Monitoring System",
+    "app_slogan": "Hiểu mình, sống chất",
     "copyright": "© 2025 LeaderInYou",
     "english": "English",
     "vietnamese": "Tiếng Việt",
@@ -189,7 +190,7 @@
   },
   "TITLE": {
     "phone": "Số điện thoại",
-    "account": "Tài khoản",
+    "account": "Tên đăng nhập",
     "email": "Email",
     "password": "Mật khẩu",
     "login": "Đăng nhập",
