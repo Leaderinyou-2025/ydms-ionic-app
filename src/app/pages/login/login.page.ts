@@ -273,7 +273,12 @@ export class LoginPage implements OnInit, OnDestroy {
 
       // Set default statusbar
       if (this.platform.is(NativePlatform.CAPACITOR) && this.platform.is(NativePlatform.ANDROID)) {
-        await StatusBar.setBackgroundColor({color: '#00000000'});
+        const theme = await this.themeService.getTheme();
+        if (theme === Theme.DARK) {
+          await StatusBar.setBackgroundColor({color: '#000000'});
+        } else {
+          await StatusBar.setBackgroundColor({color: '#ffffff'});
+        }
       }
 
       // Login success check role to redirect home page
