@@ -25,5 +25,6 @@ export enum ModelName {
   GUIDE = 'liy.ydms.guide',
   CATEGORY = 'liy.ydms.category',
   EXPERIENCE = 'liy.ydms.experience',
-  EXPERIENCE_REVIEW = 'liy.ydms.experience.review'
+  EXPERIENCE_REVIEW = 'liy.ydms.experience.review',
+  PARTNER_TOKEN = 'liy.ydms.partner.token',
 }

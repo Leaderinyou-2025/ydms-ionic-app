@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController, AlertOptions, Platform, ToastButton, ToastController, ToastOptions } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { PushNotifications, Token } from '@capacitor/push-notifications';
@@ -19,6 +20,8 @@ import { BtnRoles } from '../../shared/enums/btn-roles';
 import { IonicColors } from '../../shared/enums/ionic-colors';
 import { SoundKeys } from '../../shared/enums/sound-keys';
 import { StorageKey } from '../../shared/enums/storage-key';
+import { LiyYdmsPartnerTokenService } from '../models/liy.ydms.partner.token.service';
+import { PageRoutes } from '../../shared/enums/page-routes';
 
 
 @Injectable({
@@ -34,9 +37,11 @@ export class PushNotificationService {
     private alertController: AlertController,
     private translate: TranslateService,
     private platform: Platform,
+    private router: Router,
     private toastController: ToastController,
     private soundService: SoundService,
     private localStorageService: LocalStorageService,
+    private liyYdmsPartnerTokenService: LiyYdmsPartnerTokenService,
   ) {
   }
 
@@ -44,7 +49,7 @@ export class PushNotificationService {
    * Init push notifications
    */
   async init() {
-    if (!this.platform.is(NativePlatform.MOBILEWEB) && (this.platform.is(NativePlatform.ANDROID) || this.platform.is(NativePlatform.IOS))) {
+    if (this.platform.is(NativePlatform.CAPACITOR)) {
       await this.registerNotifications();
       this.addListeners();
     } else {
@@ -61,7 +66,7 @@ export class PushNotificationService {
     if (!firebaseToken) return;
     const authData = await this.authService.getAuthData();
     if (!authData) return;
-    // TODO: Call API to register user firebase device token
+    await this.authService.updatePartnerFirebaseTokenPushNotification();
   }
 
   /**
@@ -112,7 +117,7 @@ export class PushNotificationService {
         icon: IonicIcons.CLOSE_CIRCLE_OUTLINE,
         side: Position.END,
         role: BtnRoles.CANCEL,
-      }
+      };
       const toastOption: ToastOptions = {
         header: notification.title,
         message: notification.body,
@@ -124,7 +129,7 @@ export class PushNotificationService {
         icon: IonicIcons.INFORMATION_CIRCLE_OUTLINE,
         color: IonicColors.PRIMARY,
         keyboardClose: false
-      }
+      };
 
       if (!popover) {
         this.toastController.create(toastOption).then(toast => toast.present().finally(() => this.soundService.playEffect(SoundKeys.NOTIFICATION)));
@@ -177,7 +182,8 @@ export class PushNotificationService {
     // Khi user click vào notification.
     PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
       console.log('Push notification action performed: ', JSON.stringify(notification));
-      // Xử lý logic khi user click vào notification
+      const notificationId = notification.notification?.data?.id;
+      if (notificationId) this.router.navigateByUrl(`/${PageRoutes.NOTIFICATIONS}/${notificationId}`);
     });
   }
 
