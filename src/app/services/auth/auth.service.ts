@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpHeaders } from '@angular/common/http';
 import { AlertController, AlertOptions, LoadingController, NavController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -8,6 +7,7 @@ import { HttpClientService } from '../http-client/http-client.service';
 import { LocalStorageService } from '../local-storage/local-storage.service';
 import { OdooService } from '../odoo/odoo.service';
 import { StorageService } from '../storage/storage.service';
+import { LiyYdmsPartnerTokenService } from '../models/liy.ydms.partner.token.service';
 
 import { IAuthData } from '../../shared/interfaces/auth/auth-data';
 import { RequestPayload } from '../../shared/classes/request-payload';
@@ -48,13 +48,13 @@ export class AuthService {
   constructor(
     private loadingController: LoadingController,
     private navCtrl: NavController,
-    private router: Router,
     private alertCtrl: AlertController,
     private translate: TranslateService,
     private localStorageService: LocalStorageService,
     private storageService: StorageService,
     private httpClientService: HttpClientService,
     private odooService: OdooService,
+    private liyYdmsPartnerTokenService: LiyYdmsPartnerTokenService,
   ) {
   }
 
@@ -63,7 +63,6 @@ export class AuthService {
    */
   public isAuthenticated(): boolean {
     const authToken = this.localStorageService.get<string>(StorageKey.AUTH_TOKEN_SESSION);
-    console.log('Auth token: ', authToken);
     return authToken !== undefined;
   }
 
@@ -207,6 +206,7 @@ export class AuthService {
     if (!userSettings) return;
     userSettings.notification = notificationSettings;
     await this.setUserSettings(userSettings);
+    await this.updatePartnerFirebaseTokenPushNotification();
   }
 
   /**
@@ -253,7 +253,13 @@ export class AuthService {
 
     // Set temp data after login success
     this.saveAuthToken(password);
-    const tempUserProfile = {id: +loginResult.result, login: username, is_teenager: false, is_teacher: false, is_parent: false};
+    const tempUserProfile = {
+      id: +loginResult.result,
+      login: username,
+      is_teenager: false,
+      is_teacher: false,
+      is_parent: false
+    };
     this.authData = tempUserProfile;
     await this.setAuthData(tempUserProfile, true);
 
@@ -272,7 +278,7 @@ export class AuthService {
         {text: this.translate.instant(TranslateKeys.BUTTON_CANCEL), role: BtnRoles.CANCEL},
         {text: this.translate.instant(TranslateKeys.BUTTON_CONFIRM), handler: () => this.handleLogout()}
       ]
-    }
+    };
     this.alertCtrl.create(alertOption).then(alert => alert.present());
   }
 
@@ -335,6 +341,7 @@ export class AuthService {
 
     this.authData = userProfile;
     await this.setAuthData(userProfile);
+    await this.updatePartnerFirebaseTokenPushNotification();
     return true;
   }
 
@@ -356,7 +363,7 @@ export class AuthService {
       district_id: authData.district_id,
       precint_id: authData.precint_id,
       street: authData.street,
-    }
+    };
     params = CommonConstants.convertListItem2Number(params);
 
     return this.odooService.write<IAuthData>(ModelName.RES_USERS, [authData.id], params);
@@ -419,6 +426,28 @@ export class AuthService {
     return CommonConstants.convertArr2ListItem(results);
   }
 
+
+  /**
+   * Updates the Firebase device token for push notifications associated with a partner.
+   * If notification settings are enabled, the token will be registered with the partner.
+   * Otherwise, the token will be removed.
+   * The method utilizes the currently stored Firebase device token and partner ID.
+   *
+   * @return {Promise<void>} A promise that resolves when the operation is complete.
+   */
+  public async updatePartnerFirebaseTokenPushNotification(): Promise<void> {
+    const token = this.localStorageService.get<string>(StorageKey.FIREBASE_DEVICE_TOKEN);
+    if (!this.authData?.partner_id?.id || !token) return;
+
+    const notificationSettings = await this.getNotificationSettings();
+
+    if (notificationSettings?.enabled) {
+      await this.liyYdmsPartnerTokenService.createPartnerToken(this.authData.partner_id.id, token);
+    } else {
+      await this.liyYdmsPartnerTokenService.removePartnerToken(this.authData.partner_id.id, token);
+    }
+  }
+
   /**
    * Show confirm and handle logout
    * @private
@@ -426,9 +455,15 @@ export class AuthService {
   private handleLogout(): void {
     this.loadingController.create({mode: NativePlatform.IOS}).then(loading => {
       loading.present().finally(() => {
-        this.clearStorageUserData()
-          .then(() => this.navCtrl.navigateRoot(`/${PageRoutes.LOGIN}`, {replaceUrl: true}))
-          .finally(() => this.router.navigateByUrl(PageRoutes.LOGIN).finally(() => loading.dismiss()));
+        // Remover firebase token on server
+        this.liyYdmsPartnerTokenService.removePartnerToken(
+          this.authData?.partner_id?.id || -1,
+          this.localStorageService.get<string>(StorageKey.FIREBASE_DEVICE_TOKEN) || ''
+        ).finally(() => {
+          this.clearStorageUserData()
+            .then(() => this.navCtrl.navigateRoot(`/${PageRoutes.LOGIN}`, {replaceUrl: true}))
+            .finally(() => loading.dismiss());
+        });
       });
     });
   }

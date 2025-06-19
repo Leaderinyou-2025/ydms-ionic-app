@@ -130,7 +130,7 @@ export class NotificationAndSoundComponent implements OnInit {
    * Save sound and notification setting to user
    * @private
    */
-  private async saveUserSettings() {
+  private async saveUserSettings(): Promise<void> {
     if (this.soundSettings && this.isChangeSoundSettings)
       await this.authService.setSoundSettings(this.soundSettings);
 
