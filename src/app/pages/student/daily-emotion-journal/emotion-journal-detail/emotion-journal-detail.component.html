@@ -50,7 +50,7 @@
         </div>
 
         <!--    Stop sharing button    -->
-        <ion-button shape="round" color="primary" class="min-h-10" (click)="onClickUnPublicEmotional()">
+        <ion-button shape="round" color="primary" class="min-h-10" (click)="onClickUnPublicEmotional()" *ngIf="emotionalDiary.create_uid?.id === authData?.id">
           {{ TranslateKeys.DAILY_EMOTION_JOURNAL_STOP_SHARING | translate }}
         </ion-button>
       </div>
